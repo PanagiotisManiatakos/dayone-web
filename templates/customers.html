@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="keywords" content="footer, address, phone, icons" />
+	<title>Customer</title>
+	<link href ="{{ url_for('static', filename= 'images/l.jpg') }}" rel="icon">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/general.css') }}">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+
+	<script src="{{ url_for('static', filename= 'js/g.js') }}"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+	<link href="http://fonts.googleapis.com/css?family=Cookie" rel="stylesheet" type="text/css">
+	<style>
+		.sidebar {
+			width:60px !important;
+		}
+	</style>
+
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/select/1.3.3/css/select.dataTables.min.css">
+	<link rel="stylesheet" href="https://cdn.datatables.net/scroller/2.0.4/css/scroller.bulma.min.css">
+	<link rel="stylesheet" href="https://cdn.datatables.net/searchpanes/1.3.0/css/searchPanes.bulma.min.css">
+	<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css">
+
+
+	<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+	<script src="https://cdn.datatables.net/1.10.25/js/dataTables.min.js"></script>
+	<script src="https://cdn.datatables.net/select/1.3.3/js/dataTables.select.min.js"></script>
+    <script src="https://cdn.datatables.net/searchpanes/1.3.0/js/dataTables.searchPanes.min.js"></script>
+	<script src="https://cdn.datatables.net/searchpanes/1.3.0/js/searchPanes.min.js"></script>
+	<script src="https://cdn.datatables.net/select/1.3.3/js/dataTables.select.min.js"></script>
+	<script src="https://cdn.datatables.net/scroller/2.0.4/js/dataTables.scroller.min.js"></script>
+	<script src="{{ url_for('static', filename= 'js/tabs.js') }}"></script>
+	<script>
+        $(document).ready(
+        	function() {
+				window.table = $('#example').DataTable( {
+					info: 				false,
+					"order": [[0, "desc" ]],
+					deferRender:    	true,
+					scrollY:        	'50vh',
+					scrollX:        	true,
+					scrollCollapse: 	true,
+					scroller:       	true,
+					select: 			true,
+					"columnDefs": [
+            			{ className: "hide_column", "targets": [7] },
+            			{ "name": "Κωδικος", "targets": [0] }
+            		]
+				});
+				document.querySelector('#Load').addEventListener('click',function () {
+					$("#loader").css("display", "block");
+					var table1 = $(".display tbody");
+					var qname = document.getElementById('qname').value.replace('*','%')+'%';
+					var qcode = document.getElementById('qcode').value.replace('*','%')+'%';
+
+					$.ajax({
+						url: '/D1ServicesIN',
+						method: "POST",
+						data:{
+							service:"get",
+							object:"customer",
+							qname:qname,
+							qcode:qcode
+						},
+						success: function (data) {
+							table1.empty();
+							table.clear();
+							$.each(data['data'], function (a,b) {
+								var afm = (b.AFM==undefined) ? '' : b.AFM;
+								var address = (b.ADDRESS==undefined) ? '' : b.ADDRESS;
+								var phone01 = (b.PHONE01==undefined) ? '' : b.PHONE01;
+								var email = (b.EMAIL==undefined) ? '' : b.EMAIL;
+								var ypol = (b.YPOL==undefined) ? '' : b.YPOL;
+								table.row.add([b.CODE,b.NAME,afm,address,phone01,email,ypol,b.TRDR]);
+								table.draw();
+							});
+							$("#questionsdiv").css("display", "none");
+							$("#tablediv").css("visibility", "visible");
+							$("#Load").css("display", "none");
+							$("#btnfilters").css("display", "inline");
+							$("#loader").css("display", "none");
+						}
+					});
+				});
+				document.querySelector('#btnfilters').addEventListener('click',function () {
+					$("#btnfilters").css("display", "none");
+					table.rows( { selected: true } ).deselect();
+					document.querySelector('#btndelete').disabled = true;
+					$("#Load").css("display", "inline");
+					$("#questionsdiv").css("display", "block");
+					$("#tablediv").css("visibility", "hidden");
+				});
+				$("#example").on("mouseup",'tr',
+					function(){
+						setTimeout(
+							function(){
+								if (counts()){
+									document.querySelector('#btndelete').disabled = false;
+								}else{
+									document.querySelector('#btndelete').disabled = true;
+								}
+							}
+							,1
+						);
+
+						function counts(){
+							if (table.rows( { selected: true } ).count() > 0){
+								return true;
+							}else{
+								return false
+							}
+						}
+					}
+				);
+
+				$("#example").on("dblclick",'tr',function(){
+					var rowItems = $(this).children('td').map(function () {
+						return(this.innerHTML);
+					}).toArray();
+					table.rows($(this)).select();
+					$("[id='fcode']").val(rowItems[0]);
+					$("[id='fname']").val(rowItems[1]);
+					$("[id='fafm']").val(rowItems[2]);
+					$("[id='faddress']").val(rowItems[3]);
+					$("[id='fphone01']").val(rowItems[4]);
+					$("[id='femail']").val(rowItems[5]);
+					$("[id='ftrdr']").val(rowItems[7]);
+					$("section.modal-card-body").find("*").attr( "disabled", true );
+					document.querySelector('#editm1').style.display = 'block'
+					document.getElementById("screenform").style.display = 'block'
+					openTabGen('generalscreen');
+				});
+
+				/*NEW */
+				document.querySelector('#btnew').addEventListener('click',function () {
+					$("[id='fcode']").val('');
+					$("[id='fname']").val('');
+					$("[id='fafm']").val('');
+					$("[id='faddress']").val('');
+					$("[id='fphone01']").val('');
+					$("[id='fphone02']").val('');
+					$("[id='femail']").val('');
+					$("[id='fremarks']").val('');
+					$("[id='fzip']").val('');
+					$("[id='fdistrict']").val('');
+					$("[id='ftown']").val('');
+					$("section.modal-card-body").find("*").attr( "disabled", false );
+					document.querySelector('#savem1').disabled = false;
+					document.querySelector('#editm1').style.display = 'none'
+					openTabGen('generalscreen');
+					document.getElementById('screenform').style.display = 'block';
+				});
+
+				/*DELETE*/
+				document.querySelector('#btndelete').addEventListener('click',function () {
+					document.getElementById('deleteform').style.display = 'block';
+				});
+
+				$('#savem1').click(
+					function() {
+						$("#screenform").css("display", "none");
+						$("#loader").css("display", "block");
+						var trdr = $('#ftrdr').val();
+						var code = $('#fcode').val();
+						var name = $('#fname').val();
+						var afm = $('#fafm').val();
+						var address = $('#faddress').val();
+						var phone01 = $('#fphone01').val();
+						var phone02 = $('#fphone02').val();
+						var email = $('#femail').val();
+						var remarks = $('#fremarks').val();
+						var town = $('#ftown').val();
+						var zip = $('#fzip').val();
+						var district = $('#fdistrict').val();
+						if (trdr==''){
+							$.ajax({
+								url:"customers/insert",
+								type:"POST",
+								data:{
+									code:code,
+									name:name,
+									afm:afm,
+									address:address,
+									phone01:phone01,
+									phone02:phone02,
+									email:email,
+									remarks:remarks,
+									town:town,
+									zip:zip,
+									district:district
+								},
+								success:function(data){
+									$("#loader").css("display", "none");
+									alert(data);
+								}
+							})
+						}else{
+							$.ajax({
+								url:"customers/update",
+								type:"POST",
+								data:{
+									trdr:trdr,
+									code:code,
+									name:name,
+									afm:afm,
+									address:address,
+									phone01:phone01,
+									phone02:phone02,
+									email:email,
+									remarks:remarks,
+									town:town,
+									zip:zip,
+									district:district
+								},
+								success:function(data){
+									$("#loader").css("display", "none");
+									alert(data);
+								}
+							})
+						}
+					}
+				)
+
+
+				/*Edit*/
+				document.querySelector('#editm1').addEventListener('click',function () {
+					$("section.modal-card-body").find("*").attr( "disabled", false );
+					document.querySelector('#savem1').disabled = false;
+				});
+
+				document.querySelector('#cancelm1').addEventListener('click',	function () {
+					document.getElementById("fcode").value = '';
+					document.getElementById("fname").value = '';
+					document.getElementById("fafm").value = '';
+					document.getElementById("faddress").value = '';
+					document.getElementById("fphone01").value = '';
+					document.getElementById("fphone02").value = '';
+					document.getElementById("femail").value = '';
+					document.querySelector('#savem1').disabled = true;
+					document.getElementById("screenform").style.display = 'none'
+				})
+
+				document.querySelector('#cancelm12').addEventListener('click',	function () {
+					document.getElementById("fcode").value = '';
+					document.getElementById("fname").value = '';
+					document.getElementById("fafm").value = '';
+					document.getElementById("faddress").value = '';
+					document.getElementById("fphone01").value = '';
+					document.getElementById("femail").value = '';
+					document.querySelector('#savem1').disabled = true;
+					document.getElementById("screenform").style.display = 'none'
+				})
+
+				document.querySelector('#cancelm2').addEventListener('click',function () {
+					document.getElementById("deleteform").style.display = 'none'
+				})
+
+				document.querySelector('#cancelm22').addEventListener('click',function () {
+					document.getElementById("deleteform").style.display = 'none'
+				})
+
+
+				window.addEventListener('click',function (event) {
+					if (event.target.className ==='modal-background') {
+						document.querySelector('#savem1').disabled = true;
+						document.getElementById("screenform").style.display = 'none'
+					}
+				})
+
+				document.querySelector('#savem2').addEventListener('click',function () {
+					document.getElementById("deleteform").style.display = 'none'
+					$("#loader").css("display", "block");
+					var d = table.rows(  { selected: true } ).data().toArray();
+					var id = JSON.stringify( d )
+					$.ajax({
+						url:"customers/delete",
+						type:"POST",
+						data:{id:d[0][7]},
+						success:function(data){
+							$("#loader").css("display", "none");
+							alert(data);
+						}
+					})
+				})
+
+				window.addEventListener('click',function (event) {
+					if (event.target.className ==='modal-background') {
+						document.getElementById("deleteform").style.display = 'none'
+					}
+				})
+			}
+		);
+
+		function updAll(event){
+			$('[id="'+this.id+'"]').val($(this).val());
+		}
+	</script>
+	<style>
+		.hide_column{
+		display : none;
+		}
+
+		.field input:disabled{
+  			cursor: default;
+		}
+
+		.display{
+  			cursor: default;
+		}
+
+		.field textarea:disabled{
+  			cursor: default;
+		}
+		.loader {
+			border: 16px solid #f3f3f3;
+			border-radius: 50%;
+			border-top: 16px solid #3298dc;
+			width: 120px;
+			height: 120px;
+			-webkit-animation: spin 2s linear infinite;
+			animation: spin 2s linear infinite;
+		}
+		@-webkit-keyframes spin {
+		  	0% { -webkit-transform: rotate(0deg); }
+		  	100% { -webkit-transform: rotate(360deg); }
+		}
+
+		@keyframes spin {
+		  	0% { transform: rotate(0deg); }
+		  	100% { transform: rotate(360deg); }
+		}
+	</style>
+</head>
+
+<body>
+	<div class="d-flex" id="wrapper">
+		<!-- Sidebar-->
+		<div class="border-end bg-light" id="sidebar-wrapper">
+			<div class="sidebar-heading border-bottom bg-light">Μενού</div>
+			<div class="list-group">
+				<a>
+					<div class="accordion accordion-flush" id="FindocExpand">
+						  <div class="accordion-item">
+								<h2 class="accordion-header" id="Findoc-headingOne">
+									<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#Findoc-collapseOne" aria-expanded="false" aria-controls="Findoc-collapseOne">
+										<a><i class="bi bi-cash"></i>  Εμπορική Διαχείρηση</a>
+									</button>
+								</h2>
+								<div id="Findoc-collapseOne" class="accordion-collapse collapse" aria-labelledby="Findoc-headingOne" data-bs-parent="#FindocExpand">
+										<div class="list-group">
+											<a class="list-group-item list-group-item-action list-group-item-light p-2" href="#!"><i class="bi bi-card-list"></i>  Πωλήσεις</a>
+											<a class="list-group-item list-group-item-action list-group-item-light p-2" href="#!"><i class="bi bi-card-list"></i>  Αγορές</a>
+										</div>
+								</div>
+						  </div>
+					</div>
+				</a>
+				<a>
+					<div class="accordion accordion-flush" id="TrdrExpand">
+						  <div class="accordion-item">
+								<h2 class="accordion-header" id="Trdr-headingOne">
+									<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#Trdr-collapseOne" aria-expanded="false" aria-controls="Trdr-collapseOne">
+										<a><i class="bi bi-people"></i>  Συναλασσόμενοι</a>
+									</button>
+								</h2>
+								<div id="Trdr-collapseOne" class="accordion-collapse collapse" aria-labelledby="Trdr-headingOne" data-bs-parent="#TrdrExpand">
+										<div class="list-group">
+											<a class="list-group-item list-group-item-action list-group-item-light p-2" href="/customers"><i class="bi bi-card-list"></i>  Πελάτες</a>
+											<a class="list-group-item list-group-item-action list-group-item-light p-2" href="#!"><i class="bi bi-card-list"></i>  Προμηθευτές</a>
+										</div>
+								</div>
+						  </div>
+					</div>
+				</a>
+				<a>
+					<div class="accordion accordion-flush" id="CrmExpand">
+						  <div class="accordion-item">
+								<h2 class="accordion-header" id="Crm-headingOne">
+									<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#Crm-collapseOne" aria-expanded="false" aria-controls="Crm-collapseOne">
+										<a><i class="bi bi-pie-chart"></i>  CRM</a>
+									</button>
+								</h2>
+								<div id="Crm-collapseOne" class="accordion-collapse collapse" aria-labelledby="Crm-headingOne" data-bs-parent="#CrmExpand">
+										<div class="list-group">
+											<a class="list-group-item list-group-item-action list-group-item-light p-2" href="/calendar"><i class="bi bi-calendar-date"></i>  Ημερολόγιο</a>
+											<a class="list-group-item list-group-item-action list-group-item-light p-2" href="/meetings"><i class="bi bi-card-list"></i>  Συναντήσεις</a>
+											<a class="list-group-item list-group-item-action list-group-item-light p-2" href="#!"><i class="bi bi-list-task"></i> Εκρεμότητες</a>
+											<a class="list-group-item list-group-item-action list-group-item-light p-2" href="#!"><i class="bi bi-telephone"></i> Κλήσεις</a>
+											<a class="list-group-item list-group-item-action list-group-item-light p-2" href="#!"><i class="bi bi-calendar"></i> Εορτολόγιο</a>
+											<a class="list-group-item list-group-item-action list-group-item-light p-2" href="#!"><i class="bi bi-check2-square"></i> Εγκρίσεις</a>
+										</div>
+								</div>
+						  </div>
+					</div>
+				</a>
+				<a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!"><i class="bi bi-clock"></i> Ραντεβού</a>
+				<a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!"><i class="bi bi-book"></i> Παρουσιολόγιο</a>
+			</div>
+		</div>
+		<!-- Page content wrapper-->
+		<div id="page-content-wrapper">
+			<!-- Top navigation-->
+			<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+				<div class="container-fluid">
+
+					<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+					<div class="collapse navbar-collapse" id="navbarSupportedContent">
+						<a class="navbar-item" href="/">
+							<img src="{{ url_for('static', filename= 'images/l.jpg') }}" width="30px;">
+						</a>
+
+
+						<ul class="navbar-nav ms-auto mt-2 mt-lg-0">
+
+							<li class="nav-item active"><a class="nav-link" href="/"><i class="bi bi-house-fill"></i> {{session['companyname']}}</a></li>
+
+							<li class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ><i class="bi bi-person-fill"></i> {{session['username']}}</a>
+								<div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+									<a class="dropdown-item" href="/"><i class="bi bi-house-fill"></i> {{session['companyname']}}</a>
+									<a class="dropdown-item" href="#!"><i class="bi bi-person-fill"></i> {{session['username']}}</a>
+									<a class="dropdown-item" href="#!"><i class="bi bi-gear-fill"></i> Settings</a>
+									<div class="dropdown-divider"></div>
+									<a class="dropdown-item" href="/logout"><i class="bi bi-door-closed-fill"></i> Αποσύνδεση</a>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</nav>
+
+			<!-- Page content-->
+			<div class="container-fluid">
+				<br/>
+				<button class="btn btn-outline-secondary" id="sidebarToggle"><i class="bi bi-chevron-double-right"></i></button>
+				<button class="button is-info" id='Load'>Load</button>
+				<button class="button is-info" id='btnfilters' style="display:none">Filters</button>
+				<button class="button is-info" id='btnew'>New</button>
+				<button class="button is-danger" id='btndelete' disabled="true">Delete</button>
+				<div>
+					<div>
+						<div>
+							<div class="modal" id="screenform">
+								<div class="modal-background"></div>
+								<div class="modal-card">
+
+									<header class="modal-card-head">
+										<p class="modal-card-title">Στοιχεία πελάτη</p>
+										<button class="delete" id="cancelm1" aria-label="close"></button>
+									</header>
+
+									<section class="modal-card-body" id="m1">
+
+										<div class="tabs">
+											  <ul>
+												<li class="tab is-active" onclick="openTab(event,'generalscreen')" id="genTab"><a>Βασικά στοιχεία</a></li>
+												<li class="tab" onclick="openTab(event,'commscreen')"><a>Στοιχεία επικοινωνίας </a></li>
+												<li class="tab" onclick="openTab(event,'telscreen')"><a>Thlefwna </a></li>
+											  </ul>
+										</div>
+
+
+										<div id="generalscreen" class="content-tab">
+											<div class="columns is-centered">
+												<div class="column">
+													<form id="myForm">
+														<div class="field" style="display:none;">
+															<label class="label has-text-dark"></label>
+															<input class="input" type="text" id="ftrdr" placeholder="trdr">
+														</div>
+
+														<label class="label has-text-dark">Πελάτης</label>
+														<div class="columns">
+															<div class="column is-4">
+																<div class="field">
+																	<input class="input" type="text" id="fcode" placeholder="Κωδικός">
+																</div>
+															</div>
+															<div class="column">
+																<div class="field">
+																	<input class="input" type="text" id="fname" placeholder="Επωνυμία">
+																</div>
+															</div>
+														</div>
+
+														<div class="field">
+															<label class="label has-text-dark">ΑΦΜ</label>
+															<input class="input" type="text" id="fafm" placeholder="ΑΦΜ">
+														</div>
+
+														<div class="field">
+															<label class="label has-text-dark">Διεύθυνση</label>
+															<input class="input" type="text" id="faddress" placeholder="Διεύθυνση" onfocusout="updAll.call(this,event);">
+														</div>
+
+														<div class="field">
+															<label class="label has-text-dark">Τηλ.1</label>
+															<input class="input" type="text" id="fphone01" placeholder="Τηλ.1" onfocusout="updAll.call(this,event);">
+														</div>
+
+														<div class="field">
+															<label class="label has-text-dark">e-mail</label>
+															<input class="input" type="text" autocomplete="off" id="femail" placeholder="e-mail" onfocusout="updAll.call(this,event);">
+														</div>
+
+														<div class="field">
+															<label class="label has-text-dark">Σχόλια</label>
+															<textarea class="textarea" id="fremarks"  placeholder="Σχόλια" onfocusout="updAll.call(this,event);"></textarea>
+														</div>
+													</form>
+												</div>
+											</div>
+										</div>
+
+										<div id="commscreen" class="content-tab" style="display:none;">
+											<div class="columns is-centered">
+												<div class="column">
+													<form>
+
+														<div class="field">
+															<label class="label has-text-dark">Πόλη</label>
+															<input class="input" type="text" id="ftown" placeholder="Πόλη" onfocusout="updAll.call(this,event);">
+														</div>
+
+														<div class="field">
+															<label class="label has-text-dark">Διεύθυνση</label>
+															<input class="input" type="text" id="faddress" placeholder="Διεύθυνση" onfocusout="updAll.call(this,event);">
+														</div>
+
+														<div class="field">
+															<label class="label has-text-dark">T.K</label>
+															<input class="input" type="text" id="fzip" placeholder="T.K" onfocusout="updAll.call(this,event);">
+														</div>
+
+														<div class="field">
+															<label class="label has-text-dark">Περιοχή</label>
+															<input class="input" type="text" id="fdistrict" placeholder="Περιοχή" onfocusout="updAll.call(this,event);">
+														</div>
+
+														<div class="field">
+															<label class="label has-text-dark">Τηλ.1</label>
+															<input class="input" type="text" id="fphone01" placeholder="Τηλ.1" onfocusout="updAll.call(this,event);">
+														</div>
+
+														<div class="field">
+															<label class="label has-text-dark">Τηλ.2</label>
+															<input class="input" type="text" id="fphone02" placeholder="Τηλ.2" onfocusout="updAll.call(this,event);">
+														</div>
+
+														<div class="field">
+															<label class="label has-text-dark">e-mail</label>
+															<input class="input" type="text" autocomplete="off" id="femail" placeholder="e-mail" onfocusout="updAll.call(this,event);">
+														</div>
+
+													</form>
+												</div>
+											</div>
+										</div>
+
+										<div id="telscreen" class="content-tab" style="display:none;">
+											<div class="columns is-centered">
+												<div class="column">
+													<form>
+
+														<div class="field">
+															<label class="label has-text-dark">Σχόλια</label>
+															<textarea class="textarea" id="fremarks"  placeholder="Σχόλια" onfocusout="updAll.call(this,event);"></textarea>
+														</div>
+
+													</form>
+												</div>
+											</div>
+										</div>
+
+									</section>
+
+									<footer class="modal-card-foot">
+										<button class="button is-success" disabled='true' id="savem1">Αποθήκευση</button>
+										<button class="button is-primary" id='editm1'>Edit</button>
+										<button class="button is-danger" id="cancelm12" aria-label="cancel">Ακύρωση</button>
+									</footer>
+
+								</div>
+
+							</div>
+
+							<div class="modal" id="deleteform">
+								<div class="modal-background"></div>
+								<div class="modal-card">
+									<header class="modal-card-head">
+										<p class="modal-card-title">Διαφραφή</p>
+										<button class="delete" id="cancelm2" aria-label="close"></button>
+									</header>
+									<section class="modal-card-body">
+										<div class="hero-body">
+											<div class="container">
+												<div class="columns is-centered">
+														<p>Επιβεβαίωση διαγραφής;</p>
+												</div>
+											</div>
+										</div>
+
+									</section>
+									<footer class="modal-card-foot">
+										<button class="button is-success" id="savem2">Επιβεβαίωση</button>
+										<button class="button is-danger" id="cancelm22" aria-label="cancel">Ακύρωση</button>
+									</footer>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+				<!--QUESTIONS-->
+
+				<div class="column is-half" id="questionsdiv" style="display:block">
+					<form name="questions">
+
+						<div class="field">
+							<div class="control has-icons-left has-icons-right">
+								 <input class="input" type="text" id="qcode" placeholder="Κωδικός">
+								<span class="icon is-small is-left">
+										<i class="fas fa-list"></i>
+								</span>
+							</div>
+						</div>
+
+						<div class="field">
+							<div class="control has-icons-left has-icons-right">
+								<input class="input" type="text"  id="qname" placeholder="Όνομα">
+								<span class="icon is-small is-left">
+									<i class="fas fa-user-tie"></i>
+								</span>
+							</div>
+						</div>
+
+					</form>
+				</div>
+
+				<div id="tablediv" style="visibility: hidden">
+					<table id="example" class="display" style="width:100%">
+						<thead>
+							{% for header in headings %}
+								{% if header=='hiden' or header=='hidentrdr'%}
+							<th style="display:none">{{header}}</th>
+								{% else %}
+							<th>{{header}}</th>
+								{% endif %}
+							{% endfor %}
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+				</div>
+				<br/><br/>
+			</div>
+		</div>
+		<button type="button" class="btn btn-secondary btn-floating btn-lg" id="btn-back-to-top">
+			<i class="bi bi-arrow-up"></i>
+		</button>
+		<script>
+			const sidebarToggle = document.body.querySelector('#sidebarToggle');
+
+			sidebarToggle.addEventListener('click', event => {
+				event.preventDefault();
+				document.body.classList.toggle('sb-sidenav-toggled');
+				localStorage.setItem('sb|sidebar-toggle', document.body.classList.contains('sb-sidenav-toggled'));
+			});
+
+			let mybutton = document.querySelector("#btn-back-to-top");
+
+			// When the user scrolls down 20px from the top of the document, show the button
+			window.onscroll = function () {
+				scrollFunction();
+			};
+
+			function scrollFunction() {
+				if ( document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+					mybutton.style.display = "block";
+				} else {
+					mybutton.style.display = "none";
+					}
+			}
+			// When the user clicks on the button, scroll to the top of the document
+			mybutton.addEventListener("click", backToTop);
+
+			function backToTop() {
+				document.body.scrollTop = 0;
+				document.documentElement.scrollTop = 0;
+			}
+		</script>
+	</div>
+
+
+	<footer class="text-center text-lg-start bg-light text-muted">
+		<!-- Section: Social media -->
+		<section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
+			<!-- Left -->
+			<div class="me-5 d-none d-lg-block">
+				<span>Συνδεθείτε μαζί μας στα κοινωνικά δίκτυα:</span>
+			</div>
+			<!-- Left -->
+
+			<!-- Right -->
+			<div>
+				<a href="https://www.facebook.com/DayOne-1099718003526187/" target="_blank" class="me-4 text-reset">
+					<i class="bi bi-facebook"></i>
+				</a>
+				<a href="" class="me-4 text-reset">
+					<i class="bi bi-twitter"></i>
+				</a>
+				<a href="https://www.day-one.gr/" target="_blank" class="me-4 text-reset">
+					<i class="bi bi-google"></i>
+				</a>
+				<a href="" class="me-4 text-reset">
+					<i class="bi bi-instagram"></i>
+				</a>
+				<a href="https://www.linkedin.com/company/dayone-company" target="_blank" class="me-4 text-reset">
+					<i class="bi bi-linkedin"></i>
+				</a>
+				<a href="" class="me-4 text-reset">
+					<i class="bi bi-github"></i>
+				</a>
+			</div>
+			<!-- Right -->
+		</section>
+		<!-- Section: Social media -->
+
+		<!-- Section: Links  -->
+		<section class="">
+			<div class="container text-center text-md-start mt-5">
+				<!-- Grid row -->
+				<div class="row mt-3">
+					<!-- Grid column -->
+					<div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+						<!-- Content -->
+							<h6 class="text-uppercase fw-bold mb-4">
+								<image src="{{ url_for('static', filename= 'images/l.jpg') }}" width="25px"></image> DAYONE
+							</h6>
+							<p>Η DayOne ιδρύθηκε για να προσφέρει λύσεις πληροφορικής για επιχειρήσεις.</p>
+					</div>
+					<!-- Grid column -->
+
+					<!-- Grid column -->
+					<div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+						<!-- Links -->
+						<h6 class="text-uppercase fw-bold mb-4">
+							<i class="bi bi-pen"></i> Υπηρεσιες
+						</h6>
+						<p>
+							<a href="#!" class="text-reset">Μηχανογράφηση</a>
+						</p>
+						<p>
+							<a href="#!" class="text-reset">Custom λύσεις</a>
+						</p>
+						<p>
+							<a href="#!" class="text-reset">Υλοποίηση Έργων</a>
+						</p>
+
+					</div>
+					<!-- Grid column -->
+
+					<!-- Grid column -->
+					<div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+						<!-- Links -->
+						<h6 class="text-uppercase fw-bold mb-4">
+							<i class="bi bi-link-45deg"></i> Χρησιμα links
+						</h6>
+						<p>
+							<a href="https://www.day-one.gr/kathetes-liseis/diaxeirisi-lianikis.html" target="_blanc" class="text-reset">Λιανική πώληση</a>
+						</p>
+						<p>
+							<a href="https://www.day-one.gr/kathetes-liseis/estiasi.html" target="_blanc" class="text-reset">Εστίαση</a>
+						</p>
+						<p>
+							<a href="https://www.day-one.gr/kathetes-liseis/metaforikes.html" target="_blanc" class="text-reset">Μεταφορικές</a>
+						</p>
+						<p>
+							<a href="https://www.day-one.gr/kathetes-liseis/metapwlhtes-kinhths.html" target="_blanc" class="text-reset">Κινητή τηλεφωνία</a>
+						</p>
+					</div>
+					<!-- Grid column -->
+
+					<!-- Grid column -->
+					<div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+						<!-- Links -->
+						<h6 class="text-uppercase fw-bold mb-4">
+							<i class="bi bi-person-lines-fill"></i> Επικοινωνiα
+						</h6>
+						<p><i class="bi bi-geo-alt-fill "></i><a href="https://goo.gl/maps/UBZbBfMZUN3DN9C5A" target="_blanc">Ζαλόγγου 1, Γαλάτσι</a></p>
+						<p>
+							<i class="bi bi-envelope-fill"></i>
+							<a href="mailto:name@example.com">sales@day-one.gr</a>
+						</p>
+						<p><i class="bi bi-telephone-fill"></i><a href="tel:+302165005060">+302165005060</a></p>
+					</div>
+					<!-- Grid column -->
+				</div>
+				<!-- Grid row -->
+			</div>
+		</section>
+
+		<!-- Section: Links  -->
+		<!-- Copyright -->
+		<div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
+			&copy; 2021 DAY-ONE
+		</div>
+		<!-- Copyright -->
+	</footer>
+	<div class="loader" id="loader" style="z-index:999;position:fixed;top:50%;left:50%;margin-top:-60px;margin-left:-60px;display:none;"></div>
+</body>
+</html>
