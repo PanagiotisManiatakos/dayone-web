@@ -1,7 +1,7 @@
 $(document).ready(function() {
     var calendar = $('#calendar').fullCalendar({
-        initialView: 'timeGridDay',
         selectable:true,
+        contentHeight: 800,
         selectHelper:true,
         editable:true,
         buttonText:{
@@ -17,6 +17,7 @@ $(document).ready(function() {
             right:'month,agendaWeek,agendaDay,list'
         },
         events: function (start, end, timezone, callback) {
+            $("#loader").css("display", "block");
             $.ajax({
                 url: '/D1ServicesIN',
                 type: 'POST',
@@ -46,13 +47,19 @@ $(document).ready(function() {
                     });
                     callback(events);
                 },
-                error: function () { alert('Failed!'); },
+                error: function () {
+                    alert('Failed!');
+                },
+                complete : function (){
+                    $("#loader").css("display", "none");
+                },
             });
         },
         select:
         function(start, end, allDay){
             var title = prompt("Enter Event Title");
             if(title){
+                $("#loader").css("display", "block");
                 var start = $.fullCalendar.formatDate(start, "Y-MM-DD HH:mm:ss");
                 var end = $.fullCalendar.formatDate(end, "Y-MM-DD HH:mm:ss");
                 $.ajax({
@@ -62,6 +69,9 @@ $(document).ready(function() {
                     success:function(data){
                         //alert(data)
                         calendar.fullCalendar('refetchEvents');
+                    },
+                    complete  :function(){
+                        $("#loader").css("display", "none");
                     }
                 })
             }
@@ -71,13 +81,18 @@ $(document).ready(function() {
             var end = $.fullCalendar.formatDate(event.end,"Y-MM-DD HH:mm:ss");
             var title = event.title;
             var id = event.id;
+            $("#loader").css("display", "block");
             $.ajax({
                 url:"calendar/update",
                 type:"POST",
                 data:{start:start, end:end, id:id},
                 success:function(){
                     calendar.fullCalendar('refetchEvents');
+                },
+                complete : function(){
+                    $("#loader").css("display", "none");
                 }
+
             })
         },
         eventDrop:function(event){
@@ -85,25 +100,29 @@ $(document).ready(function() {
             var end = $.fullCalendar.formatDate(event.end,"Y-MM-DD HH:mm:ss");
             var title = event.title;
             var id = event.id;
+            $("#loader").css("display", "block");
             $.ajax({
                 url:"calendar/update",
                 type:"POST",
                 data:{start:start, end:end, id:id},
                 success:function(){
                     calendar.fullCalendar('refetchEvents');
-                }
+                },
+                complete : function(){$("#loader").css("display", "none");}
             })
         },
         eventClick:function(event){
             if (confirm("Are you sure you want to remove?")){
                 var id = event.id;
+                $("#loader").css("display", "block");
                 $.ajax({
                     url:"calendar/delete",
                     type:"POST",
                     data:{id:id},
                     success:function(){
                         calendar.fullCalendar('refetchEvents');
-                    }
+                    },
+                    complete : function(){$("#loader").css("display", "block");}
                 })
             }
         },
