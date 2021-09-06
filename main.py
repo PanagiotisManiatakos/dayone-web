@@ -2,8 +2,10 @@ from flask import Flask, render_template, request, redirect, url_for, session, j
 from datetime import timedelta
 import requests
 import json
+from flask_mobility import Mobility
 
 app = Flask(__name__)
+Mobility(app)
 app.secret_key = 'hell'
 app.permanent_session_lifetime = timedelta(days=1)
 
@@ -101,7 +103,6 @@ def changepassword():
             return response.json()
     else:
         return redirect(url_for('login'))
-
 
 
 @app.route('/meetings')
@@ -274,8 +275,10 @@ def insertParousiologio():
 @app.route('/calendar')
 def calendar():
     if 'id' in session:
-        data = getSoaction(session['url'], session['id'])
-        return render_template("calendar.html", events=data)
+        if request.MOBILE:
+            return render_template("m_calendar.html")
+        else:
+            return render_template("calendar.html")
     else:
         return redirect(url_for('login'))
 
