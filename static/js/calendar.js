@@ -1,8 +1,18 @@
-$(document).ready(function() {
-    var calendar = $('#calendar').fullCalendar({
+document.addEventListener('DOMContentLoaded', function() {
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    window.today = yyyy + '-' + mm + '/' + dd;
+
+
+    var calendarEl = document.getElementById('calendar');
+    window.calendar = new FullCalendar.Calendar(calendarEl, {
         selectable:true,
-        contentHeight: 800,
-        selectHelper:true,
+        initialView: 'timeGridWeek',
+        height: $( "#calendar" ).parent().height()-50,
+        initialDate: today,
+        locale: 'gr',
         editable:true,
         buttonText:{
             today:'Σήμερα',
@@ -11,19 +21,19 @@ $(document).ready(function() {
             day:'Μέρα',
             list:'Λίστα'
         },
-        header:{
+        headerToolbar:{
             left:'prev,next today',
             center:'title',
-            right:'month,agendaWeek,agendaDay,list'
+            right:'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
         },
-        events: function (start, end, timezone, callback) {
+        events: function (fetchInfo, successCallback, failureCallback) {
             $("#loader").css("display", "block");
             $.ajax({
                 url: '/D1ServicesIN',
                 type: 'POST',
                 data:{
                     service:"get",
-                    object:"soaction",
+                    object:"calendar",
                 },
                 success: function(data) {
                     var events = [];
@@ -33,19 +43,14 @@ $(document).ready(function() {
                             id: d.SOACTION,
                             start: d.FROMDATE,
                             end:d.FINALDATE,
-                            title:d.SOACTIONCODE+' | '+d.TRDRNAME,
+                            title:d.TRDRNAME,
                             extendedProps:{
                                 comments : d.COMMENTS,
-                                trdr : d.TRDR,
-                                trdrcode : d.TRDRCODE,
-                                trdrname : d.TRDRNAME,
                                 prjc : d.PRJC,
-                                prjcode : d.PRJCODE,
-                                prjname : d.PRJNAME
                             }
                         });
                     });
-                    callback(events);
+                    successCallback(events);
                 },
                 error: function () {
                     alert('Failed!');
@@ -56,19 +61,17 @@ $(document).ready(function() {
             });
         },
         select:
-        function(start, end, allDay){
+        function(info){
             var title = prompt("Enter Event Title");
             if(title){
                 $("#loader").css("display", "block");
-                var start = $.fullCalendar.formatDate(start, "Y-MM-DD HH:mm:ss");
-                var end = $.fullCalendar.formatDate(end, "Y-MM-DD HH:mm:ss");
                 $.ajax({
                     url:"calendar/insert",
                     type:"POST",
-                    data:{title:title, start:start, end:end},
+                    data:{title:title, start:info.startStr, end:info.endStr},
                     success:function(data){
                         //alert(data)
-                        calendar.fullCalendar('refetchEvents');
+                        calendar.refetchEvents();
                     },
                     complete  :function(){
                         $("#loader").css("display", "none");
@@ -76,18 +79,17 @@ $(document).ready(function() {
                 })
             }
         },
-        eventResize:function(event){
-            var start = $.fullCalendar.formatDate(event.start,"Y-MM-DD HH:mm:ss");
-            var end = $.fullCalendar.formatDate(event.end,"Y-MM-DD HH:mm:ss");
-            var title = event.title;
-            var id = event.id;
+        eventResize:function(info){
+            var start = info.event.startStr;
+            var end = info.event.endStr;
+            var id = info.oldEvent.id;
             $("#loader").css("display", "block");
             $.ajax({
                 url:"calendar/update",
                 type:"POST",
                 data:{start:start, end:end, id:id},
-                success:function(){
-                    calendar.fullCalendar('refetchEvents');
+                success : function(){
+                    calendar.refetchEvents();
                 },
                 complete : function(){
                     $("#loader").css("display", "none");
@@ -95,36 +97,40 @@ $(document).ready(function() {
 
             })
         },
-        eventDrop:function(event){
-            var start = $.fullCalendar.formatDate(event.start,"Y-MM-DD HH:mm:ss");
-            var end = $.fullCalendar.formatDate(event.end,"Y-MM-DD HH:mm:ss");
-            var title = event.title;
-            var id = event.id;
+        eventDrop:function(info){
+            var start = info.event.startStr;
+            var end = info.event.endStr;
+            var id = info.event.id;
             $("#loader").css("display", "block");
             $.ajax({
                 url:"calendar/update",
                 type:"POST",
                 data:{start:start, end:end, id:id},
-                success:function(){
-                    calendar.fullCalendar('refetchEvents');
+                success : function(){
+                    calendar.refetchEvents();
                 },
                 complete : function(){$("#loader").css("display", "none");}
             })
         },
-        eventClick:function(event){
+        eventClick:function(info){
             if (confirm("Are you sure you want to remove?")){
-                var id = event.id;
+                var id = info.event.id;
                 $("#loader").css("display", "block");
                 $.ajax({
                     url:"calendar/delete",
                     type:"POST",
                     data:{id:id},
-                    success:function(){
-                        calendar.fullCalendar('refetchEvents');
+                    success : function(){
+                        calendar.refetchEvents();
                     },
                     complete : function(){$("#loader").css("display", "block");}
                 })
             }
         },
     });
+    calendar.render();
 });
+
+function updatethesize(){
+    calendar.updateSize();
+}

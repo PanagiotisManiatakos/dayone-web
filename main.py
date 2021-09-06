@@ -361,6 +361,8 @@ def D1ServicesIN():
         questions = {'trdr': request.form['id']}
     elif obj == 'soaction':
         questions = ''
+    elif obj == 'calendar':
+        questions = ''
     else:
         questions = {'qname': request.form['qname'],
                      'qcode': request.form['qcode']}
@@ -525,6 +527,14 @@ def getSoaction(url, id):
     return response
 
 
+def getCalendar(url, id):
+    payload = json.dumps({'clientID': id,
+                          'company': session['companycode'],
+                          'prsn': session['prsn']})
+    response = requests.request('POST', url + '/js/connector.connector/getCalendar', data=payload)
+    return response
+
+
 def get_Payments(url, id):
     payload = json.dumps({'clientID': id})
     response = requests.post(url + '/js/connector.connector/getPayments/post', data=payload)
@@ -558,6 +568,8 @@ def s1call(url, service, obj, company, id, data):
             call = requests.request('POST', url + '/js/connector.connector/getTrdr', headers=headers, data=data)
         elif obj == 'soaction':
             call = getSoaction(session['url'], session['id'])
+        elif obj == 'calendar':
+            call = getCalendar(session['url'], session['id'])
     elif service == "set":
         call = setData(url, obj, id, "", data)
     return call
