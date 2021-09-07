@@ -65,8 +65,16 @@
 <body style="padding-top:57px">
     <div class="loader" id="loader" style="z-index:999;position:fixed;top:50%;left:50%;margin-top:-60px;margin-left:-60px;display:none;"></div>
     <div class="d-flex" id="wrapper">
+		<!-- Sidebar Menu-->
+		<ul id="contextMenu">
+            <li><a class="disable-select" tabindex="-1" onclick="expandAll()">Πλήρη ανάπτυξη</a></li>
+            <li><a class="disable-select" tabindex="-1" onclick="closeAll()">Πλήρη σύμπτηξη</a></li>
+            <li class="dropdown-divider"></li>
+            <li><a class="disable-select" tabindex="-1">Separated link</a></li>
+        </ul>
+
 		<!-- Sidebar-->
-		<div class="border-end bg-light" id="sidebar-wrapper">
+		<div class="border-end bg-light disable-select" id="sidebar-wrapper">
 			<div class="list-group">
 				<div class="disable-select" style="display:none;">
 					<div class="d-flex justify-content-center p-2" id="divIcons">

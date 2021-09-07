@@ -362,8 +362,10 @@ def D1ServicesIN():
     auth = session['id']
     if obj == 'trdr':
         questions = {'trdr': request.form['id']}
+    elif obj == 'trdrname':
+        questions = {'name': request.form['name']}
     elif obj == 'soaction':
-        questions = ''
+        questions = {'soaction': request.form['id']}
     elif obj == 'calendar':
         questions = ''
     else:
@@ -569,8 +571,15 @@ def s1call(url, service, obj, company, id, data):
             data = json.dumps({'clientID': id,
                                'trdr': data['trdr']})
             call = requests.request('POST', url + '/js/connector.connector/getTrdr', headers=headers, data=data)
+        elif obj == "trdrname":
+            data = json.dumps({"clientID": id,
+                               "name": data['name'],
+                               "company": session['companycode']})
+            call = requests.request('POST', url + '/js/connector.connector/getTrdrSelectorByName', headers=headers, data=data)
         elif obj == 'soaction':
-            call = getSoaction(session['url'], session['id'])
+            data = json.dumps({'clientID': id,
+                               'soaction': data['soaction']})
+            call = requests.request('POST', url + '/js/connector.connector/getSoaction', headers=headers, data=data)
         elif obj == 'calendar':
             call = getCalendar(session['url'], session['id'])
     elif service == "set":
