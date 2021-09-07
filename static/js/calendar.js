@@ -39,16 +39,35 @@ document.addEventListener('DOMContentLoaded', function() {
                     var events = [];
                     $.each(data['data'], function (key, val) {
                         d=JSON.parse(JSON.stringify(this));
-                        events.push({
-                            id: d.SOACTION,
-                            start: d.FROMDATE,
-                            end:d.FINALDATE,
-                            title:d.TRDRNAME,
-                            extendedProps:{
-                                comments : d.COMMENTS,
-                                prjc : d.PRJC,
-                            }
-                        });
+                        var allDay;
+                        if(d.FINALDATE){
+                            allDay=false;
+                        }else{
+                            allDay=true
+                        };
+                        if(allDay){
+                            events.push({
+                                id: d.SOACTION,
+                                start: d.FROMDATE,
+                                allDay:true,
+                                title:d.TRDRNAME,
+                                extendedProps:{
+                                    comments : d.COMMENTS,
+                                    prjc : d.PRJC,
+                                }
+                            });
+                        }else{
+                            events.push({
+                                id: d.SOACTION,
+                                start: d.FROMDATE,
+                                end:d.FINALDATE,
+                                title:d.TRDRNAME,
+                                extendedProps:{
+                                    comments : d.COMMENTS,
+                                    prjc : d.PRJC,
+                                }
+                            })
+                        }
                     });
                     successCallback(events);
                 },
@@ -70,7 +89,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     type:"POST",
                     data:{title:title, start:info.startStr, end:info.endStr},
                     success:function(data){
-                        //alert(data)
                         calendar.refetchEvents();
                     },
                     complete  :function(){
