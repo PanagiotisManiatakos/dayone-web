@@ -379,13 +379,13 @@ $(document).ready(function(){
                     name:"%"+$("#fname").val()+"%"
                 },
                 success: function (d) {
-                    $('#SearchDrop').empty();
+                    $('#Selectorname').empty();
                     var rect = document.getElementById("fname").getBoundingClientRect();
                     var i=0;
                     $.each(d.data, function(index,value) {
                         i++;
                         data=jQuery.parseJSON(JSON.stringify(d.data[index]));
-                        $("#SearchDrop").append('<li class="dropdown-item disable-select" style="overflow-x: auto;">'+
+                        $("#Selectorname").append('<li class="dropdown-item disable-select" style="overflow-x: auto;">'+
                                                     '<div class="container-fluid" style="padding: 0px">'+
 					                                    '<div data-slide="'+ data.TRDR +'" class="row">'+
                                                             '<div class="col-3" style="overflow-x: hidden;">'+
@@ -401,26 +401,24 @@ $(document).ready(function(){
                             return false;
                         }
                     });
-                    $("#SearchDrop").css({
+                    $("#Selectorname").parent().css({'padding-top':rect.bottom-rect.top});
+                    $("#Selectorname").css({
                         'display': "block",
                         'left': rect.left,
-                        'top': rect.bottom,
-                        'right':rect.right,
-                        'z-index': 9999,
-                        'min-width':rect.right-rect.left
+                        'min-width':rect.right-rect.left,
                     });
                 }
             });
         }else{
-            $("#SearchDrop").css('display','none');
+            $("#Selectorname").css('display','none');
         }
     });
 
-    /*When Click on Selector fill the inputs*/
-    $("#SearchDrop").on("click", ".row", function() {
+    /*When Click on Selector Name fill the inputs*/
+    $("#Selectorname").on("click", ".row", function() {
         freezeClic=true;
         $("[id='loader']").css("display", "block");
-        $("#SearchDrop").css('display','none');
+        $("#Selectorname").css('display','none');
         var id = $(this).data('slide');
         $.ajax({
             url : '/D1ServicesIN',
