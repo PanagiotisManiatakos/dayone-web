@@ -10905,3 +10905,7 @@ body.sb-sidenav-toggled #wrapper #sidebar-wrapper {
         display:none;
     }
 }
+
+.locked {
+    disabled : true;
+}
