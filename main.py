@@ -125,16 +125,14 @@ def insertMeet():
                 "trndate": request.form['trndate'],
                 "fromdate": request.form['fromdate'],
                 "finaldate": request.form['finaldate'],
-                "prjc": request.form['prjc'],
                 "trdr": request.form['trdr'],
-                "comments": request.form['comments']
+                "comments": request.form['comments'],
+                "remarks": request.form['remarks'],
+                "actprsn":session['prsn']
             }]
             }
             response = setData(session['url'], 'SOMEETING', session['id'], "", data)
-            if response.json()['success']:
-                return 'Insert Successfully'
-            else:
-                return "Error :" + response.text
+            return response.json()
     else:
         return redirect(url_for('login'))
 
@@ -145,19 +143,15 @@ def updtMeet():
         if request.method == "POST":
             id = request.form['soaction']
             data = {"SOACTION": [{
-                "trndate": request.form['trndate'],
                 "fromdate": request.form['fromdate'],
                 "finaldate": request.form['finaldate'],
-                "prjc": request.form['prjc'],
                 "trdr": request.form['trdr'],
-                "comments": request.form['comments']
+                "comments": request.form['comments'],
+                "remarks": request.form['remarks'],
             }]
             }
             response = setData(session['url'], 'SOMEETING', session['id'], id, data)
-            if response.json()['success']:
-                return 'Update Successfully'
-            else:
-                return "Error :" + response.text
+            return response.json()
     else:
         return redirect(url_for('login'))
 
@@ -362,6 +356,8 @@ def D1ServicesIN():
     auth = session['id']
     if obj == 'trdr':
         questions = {'trdr': request.form['id']}
+    elif obj == 'trdrcode':
+        questions = {'code': request.form['code']}
     elif obj == 'trdrname':
         questions = {'name': request.form['name']}
     elif obj == 'soaction':
@@ -571,6 +567,11 @@ def s1call(url, service, obj, company, id, data):
             data = json.dumps({'clientID': id,
                                'trdr': data['trdr']})
             call = requests.request('POST', url + '/js/connector.connector/getTrdr', headers=headers, data=data)
+        elif obj == "trdrcode":
+            data = json.dumps({"clientID": id,
+                               "code": data['code'],
+                               "company": session['companycode']})
+            call = requests.request('POST', url + '/js/connector.connector/getTrdrSelectorByCode', headers=headers, data=data)
         elif obj == "trdrname":
             data = json.dumps({"clientID": id,
                                "name": data['name'],
@@ -596,6 +597,7 @@ def setData(url, obj, id, key, data):
                           "KEY": key,
                           "data": data})
     response = requests.request("POST", url, headers=headers, data=payload)
+    print(response.json())
     return response
 
 

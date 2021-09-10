@@ -29,8 +29,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
 
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='js/fullcalendar/lib/main.css') }}">
-	<script src="{{ url_for('static', filename= 'js/fullcalendar/lib/main.js') }}"></script>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/modal.css') }}">
 
+
+	<script src="{{ url_for('static', filename= 'js/fullcalendar/lib/main.js') }}"></script>
     <script src="{{ url_for('static', filename= 'js/m_calendar.js') }}"></script>
     <style>
 		.sidebar {
@@ -73,9 +75,6 @@
             <li class="dropdown-divider"></li>
             <li><a class="dropdown-item disable-select" tabindex="-1">Separated link</a></li>
         </ul>
-
-		<ul id="SearchDrop" class="dropdown-menu">
-		</ul>
 
 		<!-- Sidebar-->
 		<div class="border-end bg-light disable-select" id="sidebar-wrapper">
@@ -206,9 +205,65 @@
 		</button>
     </div>
 	<!--MODALS-->
-	<div class="modal fade" tabindex="-1" role="dialog" id="screenform" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+	<!--SuccessModal-->
+	<div class="modal fade" id="successmodal" role="dialog">
+		<div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-body">
+					<div class="container">
+						<div class="row">
+							<div class="d-flex justify-content-center">
+								<img src="{{ url_for('static', filename= 'images/Green-Tick.png') }}" style="width:50%">
+							</div>
+						</div>
+						<div class="row">
+							<div class="d-flex justify-content-center">
+								<text style="font-size:20px">Επιτυχής καταχώρηση</text>
+							</div>
+						</div>
+						<div class="row">
+							<div class="d-flex justify-content-center">
+								<h4>ID:<span id="insertID"></span></h4>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!--FailureModal-->
+	<div class="modal fade" id="failuremodal" role="dialog">
+		<div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-body">
+					<div class="container">
+						<div class="row">
+							<div class="d-flex justify-content-center">
+								<img src="{{ url_for('static', filename= 'images/Red-X.png') }}" style="width:50%">
+							</div>
+						</div>
+						<div class="row">
+							<div class="d-flex justify-content-center">
+								<text style="font-size:20px">Κάτι πήγε στραβά</text>
+							</div>
+						</div>
+						<div class="row">
+							<div class="d-flex justify-content-center">
+								<span id="insertIDFail"></span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!--ScreenModal-->
+	<div class="modal fade" tabindex="-1" role="dialog" id="screenform" style="display:none" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="loader" id="loader" style="z-index:999;position:fixed;top:50%;left:50%;margin-top:-60px;margin-left:-60px;display:none;"></div>
-		<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-dialog modal-fullscreen">
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title">Στοιχεία Συνάντησης</h5>
@@ -218,7 +273,7 @@
 				</div>
 				<div class="modal-body">
 					<!--TABS-->
-					<nav>
+					<nav style="padding-bottom:1rem">
 						<div class="nav nav-tabs" id="nav-tab" role="tablist" style="overflow-y:hidden;overflow-x: auto;flex-wrap: nowrap;">
 							<button class="nav-link active" id="generalscreen-tab" data-bs-toggle="tab" data-bs-target="#generalscreen" type="button" role="tab" aria-controls="generalscreen" aria-selected="true" style="white-space: nowrap;">Γενικά Στοιχεία</button>
 							<button class="nav-link" id="commscreen-tab" data-bs-toggle="tab" data-bs-target="#commscreen" type="button" role="tab" aria-controls="commscreen" aria-selected="false" style="white-space: nowrap;">Στοιχεία Επικοινωνίας</button>
@@ -240,50 +295,85 @@
 									</div>
 
 									<div class="form-group row">
-										<label for="fcode" class="col-sm-2 col-form-label">Κωδικός:</label>
+										<label for="fsoactioncode" class="col-sm-2 col-form-label disable-select">Συνάντηση:</label>
 										<div class="col-sm-10">
 											<div class="input-group">
-												<input class="form-control" type="text" id="fcode" placeholder="Κωδικός Πελάτη">
-												<span class="input-group-append">
-													<button class="btn btn-outline-secondary bg-white ms-n3" type="button">
-														<i class="fa fa-search"></i>
-													</button>
-												</span>
+												<input class="form-control locked" type="text" autocomplete="off" id="fsoactioncode" placeholder="Κωδικός Συνάντησης">
 											</div>
 										</div>
 									</div>
 
 									<div class="form-group row">
-										<label for="fname" class="col-sm-2 col-form-label">Επωνυμία:</label>
+										<label for="fcomments" class="col-sm-2 col-form-label disable-select">Σχόλια:</label>
+										<div class="col-sm-10">
+											<textarea class="form-control" id="fcomments" rows="1" onfocusout="updAll.call(this,event);" placeholder="Θέμα"></textarea>
+										</div>
+									</div>
+
+									<div class="form-group row">
+										<label for="ffromdate" class="col-sm-2 col-form-label disable-select">Από:</label>
+										<div class="col-sm-5">
+											<input class="form-control" type="datetime-local" autocomplete="off" id="ffromdate">
+										</div>
+
+										<label for="ffinaldate" class="col-sm-1 col-form-label disable-select">Έως:</label>
+										<div class="col-sm-4">
+											<input class="form-control" type="datetime-local" autocomplete="off" id="ffinaldate">
+										</div>
+									</div>
+
+									<div class="form-group row">
+										<label for="fcode" class="col-sm-2 col-form-label disable-select">Κωδικός:</label>
+										<div class="col-sm-10">
+											<div class="input-group">
+												<input class="form-control" type="text" autocomplete="off" id="fcode" placeholder="Κωδικός Πελάτη">
+												<span class="input-group-append">
+													<button class="btn btn-outline-secondary bg-white ms-n3 locked" type="button">
+														<i class="fa fa-search"></i>
+													</button>
+												</span>
+											</div>
+										</div>
+										<div class="dropdown" style="position:absolute">
+											<ul id="Selectorcode" class="dropdown-menu"></ul>
+										</div>
+									</div>
+
+									<div class="form-group row">
+										<label for="fname" class="col-sm-2 col-form-label disable-select">Επωνυμία:</label>
 										<div class="col-sm-10">
 											<div class="input-group">
 												<input class="form-control" type="text" autocomplete="off" id="fname" placeholder="Επωνυμία Πελάτη">
 												<span class="input-group-append">
-													<button class="btn btn-outline-secondary bg-white ms-n3" type="button">
+													<button class="btn btn-outline-secondary bg-white ms-n3 locked" type="button">
 														<i class="fa fa-search"></i>
 													</button>
 												</span>
 											</div>
 										</div>
-									</div>
-
-									<div class="form-group row">
-										<label for="faddress" class="col-sm-2 col-form-label">Διεύθυνση:</label>
-										<div class="col-sm-10">
-											<input type="text" class="form-control" id="faddress" placeholder="Διεύθυνση" onfocusout="updAll.call(this,event);">
+										<div class="dropdown" style="position:absolute">
+											<ul id="Selectorname" class="dropdown-menu"></ul>
 										</div>
 									</div>
 
 									<div class="form-group row">
-										<label for="fphone01" class="col-sm-2 col-form-label">Τηλ.1:</label>
+										<label for="faddress" class="col-sm-2 col-form-label disable-select">Διεύθυνση:</label>
 										<div class="col-sm-10">
-											<input type="text" class="form-control" id="fphone01" placeholder="Τηλ.1" onfocusout="updAll.call(this,event);">
+											<div class="input-group">
+												<input type="text" class="form-control locked" autocomplete="off" id="faddress" placeholder="Διεύθυνση">
+											</div>
 										</div>
 									</div>
 
+									<div class="form-group row">
+										<label for="fphone01" class="col-sm-2 col-form-label disable-select">Τηλ.1:</label>
+										<div class="col-sm-10">
+											<input type="text" class="form-control locked" id="fphone01" placeholder="Τηλ.1" onfocusout="updAll.call(this,event);">
+										</div>
+									</div>
 
 									<div class="form-group row">
-										<label for="fremarks" class="col-sm-2 col-form-label">Σχόλια:</label>
+										<label for="fremarks" class="col-sm-2 col-form-label disable-select">Σχόλια:</label>
 										<div class="col-sm-10">
 											<textarea class="form-control" id="fremarks" rows="3" onfocusout="updAll.call(this,event);" placeholder="Σχόλια"></textarea>
 										</div>
@@ -356,8 +446,7 @@
 	</div>
 
 	<!-- Bootstrap core JS-->
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
-	<!-- Core theme JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>	<!-- Core theme JS-->
 </body>
 <footer class="bg-light border-top text-muted fixed-bottom d-flex justify-content-center p-2">
 	<!-- Section: Social media -->
