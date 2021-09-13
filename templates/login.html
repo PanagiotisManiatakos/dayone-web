@@ -97,7 +97,7 @@
 
               <div id="btlogin" class="field" style="display:none;" >
                 <p class="control">
-                  <button type="submit" class="button is-info is-fullwidth">
+                  <button type="submit" id="bbtlogin" class="button is-info is-fullwidth">
                     Σύνδεση
                   </button>
                 </p>
@@ -105,14 +105,25 @@
 
               <div id="btnext" class="field" onclick="companies()">
                 <p class="control">
-                  <button type="button" class="button is-info is-fullwidth">
+                  <button type="button" id="bbtnext" class="button is-info is-fullwidth">
                     Επόμενο
                   </button>
                 </p>
               </div>
-
-
+              <script>
+                  var cbox = document.querySelectorAll('#uname, #password, #cname, #comcode');
+                  for (let i = 0; i < cbox.length; i++) {
+                      cbox[i].addEventListener('keypress', function(event) {
+                          if (event.keyCode == 13) {
+                              event.preventDefault();
+                              if(document.getElementById('btlogin').style.display == 'none'){document.getElementById("bbtnext").click();}
+                              else{document.getElementById("bbtlogin").click();}
+                          }
+                      });
+                  };
+              </script>
             </form>
+
               <div class="loader" id="loader" style="z-index:999;position:fixed;top:50%;left:50%;margin-top:-60px;margin-left:-60px;display:none;"></div>
               <p class="error" id="error" style="display:none"><strong>Login Failed: </strong><label id="errorDisplay">Check credentials</label></p>
           </div>
