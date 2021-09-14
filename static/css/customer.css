@@ -1,0 +1,44 @@
+.addIcon {
+  width: 60px;
+  height: 60px;
+  position: fixed;
+  bottom: 75px;
+  right: 25px;
+  z-index: 99;
+  cursor: pointer;
+  border-radius: 50px;
+}
+
+.addIcon>i {
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+}
+
+.inpCenter {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  align-content: center;
+  flex-wrap: nowrap;
+}
+
+.maxWidth {
+  width: -webkit-fill-available;
+}
+
+.sideNav {
+  position: fixed;
+  z-index: 3;
+}
+
+.sideList {
+  z-index: 3;
+  overflow-y: scroll;
+  height: 100%;
+  padding-bottom: 150px;
+}
