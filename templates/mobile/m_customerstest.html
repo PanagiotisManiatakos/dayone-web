@@ -10,24 +10,19 @@
     <link href="{{ url_for('static', filename= 'images/l.jpg') }}" rel="icon">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/general.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
-
     <script src="{{ url_for('static', filename= 'js/g.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link href="http://fonts.googleapis.com/css?family=Cookie" rel="stylesheet" type="text/css">
-
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/select/1.3.3/css/select.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/scroller/2.0.4/css/scroller.bulma.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/searchpanes/1.3.0/css/searchPanes.bulma.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css">
-
     <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.25/js/dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/select/1.3.3/js/dataTables.select.min.js"></script>
@@ -35,68 +30,15 @@
     <script src="https://cdn.datatables.net/searchpanes/1.3.0/js/searchPanes.min.js"></script>
     <script src="https://cdn.datatables.net/select/1.3.3/js/dataTables.select.min.js"></script>
     <script src="https://cdn.datatables.net/scroller/2.0.4/js/dataTables.scroller.min.js"></script>
-
     <script src="{{ url_for('static', filename= 'js/customers.js') }}"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename= 'css/customer.css') }}">
-
+    <link rel="stylesheet" href="{{ url_for('static', filename= 'css/globalStyling.css') }}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
         integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
     </script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
     </script>
-
-
-    <style>
-        .sidebar {
-            width: 60px !important;
-        }
-
-        .loader {
-            border: 16px solid #f3f3f3;
-            border-radius: 50%;
-            border-top: 16px solid #3298dc;
-            width: 120px;
-            height: 120px;
-            -webkit-animation: spin 2s linear infinite;
-            animation: spin 2s linear infinite;
-        }
-
-        @-webkit-keyframes spin {
-            0% {
-                -webkit-transform: rotate(0deg);
-            }
-
-            100% {
-                -webkit-transform: rotate(360deg);
-            }
-        }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        .hide_column {
-            display: none;
-        }
-
-        .dataTables_wrapper .dataTables_filter {
-            display: none;
-        }
-
-        .disable-select {
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-        }
-    </style>
 </head>
 
 <body style="padding-top:57px;">
@@ -210,8 +152,8 @@
                     <div>
                         <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!"><i
                                 class="bi bi-clock"></i> Ραντεβού</a>
-                        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!"><i
-                                class="bi bi-book"></i> Παρουσιολόγιο</a>
+                        <a class="list-group-item list-group-item-action list-group-item-light p-3"
+                            href="/parousiologio"><i class="bi bi-book"></i> Παρουσιολόγιο</a>
                     </div>
                 </a>
             </div>
@@ -282,9 +224,8 @@
                     <input type="text" class="form-control" placeholder="Search" id="SearchPanel" disabled="true">
                 </div>
                 <div class="dropdown">
-                    <button class="btn btn-primary bi-three-dots-vertical " type="button" id="dropdownMenuButton"
+                    <button class="btn btn-secondary bi-three-dots-vertical " type="button" id="dropdownMenuButton"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <a class="dropdown-item" href="#">Action</a>
@@ -561,7 +502,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="d-flex justify-content-center">
-                                            <text style="font-size:20px">Επιτυχής καταχώρηση</text>
+                                            <p style="font-size:20px">Επιτυχής καταχώρηση</p>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -589,7 +530,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="d-flex justify-content-center">
-                                            <text style="font-size:20px">Κάτι πήγε στραβά</text>
+                                            <p style="font-size:20px">Κάτι πήγε στραβά</p>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -617,7 +558,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="d-flex justify-content-center">
-                                            <text style="font-size:20px">Επιτυχής Διαγραφή</text>
+                                            <p style="font-size:20px">Επιτυχής Διαγραφή</p>
                                         </div>
                                     </div>
                                 </div>
@@ -640,7 +581,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="d-flex justify-content-center">
-                                            <text style="font-size:20px">Κάτι πήγε στραβά</text>
+                                            <p style="font-size:20px">Κάτι πήγε στραβά</p>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -692,7 +633,7 @@
         </div>
     </div>
 
-    
+
     </div>
     <!-- Footer -->
     <footer class="bg-light border-top text-muted fixed-bottom d-flex justify-content-center p-2">

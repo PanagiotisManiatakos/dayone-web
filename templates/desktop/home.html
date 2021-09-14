@@ -7,56 +7,24 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="keywords" content="footer, address, phone, icons" />
 	<title>Day-One</title>
-	<link href ="{{ url_for('static', filename= 'images/l.jpg') }}" rel="icon">
+	<link href="{{ url_for('static', filename= 'images/l.jpg') }}" rel="icon">
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/general.css') }}">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
-
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-
-
 	<script src="{{ url_for('static', filename= 'js/g.js') }}"></script>
 	<script src="{{ url_for('static', filename= 'js/user.js') }}"></script>
-
-
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+		integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 	<link href="http://fonts.googleapis.com/css?family=Cookie" rel="stylesheet" type="text/css">
-
-	<style>
-		.sidebar {
-			width:60px !important;
-		}
-        .loader {
-            border: 16px solid #f3f3f3;
-            border-radius: 50%;
-            border-top: 16px solid #3298dc;
-            width: 120px;
-            height: 120px;
-            -webkit-animation: spin 2s linear infinite;
-            animation: spin 2s linear infinite;
-        }
-
-        @-webkit-keyframes spin {
-            0% { -webkit-transform: rotate(0deg); }
-            100% { -webkit-transform: rotate(360deg); }
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        .disable-select {
-          -webkit-user-select: none;
-          -moz-user-select: none;
-          -ms-user-select: none;
-          user-select: none;
-        }
-	</style>
+	<link rel="stylesheet" href="{{ url_for('static', filename= 'css/globalStyling.css') }}">
 </head>
+
 <body style="padding-top:57px">
-	<div class="loader" id="loader" style="z-index:999;position:fixed;top:50%;left:50%;margin-top:-60px;margin-left:-60px;display:none;"></div>
+	<div class="loader" id="loader"
+		style="z-index:999;position:fixed;top:50%;left:50%;margin-top:-60px;margin-left:-60px;display:none;"></div>
 	<div class="d-flex" id="wrapper">
 		<!-- Sidebar-->
 		<div class="border-end bg-light" id="sidebar-wrapper">
@@ -79,61 +47,82 @@
 				</div>
 				<a>
 					<div class="accordion accordion-flush" id="FindocExpand">
-						  <div class="accordion-item">
-								<h2 class="accordion-header" id="Findoc-headingOne">
-									<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#Findoc-collapseOne" aria-expanded="false" aria-controls="Findoc-collapseOne">
-										<a><i class="bi bi-cash"></i>  Εμπορική Διαχείρηση</a>
-									</button>
-								</h2>
-								<div id="Findoc-collapseOne" class="accordion-collapse collapse" aria-labelledby="Findoc-headingOne" data-bs-parent="#FindocExpand">
-										<div class="list-group">
-											<a class="list-group-item list-group-item-action list-group-item-light p-2" href="#!"><i class="bi bi-card-list"></i>  Πωλήσεις</a>
-											<a class="list-group-item list-group-item-action list-group-item-light p-2" href="#!"><i class="bi bi-card-list"></i>  Αγορές</a>
-										</div>
+						<div class="accordion-item">
+							<h2 class="accordion-header" id="Findoc-headingOne">
+								<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+									data-bs-target="#Findoc-collapseOne" aria-expanded="false"
+									aria-controls="Findoc-collapseOne">
+									<a><i class="bi bi-cash"></i> Εμπορική Διαχείρηση</a>
+								</button>
+							</h2>
+							<div id="Findoc-collapseOne" class="accordion-collapse collapse"
+								aria-labelledby="Findoc-headingOne" data-bs-parent="#FindocExpand">
+								<div class="list-group">
+									<a class="list-group-item list-group-item-action list-group-item-light p-2"
+										href="#!"><i class="bi bi-card-list"></i> Πωλήσεις</a>
+									<a class="list-group-item list-group-item-action list-group-item-light p-2"
+										href="#!"><i class="bi bi-card-list"></i> Αγορές</a>
 								</div>
-						  </div>
+							</div>
+						</div>
 					</div>
 				</a>
 				<a>
 					<div class="accordion accordion-flush" id="TrdrExpand">
-						  <div class="accordion-item">
-								<h2 class="accordion-header" id="Trdr-headingOne">
-									<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#Trdr-collapseOne" aria-expanded="false" aria-controls="Trdr-collapseOne">
-										<a><i class="bi bi-people"></i>  Συναλασσόμενοι</a>
-									</button>
-								</h2>
-								<div id="Trdr-collapseOne" class="accordion-collapse collapse" aria-labelledby="Trdr-headingOne" data-bs-parent="#TrdrExpand">
-										<div class="list-group">
-											<a class="list-group-item list-group-item-action list-group-item-light p-2" href="/customers"><i class="bi bi-card-list"></i>  Πελάτες</a>
-											<a class="list-group-item list-group-item-action list-group-item-light p-2" href="#!"><i class="bi bi-card-list"></i>  Προμηθευτές</a>
-										</div>
+						<div class="accordion-item">
+							<h2 class="accordion-header" id="Trdr-headingOne">
+								<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+									data-bs-target="#Trdr-collapseOne" aria-expanded="false"
+									aria-controls="Trdr-collapseOne">
+									<a><i class="bi bi-people"></i> Συναλασσόμενοι</a>
+								</button>
+							</h2>
+							<div id="Trdr-collapseOne" class="accordion-collapse collapse"
+								aria-labelledby="Trdr-headingOne" data-bs-parent="#TrdrExpand">
+								<div class="list-group">
+									<a class="list-group-item list-group-item-action list-group-item-light p-2"
+										href="/customers"><i class="bi bi-card-list"></i> Πελάτες</a>
+									<a class="list-group-item list-group-item-action list-group-item-light p-2"
+										href="#!"><i class="bi bi-card-list"></i> Προμηθευτές</a>
 								</div>
-						  </div>
+							</div>
+						</div>
 					</div>
 				</a>
 				<a>
 					<div class="accordion accordion-flush" id="CrmExpand">
-						  <div class="accordion-item">
-								<h2 class="accordion-header" id="Crm-headingOne">
-									<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#Crm-collapseOne" aria-expanded="false" aria-controls="Crm-collapseOne">
-										<a><i class="bi bi-pie-chart"></i>  CRM</a>
-									</button>
-								</h2>
-								<div id="Crm-collapseOne" class="accordion-collapse collapse" aria-labelledby="Crm-headingOne" data-bs-parent="#CrmExpand">
-										<div class="list-group">
-											<a class="list-group-item list-group-item-action list-group-item-light p-2" href="/calendar"><i class="bi bi-calendar-date"></i>  Ημερολόγιο</a>
-											<a class="list-group-item list-group-item-action list-group-item-light p-2" href="/meetings"><i class="bi bi-card-list"></i>  Συναντήσεις</a>
-											<a class="list-group-item list-group-item-action list-group-item-light p-2" href="#!"><i class="bi bi-list-task"></i> Εκρεμότητες</a>
-											<a class="list-group-item list-group-item-action list-group-item-light p-2" href="#!"><i class="bi bi-telephone"></i> Κλήσεις</a>
-											<a class="list-group-item list-group-item-action list-group-item-light p-2" href="#!"><i class="bi bi-calendar"></i> Εορτολόγιο</a>
-											<a class="list-group-item list-group-item-action list-group-item-light p-2" href="#!"><i class="bi bi-check2-square"></i> Εγκρίσεις</a>
-										</div>
+						<div class="accordion-item">
+							<h2 class="accordion-header" id="Crm-headingOne">
+								<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+									data-bs-target="#Crm-collapseOne" aria-expanded="false"
+									aria-controls="Crm-collapseOne">
+									<a><i class="bi bi-pie-chart"></i> CRM</a>
+								</button>
+							</h2>
+							<div id="Crm-collapseOne" class="accordion-collapse collapse"
+								aria-labelledby="Crm-headingOne" data-bs-parent="#CrmExpand">
+								<div class="list-group">
+									<a class="list-group-item list-group-item-action list-group-item-light p-2"
+										href="/calendar"><i class="bi bi-calendar-date"></i> Ημερολόγιο</a>
+									<a class="list-group-item list-group-item-action list-group-item-light p-2"
+										href="/meetings"><i class="bi bi-card-list"></i> Συναντήσεις</a>
+									<a class="list-group-item list-group-item-action list-group-item-light p-2"
+										href="#!"><i class="bi bi-list-task"></i> Εκρεμότητες</a>
+									<a class="list-group-item list-group-item-action list-group-item-light p-2"
+										href="#!"><i class="bi bi-telephone"></i> Κλήσεις</a>
+									<a class="list-group-item list-group-item-action list-group-item-light p-2"
+										href="#!"><i class="bi bi-calendar"></i> Εορτολόγιο</a>
+									<a class="list-group-item list-group-item-action list-group-item-light p-2"
+										href="#!"><i class="bi bi-check2-square"></i> Εγκρίσεις</a>
 								</div>
-						  </div>
+							</div>
+						</div>
 					</div>
 				</a>
-				<a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!"><i class="bi bi-clock"></i> Ραντεβού</a>
-				<a class="list-group-item list-group-item-action list-group-item-light p-3" href="/parousiologio"><i class="bi bi-book"></i> Παρουσιολόγιο</a>
+				<a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!"><i
+						class="bi bi-clock"></i> Ραντεβού</a>
+				<a class="list-group-item list-group-item-action list-group-item-light p-3" href="/parousiologio"><i
+						class="bi bi-book"></i> Παρουσιολόγιο</a>
 			</div>
 		</div>
 		<!-- Page content wrapper-->
@@ -142,32 +131,39 @@
 			<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom fixed-top">
 				<div class="container-fluid">
 
-					<button class="navbar-toggler" type="button" data-bs-toggle="collapse" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+					<button class="navbar-toggler" type="button" data-bs-toggle="collapse" aria-expanded="false"
+						aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
 					<div class="collapse navbar-collapse" id="navbarSupportedContent">
-						<button class="btn btn-outline-secondary" id="sidebarToggle"><span class="navbar-toggler-icon"></span></button>
+						<button class="btn btn-outline-secondary" id="sidebarToggle"><span
+								class="navbar-toggler-icon"></span></button>
 						<script>
-							if($('.navbar-toggler').css('display')=='none'){
-							}else{
-								$('#sidebarToggle').css('display','none');
-								$('#divIcons').parent().css('display','block');
+							if ($('.navbar-toggler').css('display') == 'none') {} else {
+								$('#sidebarToggle').css('display', 'none');
+								$('#divIcons').parent().css('display', 'block');
 							};
 
-							$('.navbar-toggler').on('click', function(){
+							$('.navbar-toggler').on('click', function () {
 								$('#sidebarToggle').click();
 							});
 						</script>
 						<ul class="navbar-nav ms-auto mt-2 mt-lg-0">
 
-							<li class="nav-item"><a class="nav-link" href="/"><i class="bi bi-house-fill"></i> {{session['companyname']}}</a></li>
+							<li class="nav-item"><a class="nav-link" href="/"><i class="bi bi-house-fill"></i>
+									{{session['companyname']}}</a></li>
 
 							<li class="nav-item dropdown">
-								<a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ><i class="bi bi-person-fill"></i> {{session['username']}}</a>
+								<a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
+									data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
+										class="bi bi-person-fill"></i> {{session['username']}}</a>
 								<div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-									<a class="dropdown-item" href="/"><i class="bi bi-house-fill"></i> {{session['companyname']}}</a>
-									<a class="dropdown-item" onclick="user()" style="cursor: pointer"><i class="bi bi-person-fill"></i> {{session['username']}}</a>
+									<a class="dropdown-item" href="/"><i class="bi bi-house-fill"></i>
+										{{session['companyname']}}</a>
+									<a class="dropdown-item" onclick="user()" style="cursor: pointer"><i
+											class="bi bi-person-fill"></i> {{session['username']}}</a>
 									<a class="dropdown-item" href="#!"><i class="bi bi-gear-fill"></i> Settings</a>
 									<div class="dropdown-divider"></div>
-									<a class="dropdown-item" href="/logout"><i class="bi bi-door-closed-fill"></i> Αποσύνδεση</a>
+									<a class="dropdown-item" href="/logout"><i class="bi bi-door-closed-fill"></i>
+										Αποσύνδεση</a>
 								</div>
 							</li>
 						</ul>
@@ -185,7 +181,8 @@
 						<div class="card">
 							<div class="card-body">
 								<h5 class="card-title"><i class="bi bi-cash"></i> Τζίρος</h5>
-								<p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+								<p class="card-text">With supporting text below as a natural lead-in to additional
+									content.</p>
 								<a href="#" class="btn btn-primary">Περισσότερα</a>
 							</div>
 						</div>
@@ -194,19 +191,21 @@
 						<div class="card">
 							<div class="card-body">
 								<h5 class="card-title"><i class="bi bi-clock"></i> Ραντεβού</h5>
-								<p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+								<p class="card-text">With supporting text below as a natural lead-in to additional
+									content.</p>
 								<a href="#" class="btn btn-primary">Περισσότερα</a>
 							</div>
 						</div>
 					</div>
 				</div>
-				<br/>
+				<br />
 				<div class="row">
 					<div class="col-sm-6">
 						<div class="card">
 							<div class="card-body">
 								<h5 class="card-title"><i class="bi bi-list-task"></i> Εκρεμότητες</h5>
-								<p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+								<p class="card-text">With supporting text below as a natural lead-in to additional
+									content.</p>
 								<a href="#" class="btn btn-primary">Περισσότερα</a>
 							</div>
 						</div>
@@ -215,13 +214,14 @@
 						<div class="card">
 							<div class="card-body">
 								<h5 class="card-title"><i class="bi bi-telephone"></i> Κλήσεις</h5>
-								<p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+								<p class="card-text">With supporting text below as a natural lead-in to additional
+									content.</p>
 								<a href="#" class="btn btn-primary">Περισσότερα</a>
 							</div>
 						</div>
 					</div>
 				</div>
-				<br/>
+				<br />
 				<div class="row">
 					<div class="col-sm-3">
 						<div class="card">
@@ -229,10 +229,15 @@
 								<h5 class="card-title"><i class="bi bi-calendar"></i> Εορτολόγιο</h5>
 								<p class="card-text">
 									<div style="width:px;text-align:center;">
-										<iframe src="https://www.eortologio.net/widget.php?color=555555&color2=f5f5f5&bgcolor=ffffff&width=60&height=50" width="auto" height="auto" scrolling=no marginwidth=0 marginheight=0 frameborder=0 border=0 style="border:0;margin:0;padding:0;"></iframe>
-										<a style="font-size:13px;color:#404040;text-decoration:none;text-shadow: 0px 1px 0px #F0F0F0" href="https://www.eortologio.net" target="_blank"></a>
+										<iframe
+											src="https://www.eortologio.net/widget.php?color=555555&color2=f5f5f5&bgcolor=ffffff&width=60&height=50"
+											width="auto" height="auto" scrolling=no marginwidth=0 marginheight=0
+											frameborder=0 border=0 style="border:0;margin:0;padding:0;"></iframe>
+										<a style="font-size:13px;color:#404040;text-decoration:none;text-shadow: 0px 1px 0px #F0F0F0"
+											href="https://www.eortologio.net" target="_blank"></a>
 									</div>
-								<a href="https://www.eortologio.net/" target="_blanc" class="btn btn-primary">Περισσότερα</a>
+									<a href="https://www.eortologio.net/" target="_blanc"
+										class="btn btn-primary">Περισσότερα</a>
 							</div>
 						</div>
 					</div>
@@ -240,7 +245,8 @@
 						<div class="card">
 							<div class="card-body">
 								<h5 class="card-title"><i class="bi bi-book"></i> Παρουσιολόγιο</h5>
-								<p class="card-text">Σκανάρετε το QRCode που βρίσκεται στην εταιρία σας, κατά την είσοδο και έξοδο απο αυτή.</p>
+								<p class="card-text">Σκανάρετε το QRCode που βρίσκεται στην εταιρία σας, κατά την είσοδο
+									και έξοδο απο αυτή.</p>
 								<a href="/parousiologio" class="btn btn-primary">Περισσότερα</a>
 							</div>
 						</div>
@@ -249,28 +255,28 @@
 						<div class="card">
 							<div class="card-body">
 								<h5 class="card-title"><i class="bi bi-check2-square"></i> Εγκρίσεις</h5>
-								<p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+								<p class="card-text">With supporting text below as a natural lead-in to additional
+									content.</p>
 								<a href="#" class="btn btn-primary">Περισσότερα</a>
 							</div>
 						</div>
 					</div>
-					</div>
 				</div>
-				<br/><br/>
 			</div>
-
+			<br /><br />
 		</div>
 
-		<script>
-			const sidebarToggle = document.body.querySelector('#sidebarToggle');
+	</div>
 
-			sidebarToggle.addEventListener('click', event => {
-				event.preventDefault();
-				document.body.classList.toggle('sb-sidenav-toggled');
-				localStorage.setItem('sb|sidebar-toggle', document.body.classList.contains('sb-sidenav-toggled'));
-			});
+	<script>
+		const sidebarToggle = document.body.querySelector('#sidebarToggle');
 
-		</script>
+		sidebarToggle.addEventListener('click', event => {
+			event.preventDefault();
+			document.body.classList.toggle('sb-sidenav-toggled');
+			localStorage.setItem('sb|sidebar-toggle', document.body.classList.contains('sb-sidenav-toggled'));
+		});
+	</script>
 	</div>
 	<!--USERMODAL-->
 	<div class="modal fade" id="usermodal" role="dialog">
@@ -305,14 +311,18 @@
 							</div>
 							<div id="changepassdiv" style="display:none">
 								<div class="form-group row">
-									<input value="{{session['password']}}" id="oldpasswcfromsession" style="display:none">
-									<input type="password" class="form-control" id="oldpasswchange" placeholder="Τρέχων κωδικός">
+									<input value="{{session['password']}}" id="oldpasswcfromsession"
+										style="display:none">
+									<input type="password" class="form-control" id="oldpasswchange"
+										placeholder="Τρέχων κωδικός">
 								</div>
 								<div class="form-group row">
-									<input type="password" class="form-control" id="newpasswchange" placeholder="Νέος κωδικός">
+									<input type="password" class="form-control" id="newpasswchange"
+										placeholder="Νέος κωδικός">
 								</div>
 								<div class="form-group row">
-									<input type="password" class="form-control" id="confirmpasswchange" placeholder="Επιβεβαίωση">
+									<input type="password" class="form-control" id="confirmpasswchange"
+										placeholder="Επιβεβαίωση">
 								</div>
 								<div class="form-group row">
 									<label class="col-form-label" id="passerror" style="color:red"></label>
@@ -330,12 +340,12 @@
 					<div class="container" id="passwordchangeconfirmdiv" style="display:none">
 						<div class="d-flex justify-content-center">
 							<div class="row">
-								<divc class="col">
+								<div class="col">
 									<button class="btn btn-success" onclick="checkpass()">Επιβεβαίωση</button>
-								</divc>
-								<divc class="col">
+								</div>
+								<div class="col">
 									<button class="btn btn-danger" onclick="closethismodal()">Ακύρωση</button>
-								</divc>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -356,7 +366,7 @@
 						</div>
 						<div class="row">
 							<div class="d-flex justify-content-center">
-								<text style="font-size:20px">Επιτυχής καταχώρηση</text>
+								<p style="font-size:20px">Επιτυχής καταχώρηση</p>
 							</div>
 						</div>
 						<div class="row">
@@ -382,7 +392,7 @@
 						</div>
 						<div class="row">
 							<div class="d-flex justify-content-center">
-								<text style="font-size:20px">Κάτι πήγε στραβά</text>
+								<p style="font-size:20px">Κάτι πήγε στραβά</p>
 							</div>
 						</div>
 						<div class="row">
@@ -395,7 +405,7 @@
 			</div>
 		</div>
 	</div>
-		<!-- Footer -->
+	<!-- Footer -->
 	<!-- Footer -->
 	<!-- Bootstrap core JS-->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -403,23 +413,24 @@
 </body>
 <footer class="bg-light border-top text-muted fixed-bottom d-flex justify-content-center p-2">
 	<!-- Section: Social media -->
-		<div>
-			<a href="https://www.facebook.com/DayOne-1099718003526187/" target="_blank" class="me-4 text-reset">
-				<i class="bi bi-facebook"></i>
-			</a>
-			<a href="" class="me-4 text-reset">
-				<i class="bi bi-twitter"></i>
-			</a>
-			<a href="https://www.day-one.gr/" target="_blank" class="me-4 text-reset">
-				<i class="bi bi-google"></i>
-			</a>
-			<a href="" class="me-4 text-reset">
-				<i class="bi bi-instagram"></i>
-			</a>
-			<a href="https://www.linkedin.com/company/dayone-company" target="_blank" class="me-4 text-reset">
-				<i class="bi bi-linkedin"></i>
-			</a>
-		</div>
+	<div>
+		<a href="https://www.facebook.com/DayOne-1099718003526187/" target="_blank" class="me-4 text-reset">
+			<i class="bi bi-facebook"></i>
+		</a>
+		<a href="" class="me-4 text-reset">
+			<i class="bi bi-twitter"></i>
+		</a>
+		<a href="https://www.day-one.gr/" target="_blank" class="me-4 text-reset">
+			<i class="bi bi-google"></i>
+		</a>
+		<a href="" class="me-4 text-reset">
+			<i class="bi bi-instagram"></i>
+		</a>
+		<a href="https://www.linkedin.com/company/dayone-company" target="_blank" class="me-4 text-reset">
+			<i class="bi bi-linkedin"></i>
+		</a>
+	</div>
 	<!-- Section: Social media -->
 </footer>
+
 </html>
