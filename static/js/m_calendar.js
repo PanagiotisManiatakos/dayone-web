@@ -185,11 +185,15 @@ document.addEventListener('DOMContentLoaded', function() {
             cNew: {
                 text : 'Νέα',
                 click: function() {
+                    var ddnn = new Date(Date.now())
+                    var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
+                    var localISOTimeFROM = (new Date(ddnn - tzoffset)).toISOString().slice(0, 16);
+                    var localISOTimeFINAL = (new Date(ddnn.setHours(ddnn.getHours() + 1) - tzoffset)).toISOString().slice(0, 16);
                     $("[id='fsoaction']").val('');
                     $("[id='fsoactioncode']").val('');
                     $("[id='ftrdr']").val('');
-                    $("[id='ffromdate']").val('');
-                    $("[id='ffinaldate']").val('');
+                    $("[id='ffromdate']").val(localISOTimeFROM);
+                    $("[id='ffinaldate']").val(localISOTimeFINAL);
                     $("[id='fcode']").val('');
                     $("[id='fname']").val('');
                     $("[id='faddress']").val('');
@@ -378,11 +382,13 @@ $(document).ready(function(){
                           $('#successmodal').modal('hide')
                         }, 2000);
                     }else{
+                        $('#screenform').modal('toggle');
                         $("#insertIDFail").text(data['error']);
                         $('#failuremodal').modal('toggle');
                         setTimeout(function(){
-                          $('#failuremodal').modal('hide')
-                        }, 3000);
+                            $('#screenform').modal('toggle');
+                            $('#failuremodal').modal('hide')
+                        }, 2000);
                     }
                 }
             })
@@ -413,8 +419,9 @@ $(document).ready(function(){
                         $("#insertIDFail").text(data['error']);
                         $('#failuremodal').modal('toggle');
                         setTimeout(function(){
-                          $('#failuremodal').modal('hide')
-                        }, 3000);
+                            $('#screenform').modal('toggle');
+                            $('#failuremodal').modal('hide')
+                        }, 2000);
                     }
                 }
             })
@@ -488,54 +495,6 @@ $(document).ready(function(){
         }
     });
 
-    /*When Search for customer by name*/
-    $("#fname").keyup(function() {
-        if($("#fname").val().length > 3 ){
-            $.ajax({
-                url: '/D1ServicesIN',
-                method: "POST",
-                data:{
-                    service:"get",
-                    object:"trdrname",
-                    name:"%"+$("#fname").val()+"%"
-                },
-                success: function (d) {
-                    $('#Selectorname').empty();
-                    var rect = document.getElementById("fname").parentElement.getBoundingClientRect();
-                    var i=0;
-                    $.each(d.data, function(index,value) {
-                        i++;
-                        data=jQuery.parseJSON(JSON.stringify(d.data[index]));
-                        $("#Selectorname").append('<li class="dropdown-item disable-select" style="overflow-x: auto;">'+
-                                                    '<div class="container-fluid" style="padding: 0px">'+
-					                                    '<div data-slide="'+ data.TRDR +'" class="row">'+
-                                                            '<div class="col-3" style="overflow-x: hidden;">'+
-                                                                '<a id="SelectorCode"">'+ data.CODE +'</a>'+
-                                                            '</div>'+
-                                                            '<div class="col-9">'+
-                                                                '<a id="SelectorName">'+ data.NAME +'</a>'+
-                                                            '</div>'+
-                                                       '</div>'+
-                                                   '</div>'+
-                                                '</li>');
-                        if(i == 10) {
-                            return false;
-                        }
-                    });
-                    $("#Selectorname").parent().css({'padding-top':rect.bottom-rect.top});
-                    $("#Selectorname").css({
-                        'display': "block",
-                        'left': rect.left,
-                        'margin-top':rect.bottom-rect.top,
-                        'width':rect.right-rect.left,
-                    });
-                }
-            });
-        }else{
-            $("#Selectorname").css('display','none');
-        }
-    });
-
     /*When Click on Selector Code fill the inputs*/
     $("#Selectorcode").on("click", ".row", function() {
         freezeClic=true;
@@ -600,7 +559,17 @@ $(document).ready(function(){
         $('.tab-pane').removeClass('active show');
         $('#generalscreen-tab').addClass('active');
         $('#generalscreen').addClass('active show');
+        var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
+        var localISOTime = (new Date(Date.now() - tzoffset)).toISOString().slice(0, -1);
     })
+
+    /*When focusout fromdate*/
+    $("#ffromdate").on("focusout", function() {
+        var ddnn = new Date($('#ffromdate').val())
+        var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
+        var localISOTimeFINAL = (new Date(ddnn.setHours(ddnn.getHours() + 1) - tzoffset)).toISOString().slice(0, 16);
+        $("#ffinaldate").val(localISOTimeFINAL);
+    });
 });
 
 function updAll(event){
@@ -615,7 +584,6 @@ function closeAll(){
     $("#sidebar-wrapper .accordion-collapse").collapse('hide');
 }
 
-
 let freezeClic = false;
 
 document.addEventListener('click', function(e){
@@ -626,3 +594,57 @@ document.addEventListener('click', function(e){
         }
     }
 });
+
+var timer;
+function trdrSelectorByName(){
+    if($("#fname").val().length > 2 ){
+        clearTimeout(timer);
+        timer=setTimeout(function validate(){
+        var str = $("#fname").val().replace('*','%');
+
+            $.ajax({
+                url: '/D1ServicesIN',
+                method: "POST",
+                data:{
+                    service:"get",
+                    object:"trdrname",
+                    name:str+"%"
+                },
+                success: function (d) {
+                    $('#Selectorname').empty();
+                    var rect = document.getElementById("fname").parentElement.getBoundingClientRect();
+                    var i=0;
+                    $.each(d.data, function(index,value) {
+                        i++;
+                        data=jQuery.parseJSON(JSON.stringify(d.data[index]));
+                        $("#Selectorname").append('<li class="dropdown-item disable-select" style="overflow-x: auto;">'+
+                                                    '<div class="container-fluid" style="padding: 0px">'+
+                                                        '<div data-slide="'+ data.TRDR +'" class="row">'+
+                                                            '<div class="col-3" style="overflow-x: hidden;">'+
+                                                                '<a id="SelectorCode"">'+ data.CODE +'</a>'+
+                                                            '</div>'+
+                                                            '<div class="col-9">'+
+                                                                '<a id="SelectorName">'+ data.NAME +'</a>'+
+                                                            '</div>'+
+                                                       '</div>'+
+                                                   '</div>'+
+                                                '</li>');
+                        if(i == 10) {
+                            return false;
+                        }
+                    });
+                    $("#Selectorname").parent().css({'padding-top':rect.bottom-rect.top});
+                    $("#Selectorname").css({
+                        'display': "block",
+                        'left': rect.left,
+                        'margin-top':rect.bottom-rect.top,
+                        'width':rect.right-rect.left,
+                    });
+                }
+            });
+        },400);
+    }else{
+        clearTimeout(timer);
+        $("#Selectorname").css('display','none');
+    }
+}
