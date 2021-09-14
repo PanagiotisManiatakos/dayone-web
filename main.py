@@ -159,8 +159,10 @@ def updtMeet():
 @app.route('/customers')
 def customers():
     if 'id' in session:
-        headings = ('Κωδικός', 'Επωνυμία', 'ΑΦΜ', 'Διεύθυνση', 'Τηλ1', 'Email', 'Υπόλοιπο', 'hidentrdr')
-        return render_template("customerstest.html", headings=headings)
+        if request.MOBILE:
+            return render_template("m_customerstest.html")
+        else:
+            return render_template("customerstest.html")
     else:
         return redirect(url_for('login'))
 
