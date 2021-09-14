@@ -21,14 +21,12 @@ def reindex():
 @app.route("/index")
 def index():
     if 'id' in session:
-        return render_template("home.html")
+        if request.MOBILE:
+            return render_template("mobile/m_home.html")
+        else:
+            return render_template("desktop/home.html")
     else:
         return redirect(url_for('login'))
-
-
-@app.route("/about")
-def about():
-    return render_template("about.html")
 
 
 # Route for handling the login page logic
@@ -55,7 +53,8 @@ def login():
         session['companyname'] = companyname
         session['username'] = username
         session['password'] = password
-        getcred = s1get_Credentials(url, password, username, session['companycode'])
+        getcred = s1get_Credentials(
+            url, password, username, session['companycode'])
         if getcred['success']:
             session['prsn'] = getcred['data'][0]['prsn']
             session['isadmin'] = getcred['data'][0]['isadmin']
@@ -96,8 +95,10 @@ def changepassword():
     if 'id' in session:
         if request.method == "POST":
             id = session['cccwebaccounts']
-            data = {"cccWEBACCOUNTS": [{"password": request.form['newpassword']}]}
-            response = setData(session['url'], 'cccWEBACCOUNTS', session['id'], id, data)
+            data = {"cccWEBACCOUNTS": [
+                {"password": request.form['newpassword']}]}
+            response = setData(
+                session['url'], 'cccWEBACCOUNTS', session['id'], id, data)
             if response.json()['success']:
                 session['password'] = request.form['newpassword']
             return response.json()
@@ -110,9 +111,11 @@ def meetings():
     if 'id' in session:
         headings = ('Κωδικός', 'Από', 'Έως', 'Πελάτης', 'Σχόλια', 'Έργο')
         d1 = getSoaction(session['url'], session['id'])
-        d2 = getCustomersSelector(session['url'], session['id'], session['companycode'])
-        d3 = getPrjcSelector(session['url'], session['id'], session['companycode'])
-        return render_template("meetings.html", headings=headings, data=d1, customers=d2, prjc=d3)
+        d2 = getCustomersSelector(
+            session['url'], session['id'], session['companycode'])
+        d3 = getPrjcSelector(
+            session['url'], session['id'], session['companycode'])
+        return render_template("desktop/meetings.html", headings=headings, data=d1, customers=d2, prjc=d3)
     else:
         return redirect(url_for('login'))
 
@@ -131,7 +134,8 @@ def insertMeet():
                 "actprsn":session['prsn']
             }]
             }
-            response = setData(session['url'], 'SOMEETING', session['id'], "", data)
+            response = setData(
+                session['url'], 'SOMEETING', session['id'], "", data)
             return response.json()
     else:
         return redirect(url_for('login'))
@@ -150,7 +154,8 @@ def updtMeet():
                 "remarks": request.form['remarks'],
             }]
             }
-            response = setData(session['url'], 'SOMEETING', session['id'], id, data)
+            response = setData(
+                session['url'], 'SOMEETING', session['id'], id, data)
             return response.json()
     else:
         return redirect(url_for('login'))
@@ -160,9 +165,9 @@ def updtMeet():
 def customers():
     if 'id' in session:
         if request.MOBILE:
-            return render_template("m_customerstest.html")
+            return render_template("mobile/m_customerstest.html")
         else:
-            return render_template("customerstest.html")
+            return render_template("desktop/customerstest.html")
     else:
         return redirect(url_for('login'))
 
@@ -185,7 +190,8 @@ def insertCust():
                 "remarks": request.form['remarks']
             }]
             }
-            response = setData(session['url'], 'CUSTOMER', session['id'], "", data)
+            response = setData(
+                session['url'], 'CUSTOMER', session['id'], "", data)
             return response.json()
     else:
         return redirect(url_for('login'))
@@ -210,7 +216,8 @@ def updtCust():
                 "remarks": request.form['remarks']
             }]
             }
-            response = setData(session['url'], 'CUSTOMER', session['id'], id, data)
+            response = setData(
+                session['url'], 'CUSTOMER', session['id'], id, data)
             return response.json()
     else:
         return redirect(url_for('login'))
@@ -231,7 +238,11 @@ def deleteCust():
 def parousiologio():
     if 'id' in session:
         d1 = {'qrcode': session['url']}
-        return render_template("parousiologio.html", data=d1)
+        if request.MOBILE:
+            return render_template("mobile/m_parousiologio.html", data=d1)
+        else:
+            return render_template("desktop/parousiologio.html", data=d1)
+
     else:
         return redirect(url_for('login'))
 
@@ -243,14 +254,16 @@ def insertParousiologio():
             message = request.form['qrcode']
             if message.lower() == session['url'].lower():
                 date = request.form['date']
-                thecheck = s1_CheckForChekIn(session['url'], session['prsn'], date, session['companycode'])
+                thecheck = s1_CheckForChekIn(
+                    session['url'], session['prsn'], date, session['companycode'])
                 if thecheck.json()['success']:
                     soaction = thecheck.json()['data'][0]['SOACTION']
                     data = {"SOPRSN": [{
                         "finaldate": date
                     }]
                     }
-                    setData(session['url'], 'SOPRSN', session['id'], soaction, data)
+                    setData(session['url'], 'SOPRSN',
+                            session['id'], soaction, data)
                     return {'success': True, 'status': 'update'}
                 else:
                     data = {"SOPRSN": [{
@@ -272,9 +285,9 @@ def insertParousiologio():
 def calendar():
     if 'id' in session:
         if request.MOBILE:
-            return render_template("m_calendar.html")
+            return render_template("mobile/m_calendar.html")
         else:
-            return render_template("calendar.html")
+            return render_template("desktop/calendar.html")
     else:
         return redirect(url_for('login'))
 
@@ -291,7 +304,8 @@ def insertcal():
                 "COMMENTS": request.form['title'],
             }]
             }
-            response = setData(session['url'], 'SOMEETING', session['id'], "", data)
+            response = setData(
+                session['url'], 'SOMEETING', session['id'], "", data)
             return response.text
     else:
         return redirect(url_for('login'))
@@ -309,7 +323,8 @@ def updatecal():
                 "actprsn": session['prsn']
             }]
             }
-            response = setData(session['url'], 'SOMEETING', session['id'], id, data)
+            response = setData(
+                session['url'], 'SOMEETING', session['id'], id, data)
             return response.text
     else:
         return redirect(url_for('login'))
@@ -438,7 +453,8 @@ def s1authenticate(url, id, company):
 def s1get_Credentials1(url, password, username):
     payload = json.dumps({"password": password,
                           "username": username})
-    response = requests.request('POST', url + '/js/connector.connector/getCredentials1', data=payload)
+    response = requests.request(
+        'POST', url + '/js/connector.connector/getCredentials1', data=payload)
     return response.json()
 
 
@@ -446,7 +462,8 @@ def s1get_Credentials(url, password, username, company):
     payload = json.dumps({"password": password,
                           "username": username,
                           "company": company})
-    response = requests.request('POST', url + '/js/connector.connector/getCredentials', data=payload)
+    response = requests.request(
+        'POST', url + '/js/connector.connector/getCredentials', data=payload)
     return response.json()
 
 
@@ -455,13 +472,15 @@ def s1_CheckForChekIn(url, prsn, date, company):
                           "date": date,
                           "prsn": prsn,
                           "company": company})
-    response = requests.request('POST', url + '/js/connector.connector/checkForCheckIn', data=payload)
+    response = requests.request(
+        'POST', url + '/js/connector.connector/checkForCheckIn', data=payload)
     return response
 
 
 def getCompanies(url, cccwebaccounts):
     payload = json.dumps({"cccwebaccounts": cccwebaccounts})
-    response = requests.request('POST', url + '/js/connector.connector/getCompanies', data=payload)
+    response = requests.request(
+        'POST', url + '/js/connector.connector/getCompanies', data=payload)
     return response.json()
 
 
@@ -472,7 +491,8 @@ def getCustomersSelector(url, id, company):
     payload = json.dumps({
         "clientID": id,
         "company": company})
-    response = requests.request('POST', url + '/js/connector.connector/getCustomersSelector', data=payload)
+    response = requests.request(
+        'POST', url + '/js/connector.connector/getCustomersSelector', data=payload)
     return response.json()['data']
 
 
@@ -480,7 +500,8 @@ def getPrjcSelector(url, id, company):
     payload = json.dumps({
         "clientID": id,
         "company": company})
-    response = requests.request('POST', url + '/js/connector.connector/getPrjcSelector', data=payload)
+    response = requests.request(
+        'POST', url + '/js/connector.connector/getPrjcSelector', data=payload)
     return response.json()['data']
 
 
@@ -518,7 +539,8 @@ def decrypt(message, key):
 def getCustomers(url, id, company):
     payload = json.dumps({'clientID': id,
                           'company': company})
-    response = requests.request('POST', url + '/js/connector.connector/getCustomers', data=payload)
+    response = requests.request(
+        'POST', url + '/js/connector.connector/getCustomers', data=payload)
     return response.json()['data']
 
 
@@ -526,7 +548,8 @@ def getSoaction(url, id):
     payload = json.dumps({'clientID': id,
                           'company': session['companycode'],
                           'prsn': session['prsn']})
-    response = requests.request('POST', url + '/js/connector.connector/getSoaction', data=payload)
+    response = requests.request(
+        'POST', url + '/js/connector.connector/getSoaction', data=payload)
     return response
 
 
@@ -534,19 +557,22 @@ def getCalendar(url, id):
     payload = json.dumps({'clientID': id,
                           'company': session['companycode'],
                           'prsn': session['prsn']})
-    response = requests.request('POST', url + '/js/connector.connector/getCalendar', data=payload)
+    response = requests.request(
+        'POST', url + '/js/connector.connector/getCalendar', data=payload)
     return response
 
 
 def get_Payments(url, id):
     payload = json.dumps({'clientID': id})
-    response = requests.post(url + '/js/connector.connector/getPayments/post', data=payload)
+    response = requests.post(
+        url + '/js/connector.connector/getPayments/post', data=payload)
     return response.text
 
 
 def get_Products(url, id):
     payload = json.dumps({'clientID': id})
-    response = requests.post(url + '/js/connector.connector/getProducts/post', data=payload)
+    response = requests.post(
+        url + '/js/connector.connector/getProducts/post', data=payload)
     return response.text
 
 
@@ -556,33 +582,40 @@ def s1call(url, service, obj, company, id, data):
     call = ""
     if service == "get":
         if obj == "item":
-            call = requests.request('POST', url + '/js/connector.connector/getProducts', headers=headers, data=clientID)
+            call = requests.request(
+                'POST', url + '/js/connector.connector/getProducts', headers=headers, data=clientID)
         elif obj == "payment":
-            call = requests.request('POST', url + '/js/connector.connector/getPayments', headers=headers, data=clientID)
+            call = requests.request(
+                'POST', url + '/js/connector.connector/getPayments', headers=headers, data=clientID)
         elif obj == "customer":
             data = json.dumps({'clientID': id,
                                'company': company,
                                'qname': data['qname'],
                                'qcode': data['qcode']})
-            call = requests.request('POST', url + '/js/connector.connector/getCustomers', headers=headers, data=data)
+            call = requests.request(
+                'POST', url + '/js/connector.connector/getCustomers', headers=headers, data=data)
         elif obj == "trdr":
             data = json.dumps({'clientID': id,
                                'trdr': data['trdr']})
-            call = requests.request('POST', url + '/js/connector.connector/getTrdr', headers=headers, data=data)
+            call = requests.request(
+                'POST', url + '/js/connector.connector/getTrdr', headers=headers, data=data)
         elif obj == "trdrcode":
             data = json.dumps({"clientID": id,
                                "code": data['code'],
                                "company": session['companycode']})
-            call = requests.request('POST', url + '/js/connector.connector/getTrdrSelectorByCode', headers=headers, data=data)
+            call = requests.request(
+                'POST', url + '/js/connector.connector/getTrdrSelectorByCode', headers=headers, data=data)
         elif obj == "trdrname":
             data = json.dumps({"clientID": id,
                                "name": data['name'],
                                "company": session['companycode']})
-            call = requests.request('POST', url + '/js/connector.connector/getTrdrSelectorByName', headers=headers, data=data)
+            call = requests.request(
+                'POST', url + '/js/connector.connector/getTrdrSelectorByName', headers=headers, data=data)
         elif obj == 'soaction':
             data = json.dumps({'clientID': id,
                                'soaction': data['soaction']})
-            call = requests.request('POST', url + '/js/connector.connector/getSoaction', headers=headers, data=data)
+            call = requests.request(
+                'POST', url + '/js/connector.connector/getSoaction', headers=headers, data=data)
         elif obj == 'calendar':
             call = getCalendar(session['url'], session['id'])
     elif service == "set":

@@ -9,30 +9,7 @@
   <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="{{ url_for('static', filename= 'js/login.js') }}"></script>
-  <style>
-    .select, .select select{
-        width: 100%;
-    }
-    .loader {
-      border: 16px solid #f3f3f3;
-      border-radius: 50%;
-      border-top: 16px solid #3298dc;
-      width: 120px;
-      height: 120px;
-      -webkit-animation: spin 2s linear infinite;
-      animation: spin 2s linear infinite;
-    }
-
-    @-webkit-keyframes spin {
-      0% { -webkit-transform: rotate(0deg); }
-      100% { -webkit-transform: rotate(360deg); }
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-  </style>
+  <link rel="stylesheet" href="{{ url_for('static', filename= 'css/globalStyling.css') }}">
 </head>
 
 <body>
@@ -42,19 +19,16 @@
         <div class="columns is-centered">
           <div class="column is-half">
             <form name="login" method="POST">
-
-
-
-			  <div class="control has-icons-left" style="margin-bottom:10px;">
-				<div class="select">
-					<select name="platform" id="platform">
-						<option selected>Softone</option>
-					</select>
-                   <span class="icon is-large is-left">
-					<i class="fas fa-cogs"></i>
-				  </span>
-				</div>
-			  </div>
+              <div class="control has-icons-left" style="margin-bottom:10px;">
+                <div class="select">
+                  <select name="platform" id="platform">
+                    <option selected>Softone</option>
+                  </select>
+                  <span class="icon is-large is-left">
+                    <i class="fas fa-cogs"></i>
+                  </span>
+                </div>
+              </div>
 
               <div class="field">
                 <div class="control has-icons-left has-icons-right">
@@ -67,7 +41,7 @@
 
               <div class="field">
                 <div class="control has-icons-left has-icons-right">
-                  <input class="input" type="text"  id="uname" name="username" placeholder="Username" required>
+                  <input class="input" type="text" id="uname" name="username" placeholder="Username" required>
                   <span class="icon is-small is-left">
                     <i class="fas fa-user"></i>
                   </span>
@@ -83,19 +57,17 @@
                 </p>
               </div>
 
-
               <div id="divcom" class="control has-icons-left has-icons-right" style="margin-bottom:15px;display:none;">
-				<div class="select" >
-					<select name="comcode" id="comcode" required>
-                    </select>
-				</div>
-                  <span class="icon is-small is-left">
-                    <i class="fas fa-home"></i>
-                  </span>
-			  </div>
+                <div class="select">
+                  <select name="comcode" id="comcode" required>
+                  </select>
+                </div>
+                <span class="icon is-small is-left">
+                  <i class="fas fa-home"></i>
+                </span>
+              </div>
 
-
-              <div id="btlogin" class="field" style="display:none;" >
+              <div id="btlogin" class="field" style="display:none;">
                 <p class="control">
                   <button type="submit" id="bbtlogin" class="button is-info is-fullwidth">
                     Σύνδεση
@@ -111,21 +83,27 @@
                 </p>
               </div>
               <script>
-                  var cbox = document.querySelectorAll('#uname, #password, #cname, #comcode');
-                  for (let i = 0; i < cbox.length; i++) {
-                      cbox[i].addEventListener('keypress', function(event) {
-                          if (event.keyCode == 13) {
-                              event.preventDefault();
-                              if(document.getElementById('btlogin').style.display == 'none'){document.getElementById("bbtnext").click();}
-                              else{document.getElementById("bbtlogin").click();}
-                          }
-                      });
-                  };
+                var cbox = document.querySelectorAll('#uname, #password, #cname, #comcode');
+                for (let i = 0; i < cbox.length; i++) {
+                  cbox[i].addEventListener('keypress', function (event) {
+                    if (event.keyCode == 13) {
+                      event.preventDefault();
+                      if (document.getElementById('btlogin').style.display == 'none') {
+                        document.getElementById("bbtnext").click();
+                      } else {
+                        document.getElementById("bbtlogin").click();
+                      }
+                    }
+                  });
+                };
               </script>
             </form>
 
-              <div class="loader" id="loader" style="z-index:999;position:fixed;top:50%;left:50%;margin-top:-60px;margin-left:-60px;display:none;"></div>
-              <p class="error" id="error" style="display:none"><strong>Login Failed: </strong><label id="errorDisplay">Check credentials</label></p>
+            <div class="loader" id="loader"
+              style="z-index:999;position:fixed;top:50%;left:50%;margin-top:-60px;margin-left:-60px;display:none;">
+            </div>
+            <p class="error" id="error" style="display:none"><strong>Login Failed: </strong><label
+                id="errorDisplay">Check credentials</label></p>
           </div>
         </div>
       </div>
