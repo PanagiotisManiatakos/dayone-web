@@ -334,6 +334,7 @@ document.addEventListener("DOMContentLoaded", function () {
           $("#loader").css("display", "none");
           $("#screenform .modal-content .modal-body .tab-content")
             .find("*")
+            .not('#mapp')
             .attr("disabled", true);
           $("#screenform").modal("toggle");
         },
@@ -638,6 +639,35 @@ document.addEventListener("click", function (e) {
     }
   }
 });
+
+function gotomaps(){
+   $("[id='loader']").css("display", "block");
+   var trdr =$("#ftrdr").val();
+   $.ajax({
+        url: "/D1ServicesIN",
+        method: "POST",
+        data: {
+          service: "get",
+          object: "trdraddress",
+          trdr:trdr
+        },
+        success: function (d) {
+            data = jQuery.parseJSON(JSON.stringify(d.data[0]));
+            var address = data.ADDRESS == undefined ? "" : data.ADDRESS;
+            var city = data.CITY == undefined ? "" : data.CITY;
+            var zip = data.ZIP == undefined ? "" : data.ZIP;
+            var district = data.DISTRICT == undefined ? "" : data.DISTRICT;
+            var address = address +','+ city +','+ zip +','+ district;
+            address = encodeURIComponent(address);
+            $("[id='loader']").css("display", "none");
+            if ((navigator.platform.indexOf('iPhone') != -1) || (navigator.platform.indexOf('iPad') != -1) || (navigator.platform.indexOf('iPod') != -1)){/* if we're on iOS, open in Apple Maps */
+                window.open('http://maps.apple.com/?q=' + address);
+            } else { /* else use Google */
+                window.open('https://maps.google.com/maps?q=' + address);
+            }
+        }
+    });
+}
 
 var timer;
 function trdrSelectorByName() {
