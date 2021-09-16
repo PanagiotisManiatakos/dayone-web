@@ -152,17 +152,17 @@
 									{{session['companyname']}}</a></li>
 
 							<li class="nav-item dropdown">
-								<a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
+								<a class="nav-link dropdown-toggle disable-select" id="navbarDropdown" href="#" role="button"
 									data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
 										class="bi bi-person-fill"></i> {{session['username']}}</a>
 								<div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-									<a class="dropdown-item" href="/"><i class="bi bi-house-fill"></i>
+									<a class="dropdown-item disable-select" href="/"><i class="bi bi-house-fill"></i>
 										{{session['companyname']}}</a>
-									<a class="dropdown-item" onclick="user()" style="cursor: pointer"><i
+									<a class="dropdown-item disable-select" onclick="user()" style="cursor: pointer"><i
 											class="bi bi-person-fill"></i> {{session['username']}}</a>
-									<a class="dropdown-item" href="#!"><i class="bi bi-gear-fill"></i> Settings</a>
+									<a class="dropdown-item disable-select" href="#!"><i class="bi bi-gear-fill"></i> Settings</a>
 									<div class="dropdown-divider"></div>
-									<a class="dropdown-item" href="/logout"><i class="bi bi-door-closed-fill"></i>
+									<a class="dropdown-item disable-select" href="/logout"><i class="bi bi-door-closed-fill"></i>
 										Αποσύνδεση</a>
 								</div>
 							</li>
