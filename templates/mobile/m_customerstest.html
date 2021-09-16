@@ -58,18 +58,6 @@
             <li><a class="dropdown-item disable-select" tabindex="-1">Separated link</a></li>
         </ul>
 
-        <ul id="rowcontextMenu" class="dropdown-menu dropdown-menu-end" role="menu">
-            <li><a class="dropdown-item" href="#">Προβολή</a></li>
-            <li class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">Επαφές</a></li>
-            <li><a class="dropdown-item" href="#">Προιόντα</a></li>
-            <li><a class="dropdown-item" href="#">Καρτέλα</a></li>
-            <li><a class="dropdown-item" href="#">Ανοιχτές παραγγελίες</a></li>
-            <li><a class="dropdown-item" href="#">Ραντεβου</a></li>
-            <li><a class="dropdown-item" href="#">Εργασίες</a></li>
-            <li><a class="dropdown-item" href="#">Χαρτης</a></li>
-        </ul>
-
         <!-- Sidebar-->
         <div class="border-end bg-light disable-select sideNav" id="sidebar-wrapper">
             <div style="display:none;">
@@ -241,22 +229,6 @@
                 <div class="btn-group mr-2 maxWidth" role="group" aria-label="Third group">
                     <input type="text" class="form-control" placeholder="Search" id="SearchPanel" disabled="true">
                 </div>
-                <div class="dropdown">
-                    <button class="btn btn-secondary bi-three-dots-vertical " type="button" id="dropdownMenuButton"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="#">Προβολή</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Επαφές</a>
-                        <a class="dropdown-item" href="#">Προιόντα</a>
-                        <a class="dropdown-item" href="#">Καρτέλα</a>
-                        <a class="dropdown-item" href="#">Ανοιχτές παραγγελίες</a>
-                        <a class="dropdown-item" href="#">Ραντεβου</a>
-                        <a class="dropdown-item" href="#">Εργασίες</a>
-                        <a class="dropdown-item" href="#">Χαρτης</a>
-                    </div>
-                </div>
                 <div class="btn-group mr-2" role="group" aria-label="Fourth group" style="display:none !important;">
                     <button class="btn btn-secondary" id="btnrefresh" disabled="true"><i
                             class="bi bi-arrow-repeat"></i></button>
@@ -320,14 +292,35 @@
                     <div class="modal-dialog modal-fullscreen" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <div class="conatiner-fluid">
+                                <h5 class="modal-title">Στοιχεία Πελάτη</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span id="cancelm1">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div>
                                     <div class="row">
-                                        <div class="col-sm">
-                                            <h5 class="modal-title">Στοιχεία Πελάτη</h5>
+                                    <!--TABS-->
+                                        <div class="col-10">
+                                            <nav>
+                                                <div class="nav nav-tabs" id="nav-tab" role="tablist"
+                                                    style="overflow-y:hidden;overflow-x: auto;flex-wrap: nowrap;">
+                                                    <button class="nav-link active" id="generalscreen-tab" data-bs-toggle="tab"
+                                                        data-bs-target="#generalscreen" type="button" role="tab"
+                                                        aria-controls="generalscreen" aria-selected="true" style="white-space: nowrap;">Γενικά Στοιχεία</button>
+                                                    <button class="nav-link" id="commscreen-tab" data-bs-toggle="tab"
+                                                        data-bs-target="#commscreen" type="button" role="tab"
+                                                        aria-controls="commscreen" aria-selected="false" style="white-space: nowrap;">Στοιχεία
+                                                        Επικοινωνίας</button>
+                                                    <button class="nav-link" id="telscreen-tab" data-bs-toggle="tab"
+                                                        data-bs-target="#telscreen" type="button" role="tab"
+                                                        aria-controls="telscreen" aria-selected="false" style="white-space: nowrap;">Contact</button>
+                                                </div>
+                                            </nav>
                                         </div>
-                                        <div class="col-sm">
+                                        <div class="col-2">
                                             <div class="dropdown">
-                                                <button class="btn btn-secondary bi-three-dots-vertical " type="button" id="dropdownMenuButton"
+                                                <button class="btn bi-three-dots-vertical " type="button" id="dropdownMenuButton"
                                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 </button>
                                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
@@ -343,28 +336,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span id="cancelm1">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-
-                                <!--TABS-->
-                                <nav style="padding-bottom:1rem">
-                                    <div class="nav nav-tabs" id="nav-tab" role="tablist"
-							            style="overflow-y:hidden;overflow-x: auto;flex-wrap: nowrap;">
-                                        <button class="nav-link active" id="generalscreen-tab" data-bs-toggle="tab"
-                                            data-bs-target="#generalscreen" type="button" role="tab"
-                                            aria-controls="generalscreen" aria-selected="true" style="white-space: nowrap;">Γενικά Στοιχεία</button>
-                                        <button class="nav-link" id="commscreen-tab" data-bs-toggle="tab"
-                                            data-bs-target="#commscreen" type="button" role="tab"
-                                            aria-controls="commscreen" aria-selected="false" style="white-space: nowrap;">Στοιχεία
-                                            Επικοινωνίας</button>
-                                        <button class="nav-link" id="telscreen-tab" data-bs-toggle="tab"
-                                            data-bs-target="#telscreen" type="button" role="tab"
-                                            aria-controls="telscreen" aria-selected="false" style="white-space: nowrap;">Contact</button>
-                                    </div>
-                                </nav>
 
                                 <!--TAB CONTENTS-->
                                 <div class="tab-content" id="nav-tabContent">
@@ -417,16 +388,30 @@
                                                 <div class="form-group row">
                                                     <label for="fphone01" class="col-sm-2 col-form-label">Τηλ.1:</label>
                                                     <div class="col-sm-10">
-                                                        <input type="text" class="form-control" id="fphone01"
-                                                            placeholder="Τηλ.1" onfocusout="updAll.call(this,event);">
+                                                        <div class="input-group">
+                                                            <input type="text" class="form-control" id="fphone01"
+                                                                placeholder="Τηλ.1" onfocusout="updAll.call(this,event);">
+                                                            <span class="input-group-append">
+                                                                <a id="ffphone01call" class="btn btn-outline-secondary bg-white ms-n3" onclick="makephonecall(this,document.getElementById('fphone01'))">
+                                                                    <i class="bi bi-telephone"></i>
+                                                                </a>
+                                                            </span>
+                                                        </div>
                                                     </div>
                                                 </div>
 
                                                 <div class="form-group row">
                                                     <label for="femail" class="col-sm-2 col-form-label">Email:</label>
                                                     <div class="col-sm-10">
-                                                        <input type="text" class="form-control" id="femail"
-                                                            placeholder="Email" onfocusout="updAll.call(this,event);">
+                                                        <div class="input-group">
+                                                            <input type="text" class="form-control" id="femail"
+                                                                placeholder="Email" onfocusout="updAll.call(this,event);">
+                                                            <span class="input-group-append">
+                                                                <a class="btn btn-outline-secondary bg-white ms-n3" onclick="emailcall(this,document.getElementById('femail'))">
+                                                                    <i class="bi bi-envelope"></i>
+                                                                </a>
+                                                            </span>
+                                                        </div>
                                                     </div>
                                                 </div>
 
@@ -486,24 +471,45 @@
                                                 <div class="form-group row">
                                                     <label for="fphone01" class="col-sm-2 col-form-label">Τηλ.1:</label>
                                                     <div class="col-sm-10">
-                                                        <input type="text" class="form-control" id="fphone01"
-                                                            placeholder="Τηλ.1" onfocusout="updAll.call(this,event);">
+                                                        <div class="input-group">
+                                                            <input type="text" class="form-control" id="fphone01"
+                                                                placeholder="Τηλ.1" onfocusout="updAll.call(this,event);">
+                                                            <span class="input-group-append">
+                                                                <a id="ffphone01call" class="btn btn-outline-secondary bg-white ms-n3" onclick="makephonecall(this,document.getElementById('fphone01'))">
+                                                                    <i class="bi bi-telephone"></i>
+                                                                </a>
+                                                            </span>
+                                                        </div>
                                                     </div>
                                                 </div>
 
                                                 <div class="form-group row">
                                                     <label for="fphone02" class="col-sm-2 col-form-label">Τηλ.2:</label>
                                                     <div class="col-sm-10">
-                                                        <input type="text" class="form-control" id="fphone02"
-                                                            placeholder="Τηλ.2" onfocusout="updAll.call(this,event);">
+                                                        <div class="input-group">
+                                                            <input type="text" class="form-control" id="fphone02"
+                                                                placeholder="Τηλ.2" onfocusout="updAll.call(this,event);">
+                                                            <span class="input-group-append">
+                                                                <a id="ffphone02call" class="btn btn-outline-secondary bg-white ms-n3" onclick="makephonecall(this,document.getElementById('fphone02'))">
+                                                                    <i class="bi bi-telephone"></i>
+                                                                </a>
+                                                            </span>
+                                                        </div>
                                                     </div>
                                                 </div>
 
                                                 <div class="form-group row">
                                                     <label for="femail" class="col-sm-2 col-form-label">Email:</label>
                                                     <div class="col-sm-10">
-                                                        <input type="text" class="form-control" id="femail"
-                                                            placeholder="Email" onfocusout="updAll.call(this,event);">
+                                                        <div class="input-group">
+                                                            <input type="text" class="form-control" id="femail"
+                                                                placeholder="Email" onfocusout="updAll.call(this,event);">
+                                                            <span class="input-group-append">
+                                                                <a class="btn btn-outline-secondary bg-white ms-n3" onclick="emailcall(this,document.getElementById('femail'))">
+                                                                    <i class="bi bi-envelope"></i>
+                                                                </a>
+                                                            </span>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -683,8 +689,6 @@
         </div>
     </div>
 
-
-    </div>
     <!-- Footer -->
     <footer class="bg-light border-top text-muted fixed-bottom d-flex justify-content-center p-2 disable-select">
         <!-- Section: Social media -->

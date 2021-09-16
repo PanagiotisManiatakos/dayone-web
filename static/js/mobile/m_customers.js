@@ -554,3 +554,11 @@ function gotomaps(){
         }
     });
 }
+
+function makephonecall(id,phone){
+    id.href = "tel:"+phone.value;
+}
+
+function emailcall(id,email){
+    id.href = "mailto:"+email.value;
+}
