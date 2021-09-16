@@ -1,3 +1,4 @@
+window.addEventListener("contextmenu", e => e.preventDefault());
 $(document).ready(function () {
   window.table = $("#example").DataTable({
     info: false,
@@ -142,7 +143,7 @@ $(document).ready(function () {
   });
 
   /*When Single click a row*/
-  $("#example").on("mouseup", "tr", function () {
+  /*$("#example").on("mouseup", "tr", function () {
     setTimeout(function () {
       if (counts()) {
         document.querySelector("#btndelete").disabled = false;
@@ -158,10 +159,20 @@ $(document).ready(function () {
         return false;
       }
     }
-  });
+  });*/
 
-  /*When Double click a row*/
-  $("#example").on("dblclick", "tr", function () {
+    $("#example").on("contextmenu", "tr", function (e) {
+        table.rows().deselect();
+        table.rows($(this)).select();
+        $("#rowcontextMenu").css({
+          display: "block",
+          left: e.pageX,
+          top: e.pageY,
+        });
+        return false;
+    });
+
+  $("#example").on("click", "tr", function () {
     $("#loader").css("display", "block");
     table.rows().deselect();
     table.rows($(this)).select();
@@ -342,6 +353,21 @@ $(document).ready(function () {
     }
   });
 
+  /*When Click on RowContextMenu*/
+  $("#rowcontextMenu").on("click", "a", function () {
+    $("#rowcontextMenu").hide();
+  });
+
+  /*When Click out of RowContextMenu*/
+  document.addEventListener("click", function (e) {
+    if ($("#rowcontextMenu").css("display") == "block") {
+      let inside = e.target.closest("#rowcontextMenu");
+      if (!inside) {
+        $("#rowcontextMenu").hide();
+      }
+    }
+  });
+
   /*When Screen Edit Button is pressed*/
   document.querySelector("#editm1").addEventListener("click", function () {
     $("#screenform .modal-content .modal-body .tab-content")
@@ -475,6 +501,18 @@ $(document).ready(function () {
       table.draw();
     }, 250);
   });
+
+
+  $("#screenform").on("hidden.bs.modal", function (e) {
+    $(".nav-link").removeClass("active");
+    $(".tab-pane").removeClass("active show");
+    $("#generalscreen-tab").addClass("active");
+    $("#generalscreen").addClass("active show");
+    var tzoffset = new Date().getTimezoneOffset() * 60000; //offset in milliseconds
+    var localISOTime = new Date(Date.now() - tzoffset)
+      .toISOString()
+      .slice(0, -1);
+  });
 });
 
 function updAll(event) {
@@ -487,4 +525,32 @@ function expandAll() {
 
 function closeAll() {
   $("#sidebar-wrapper .accordion-collapse").collapse("hide");
+}
+
+function gotomaps(){
+   $("[id='loader']").css("display", "block");
+   var trdr =$("#ftrdr").val();
+   $.ajax({
+        url: "/D1ServicesIN",
+        method: "POST",
+        data: {
+          service: "get",
+          object: "trdraddress",
+          trdr:trdr
+        },
+        success: function (d) {
+            data = jQuery.parseJSON(JSON.stringify(d.data[0]));
+            var address = data.ADDRESS == undefined ? "" : data.ADDRESS;
+            var city = data.CITY == undefined ? "" : data.CITY;
+            var zip = data.ZIP == undefined ? "" : data.ZIP;
+            var district = data.DISTRICT == undefined ? "" : data.DISTRICT;
+            var address = address +' '+ city +' '+ zip +' '+ district;
+            $("[id='loader']").css("display", "none");
+            if ((navigator.platform.indexOf('iPhone') != -1) || (navigator.platform.indexOf('iPad') != -1) || (navigator.platform.indexOf('iPod') != -1)){/* if we're on iOS, open in Apple Maps */
+                window.open('http://maps.apple.com/?q=' + address);
+            } else { /* else use Google */
+                window.open('https://maps.google.com/maps?q=' + address);
+            }
+        }
+    });
 }
