@@ -252,10 +252,14 @@ def insertParousiologio():
     if 'id' in session:
         if request.method == "POST":
             message = request.form['qrcode']
+            print('message: '+message)
+            print('message.lower: ' + message.lower())
+            print('session.lower: ' + session['url'].lower())
             if message.lower() == session['url'].lower():
                 date = request.form['date']
                 thecheck = s1_CheckForChekIn(
                     session['url'], session['prsn'], date, session['companycode'])
+                print(thecheck.json())
                 if thecheck.json()['success']:
                     soaction = thecheck.json()['data'][0]['SOACTION']
                     data = {"SOPRSN": [{
