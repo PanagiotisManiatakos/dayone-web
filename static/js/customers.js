@@ -356,10 +356,22 @@ $(document).ready(function () {
     $("#screenform").modal("toggle");
   });
 
+
+  /*When People Cancel Button is pressed*/
+  document.querySelector("#cancelmpeople1").addEventListener("click", function () {
+    $("#peoplemodal").modal("toggle");
+  });
+
+
   /*When Screen X Button is pressed*/
   document.querySelector("#cancelm12").addEventListener("click", function () {
     document.querySelector("#savem1").disabled = true;
     $("#screenform").modal("toggle");
+  });
+
+  /*When People X Button is pressed*/
+  document.querySelector("#cancelmpeople12").addEventListener("click", function () {
+    $("#peoplemodal").modal("toggle");
   });
 
   /*When Delete Cancel Button is pressed*/

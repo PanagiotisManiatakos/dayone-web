@@ -311,6 +311,16 @@
 									</div>
 
 									<div class="form-group row">
+										<label for="fseries"
+											class="col-sm-2 col-form-label disable-select">Σειρά</label>
+										<div class="col-sm-10">
+											<div class="input-group">
+												<select class="form-control" id="fseries" onclick="getSoactionSeries(this)"></select>
+											</div>
+										</div>
+									</div>
+
+									<div class="form-group row">
 										<label for="fsoactioncode"
 											class="col-sm-2 col-form-label disable-select">Συνάντηση:</label>
 										<div class="col-sm-10">
@@ -371,8 +381,7 @@
 											class="col-sm-2 col-form-label disable-select">Επωνυμία:</label>
 										<div class="col-sm-10">
 											<div class="input-group">
-												<input class="form-control" type="text" autocomplete="off" id="fname"
-													placeholder="Επωνυμία Πελάτη" onkeyup="trdrSelectorByName()">
+												<input class="form-control" type="text" autocomplete="off" id="fname" placeholder="Επωνυμία Πελάτη" onkeyup="trdrSelectorByName()">
 												<span class="input-group-append">
 													<button class="btn btn-outline-secondary bg-white ms-n3 locked"
 														type="button">
