@@ -1,3 +1,25 @@
+.addIcon {
+  width: 60px;
+  height: 60px;
+  position: fixed;
+  bottom: 75px;
+  right: 25px;
+  z-index: 99;
+  cursor: pointer;
+  border-radius: 50px;
+}
+
+
+.addIcon>i {
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+}
+
 .sideNav {
   position: fixed;
   z-index: 3;
@@ -87,6 +109,12 @@
 #page-content-wrapper {
   min-width: 100vw;
   min-height: calc(100vh - 65px);
+  min-width: 0;
+  width: 100%;
+}
+
+#mobile-page-content-wrapper {
+  min-width: 100vw;
   min-width: 0;
   width: 100%;
 }

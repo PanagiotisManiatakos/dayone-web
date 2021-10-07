@@ -133,8 +133,7 @@ $(document).ready(function () {
                 });
                 $("#questionsdiv").css("display", "none");
                 $("#tablediv").css("display", "block");
-                table.columns.adjust();
-                table.draw();
+                table.columns.adjust().draw();
                 $("#SearchPanel").prop("disabled", false);
                 $("#btnrefresh").prop("disabled", false);
                 $("#btnfilters").prop("disabled", false);

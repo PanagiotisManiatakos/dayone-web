@@ -1,9 +1,8 @@
 import json
-from datetime import timedelta
-
 import requests
-from flask import Flask, render_template, request, redirect, url_for, session, jsonify
+from flask import Flask, render_template, request, redirect, url_for, session
 from flask_mobility import Mobility
+from datetime import timedelta
 from bs4 import BeautifulSoup
 
 app = Flask(__name__)
@@ -63,12 +62,16 @@ def login():
 			session['name'] = getcred['data'][0]['name']
 			session['name2'] = getcred['data'][0]['name2']
 			session['cccwebaccounts'] = getcred['data'][0]['cccwebaccounts']
+
 			return redirect(url_for('index'))
+
 		else:
 			error = 'Try again '
+
 	else:
 		if 'id' in session:
 			return redirect(url_for('index'))
+
 	return render_template('login.html', error=error)
 
 
@@ -80,10 +83,16 @@ def companies():
 		company = request.form['companyname']
 		url = "http://" + company + ".oncloud.gr/s1services"
 		creds = s1get_Credentials1(url, password, username)
-		if creds['success']:
-			return jsonify(getCompanies(url, creds['data'][0]['cccwebaccounts']))
+		if creds.status_code == 200:
+			print(creds.json())
+			if creds.json()['success']:
+				data = creds.json()['data'][0]
+				return getCompanies(url, data['cccwebaccounts']).json()
+			else:
+				return s1get_Credentials1(url, password, username).json()
+
 		else:
-			return jsonify(s1get_Credentials1(url, password, username))
+			return {'success': False, 'error': 'domain'}
 
 
 @app.route('/logout', methods=['GET', 'POST'])
@@ -97,12 +106,12 @@ def changepassword():
 	if 'id' in session:
 		if request.method == "POST":
 			id = session['cccwebaccounts']
-			data = {"cccWEBACCOUNTS": [
-				{"password": request.form['newpassword']}]}
+			data = {"cccWEBACCOUNTS": [{"password": request.form['newpassword']}]}
 			response = setData(
 				session['url'], 'cccWEBACCOUNTS', session['id'], id, data)
 			if response.json()['success']:
 				session['password'] = request.form['newpassword']
+
 			return response.json()
 	else:
 		return redirect(url_for('login'))
@@ -112,6 +121,7 @@ def changepassword():
 def meetings():
 	if 'id' in session:
 		return render_template("desktop/meetings.html")
+
 	else:
 		return redirect(url_for('login'))
 
@@ -120,22 +130,26 @@ def meetings():
 def insertMeet():
 	if 'id' in session:
 		if request.method == "POST":
-			data = {"SOACTION": [{
-				"trndate": request.form['trndate'],
-				"series": request.form['series'],
-				"fromdate": request.form['fromdate'],
-				"finaldate": request.form['finaldate'],
-				"trdr": request.form['trdr'],
-				"comments": request.form['comments'],
-				"remarks": request.form['remarks'],
-				"actor": session['users'],
-				"actprsn": session['prsn']
-			}]
+			data = {
+				"SOACTION": [
+					{
+						"trndate": request.form['trndate'],
+						"series": request.form['series'],
+						"fromdate": request.form['fromdate'],
+						"finaldate": request.form['finaldate'],
+						"trdr": request.form['trdr'],
+						"comments": request.form['comments'],
+						"remarks": request.form['remarks'],
+						"actor": session['users'],
+						"actprsn": session['prsn']
+					}
+				]
 			}
-			response = setData(
-				session['url'], 'SOMEETING', session['id'], "", data)
+			response = setData(session['url'], 'SOMEETING', session['id'], "", data)
+
 			return response.json()
 	else:
+
 		return redirect(url_for('login'))
 
 
@@ -152,10 +166,11 @@ def updtMeet():
 				"remarks": request.form['remarks'],
 			}]
 			}
-			response = setData(
-				session['url'], 'SOMEETING', session['id'], id, data)
+			response = setData(session['url'], 'SOMEETING', session['id'], id, data)
+
 			return response.json()
 	else:
+
 		return redirect(url_for('login'))
 
 
@@ -164,9 +179,12 @@ def customers():
 	if 'id' in session:
 		if request.MOBILE:
 			return render_template("mobile/m_customerstest.html")
+
 		else:
 			return render_template("desktop/customerstest.html")
+
 	else:
+
 		return redirect(url_for('login'))
 
 
@@ -174,24 +192,28 @@ def customers():
 def insertCust():
 	if 'id' in session:
 		if request.method == "POST":
-			data = {"CUSTOMER": [{
-				"code": request.form['code'],
-				"name": request.form['name'],
-				"afm": request.form['afm'],
-				"address": request.form['address'],
-				"zip": request.form['zip'],
-				"city": request.form['town'],
-				"district": request.form['district'],
-				"phone01": request.form['phone01'],
-				"phone02": request.form['phone02'],
-				"email": request.form['email'],
-				"remarks": request.form['remarks']
-			}]
+			data = {
+				"CUSTOMER": [
+					{
+						"code": request.form['code'],
+						"name": request.form['name'],
+						"afm": request.form['afm'],
+						"address": request.form['address'],
+						"zip": request.form['zip'],
+						"city": request.form['town'],
+						"district": request.form['district'],
+						"phone01": request.form['phone01'],
+						"phone02": request.form['phone02'],
+						"email": request.form['email'],
+						"remarks": request.form['remarks']
+					}
+				]
 			}
-			response = setData(
-				session['url'], 'CUSTOMER', session['id'], "", data)
+			response = setData(session['url'], 'CUSTOMER', session['id'], "", data)
+
 			return response.json()
 	else:
+
 		return redirect(url_for('login'))
 
 
@@ -200,22 +222,24 @@ def updtCust():
 	if 'id' in session:
 		if request.method == "POST":
 			id = request.form['trdr']
-			data = {"CUSTOMER": [{
-				"code": request.form['code'],
-				"name": request.form['name'],
-				"afm": request.form['afm'],
-				"address": request.form['address'],
-				"zip": request.form['zip'],
-				"city": request.form['town'],
-				"district": request.form['district'],
-				"phone01": request.form['phone01'],
-				"phone02": request.form['phone02'],
-				"email": request.form['email'],
-				"remarks": request.form['remarks']
-			}]
+			data = {
+				"CUSTOMER": [
+					{
+						"code": request.form['code'],
+						"name": request.form['name'],
+						"afm": request.form['afm'],
+						"address": request.form['address'],
+						"zip": request.form['zip'],
+						"city": request.form['town'],
+						"district": request.form['district'],
+						"phone01": request.form['phone01'],
+						"phone02": request.form['phone02'],
+						"email": request.form['email'],
+						"remarks": request.form['remarks']
+					}
+				]
 			}
-			response = setData(
-				session['url'], 'CUSTOMER', session['id'], id, data)
+			response = setData(session['url'], 'CUSTOMER', session['id'], id, data)
 			return response.json()
 	else:
 		return redirect(url_for('login'))
@@ -332,12 +356,15 @@ def insertParousiologio():
 					setData(session['url'], 'SOPRSN', session['id'], soaction, data)
 					return {'success': True, 'status': 'update'}
 				else:
-					data = {"SOPRSN": [{
-						"trndate": date,
-						"fromdate": date,
-						'series': 9889,
-						'actprsn': session['prsn']
-					}]
+					data = {
+						"SOPRSN": [
+							{
+								"trndate": date,
+								"fromdate": date,
+								'series': 9889,
+								'actprsn': session['prsn']
+							}
+						]
 					}
 					setData(session['url'], 'SOPRSN', session['id'], "", data)
 					return {'success': True, 'status': 'insert'}
@@ -347,13 +374,23 @@ def insertParousiologio():
 		return redirect(url_for('login'))
 
 
+@app.route('/calls')
+def calls():
+	if 'id' in session:
+		if request.MOBILE:
+			return render_template("mobile/m_calls.html")
+		else:
+			return render_template("desktop/m_calls.html")
+	else:
+		return redirect(url_for('login'))
+
+
 @app.route('/calendar')
 def calendar():
 	if 'id' in session:
 		headers = {'Content-Type': 'application/json'}
 		data = json.dumps({'clientID': session['id'], 'username': session['username']})
-		call = requests.request(
-			'POST', session['url'] + '/js/connector.connector/getCalendarInfo', headers=headers, data=data)
+		call = requests.request('POST', session['url'] + '/js/connector.connector/getCalendarInfo', headers=headers, data=data)
 		if request.MOBILE:
 			return render_template("mobile/m_calendar.html", cdata=call.json())
 		else:
@@ -366,13 +403,16 @@ def calendar():
 def insertcal():
 	if 'id' in session:
 		if request.method == "POST":
-			data = {"SOACTION": [{
-				"trndate": request.form['start'],
-				"fromdate": request.form['start'],
-				"finaldate": request.form['end'],
-				"actprsn": session['prsn'],
-				"COMMENTS": request.form['title'],
-			}]
+			data = {
+				"SOACTION": [
+					{
+						"trndate": request.form['start'],
+						"fromdate": request.form['start'],
+						"finaldate": request.form['end'],
+						"actprsn": session['prsn'],
+						"COMMENTS": request.form['title'],
+					}
+				]
 			}
 			response = setData(
 				session['url'], 'SOMEETING', session['id'], "", data)
@@ -386,15 +426,18 @@ def updatecal():
 	if 'id' in session:
 		if request.method == "POST":
 			id = request.form['id']
-			data = {"SOACTION": [{
-				"trndate": request.form['start'],
-				"fromdate": request.form['start'],
-				"finaldate": request.form['end'],
-				"actprsn": session['prsn']
-			}]
+			data = {
+				"SOACTION": [
+					{
+						"trndate": request.form['start'],
+						"fromdate": request.form['start'],
+						"finaldate": request.form['end'],
+						"actprsn": session['prsn']
+					}
+				]
 			}
-			response = setData(
-				session['url'], 'SOMEETING', session['id'], id, data)
+			response = setData(session['url'], 'SOMEETING', session['id'], id, data)
+
 			return response.text
 	else:
 		return redirect(url_for('login'))
@@ -406,6 +449,7 @@ def deletecal():
 		if request.method == "POST":
 			id = request.form['id']
 			response = delData(session['url'], 'SOMEETING', session['id'], id)
+
 			return response.text
 	else:
 		return redirect(url_for('login'))
@@ -417,6 +461,7 @@ def getProducts():
 		url = 'http://dayone.oncloud.gr/s1services'
 		log = s1login(url)
 		auth = s1authenticate(url, log, session['companycode'])
+
 		return get_Products(url, auth)
 	else:
 		return redirect(url_for('login'))
@@ -428,6 +473,7 @@ def getPayments():
 		url = 'http://dayone.oncloud.gr/s1services'
 		log = s1login(url)
 		auth = s1authenticate(url, log, session['companycode'])
+
 		return get_Payments(url, auth)
 	else:
 		return redirect(url_for('login'))
@@ -443,8 +489,10 @@ def getPrintOutForms():
 				'clientID': session['id'],
 				'company': session['companycode'],
 				'sosource': sosource
-			})
-		call = requests.request('POST', session['url'] + '/js/connector.connector/getForms', headers=headers,	data=data)
+			}
+		)
+		call = requests.request('POST', session['url'] + '/js/connector.connector/getForms', headers=headers, data=data)
+
 		return call.json()
 	else:
 		return redirect(url_for('login'))
@@ -460,41 +508,61 @@ def D1ServicesIN():
 	auth = session['id']
 	if obj == 'findoc':
 		questions = {'findoc': request.form['id']}
+
 	elif obj == 'trdr':
 		questions = {'trdr': request.form['id']}
+
 	elif obj == 'mtrl':
 		questions = {'mtrl': request.form['id']}
+
 	elif obj == 'prsn':
 		questions = {'prsn': request.form['prsn']}
+
+	elif obj == 'toptrdr':
+		questions = {'sodtype': request.form['sodtype']}
+
 	elif obj == 'trdrcode':
 		questions = {'code': request.form['code']}
+
 	elif obj == 'trdrname':
 		questions = {'name': request.form['name']}
+
 	elif obj == 'mtrlname':
 		questions = {
 			'name': request.form['name'],
 			'sodtype': request.form['sodtype']
 		}
+
 	elif obj == 'mtrlcode':
 		questions = {
 			'code': request.form['code'],
 			'sodtype': request.form['sodtype']
 		}
+
 	elif obj == 'trdraddress':
 		questions = {'trdr': request.form['trdr']}
+
 	elif obj == 'trdrpeople':
 		questions = {'trdr': request.form['trdr']}
+
 	elif obj == 'trdropenorders':
 		questions = {
 			'trdr': request.form['trdr'],
 			'company': session['companycode']
 		}
+
 	elif obj == 'soaction':
 		questions = {'soaction': request.form['id']}
+
 	elif obj == 'soactionseries':
 		questions = {'company': session['companycode']}
+
 	elif obj == 'calendar':
 		questions = ''
+
+	elif obj == 'calls':
+		questions = ''
+
 	elif obj == 'printoutform':
 		questions = {
 			'ObjectName': request.form['ObjectName'],
@@ -502,19 +570,28 @@ def D1ServicesIN():
 			'RecordID': request.form['id'],
 			'TemplateCode': request.form['TemplateCode']
 		}
+
 	else:
 		questions = {'qname': request.form['qname'], 'qcode': request.form['qcode']}
+
 	if service == "set":
 		data = request.form['data']
+
 	else:
 		data = questions
+
 	if erp == "Softone":
 		response = s1call(url, service, obj, company, auth, data)
 		if response.json()['success']:
+
 			return {'data': response.json()['data']}
+
 		else:
+
 			return {'error': response.json()['error']}
+
 	else:
+
 		return "Paizei mono gia Softone ...pros to parwn"
 
 
@@ -524,24 +601,34 @@ def D1Services():
 	service = request.json['service']
 	obj = request.json['object']
 	callfrom = request.json['callfrom']
+
 	if callfrom == 'out':
 		url = request.json['url']
 		company = request.json['company']
+
 	elif callfrom == 'in':
 		company = session['company']
 		if erp == 'Softone':
 			url = 'https://' + session['companycode'] + '/s1services'
+
 	else:
+
 		return 'Error:Not valid callfrom || Select callfrom out'
+
 	if service == "set":
 		data = request.json['data']
+
 	else:
 		data = ""
+
 	clientID = s1login(url)
 	auth = s1authenticate(url, clientID, company)
 	if erp == "Softone":
+
 		return s1call(url, service, obj, company, auth, data)
+
 	else:
+
 		return "Paizei mono gia Softone ...pros to parwn"
 
 
@@ -555,6 +642,7 @@ def s1login(url):
 		"password": "eshop",
 		"appId": "2001"})
 	response = requests.post(url + '/post', data=payload)
+
 	return response.json()['clientID']
 
 
@@ -567,6 +655,7 @@ def s1authenticate(url, id, company):
 		"MODULE": "0",
 		"REFID": "303"})
 	response = requests.post(url + '/post', data=payload)
+
 	return response.json()['clientID']
 
 
@@ -575,9 +664,15 @@ def s1get_Credentials1(url, password, username):
 		"password": password,
 		"username": username
 	})
-	response = requests.request(
-		'POST', url + '/js/connector.connector/getCredentials1', data=payload)
-	return response.json()
+	try:
+		response = requests.request('POST', url + '/js/connector.connector/getCredentials1', data=payload)
+		return response
+	except:
+
+		return {
+			'success': False,
+			'error': 'something went wrong'
+		}
 
 
 def s1get_Credentials(url, password, username, company):
@@ -589,6 +684,7 @@ def s1get_Credentials(url, password, username, company):
 		})
 	response = requests.request(
 		'POST', url + '/js/connector.connector/getCredentials', data=payload)
+
 	return response.json()
 
 
@@ -602,6 +698,7 @@ def s1_CheckForChekIn(url, prsn, date, company):
 		})
 	response = requests.request(
 		'POST', url + '/js/connector.connector/checkForCheckIn', data=payload)
+
 	return response
 
 
@@ -609,7 +706,8 @@ def getCompanies(url, cccwebaccounts):
 	payload = json.dumps({"cccwebaccounts": cccwebaccounts})
 	response = requests.request(
 		'POST', url + '/js/connector.connector/getCompanies', data=payload)
-	return response.json()
+
+	return response
 
 
 # -------------functions for SELECTORS------------- #
@@ -621,6 +719,7 @@ def getCustomersSelector(url, id, company):
 		"company": company})
 	response = requests.request(
 		'POST', url + '/js/connector.connector/getCustomersSelector', data=payload)
+
 	return response.json()['data']
 
 
@@ -630,6 +729,7 @@ def getPrjcSelector(url, id, company):
 		"company": company})
 	response = requests.request(
 		'POST', url + '/js/connector.connector/getPrjcSelector', data=payload)
+
 	return response.json()['data']
 
 
@@ -672,6 +772,7 @@ def getCustomers(url, id, company):
 		})
 	response = requests.request(
 		'POST', url + '/js/connector.connector/getCustomers', data=payload)
+
 	return response.json()['data']
 
 
@@ -684,6 +785,7 @@ def getSoaction(url, id):
 		})
 	response = requests.request(
 		'POST', url + '/js/connector.connector/getSoaction', data=payload)
+
 	return response
 
 
@@ -696,6 +798,7 @@ def getCalendar(url, id):
 		})
 	response = requests.request(
 		'POST', url + '/js/connector.connector/getCalendar', data=payload)
+
 	return response
 
 
@@ -703,6 +806,7 @@ def get_Payments(url, id):
 	payload = json.dumps({'clientID': id})
 	response = requests.post(
 		url + '/js/connector.connector/getPayments/post', data=payload)
+
 	return response.text
 
 
@@ -710,6 +814,7 @@ def get_Products(url, id):
 	payload = json.dumps({'clientID': id})
 	response = requests.post(
 		url + '/js/connector.connector/getProducts/post', data=payload)
+
 	return response.text
 
 
@@ -720,8 +825,10 @@ def s1call(url, service, obj, company, id, data):
 	if service == "get":
 		if obj == "item":
 			call = requests.request('POST', url + '/js/connector.connector/getProducts', headers=headers, data=clientID)
+
 		elif obj == "payment":
 			call = requests.request('POST', url + '/js/connector.connector/getPayments', headers=headers, data=clientID)
+
 		elif obj == "customer":
 			data = json.dumps(
 				{
@@ -731,6 +838,7 @@ def s1call(url, service, obj, company, id, data):
 					'qcode': data['qcode']
 				})
 			call = requests.request('POST', url + '/js/connector.connector/getCustomers', headers=headers, data=data)
+
 		elif obj == "trdr":
 			data = json.dumps(
 				{
@@ -738,6 +846,7 @@ def s1call(url, service, obj, company, id, data):
 					'trdr': data['trdr']
 				})
 			call = requests.request('POST', url + '/js/connector.connector/getTrdr', headers=headers, data=data)
+
 		elif obj == "mtrl":
 			data = json.dumps(
 				{
@@ -745,6 +854,7 @@ def s1call(url, service, obj, company, id, data):
 					'mtrl': data['mtrl']
 				})
 			call = requests.request('POST', url + '/js/connector.connector/getMtrl', headers=headers, data=data)
+
 		elif obj == "prsn":
 			data = json.dumps(
 				{
@@ -752,6 +862,16 @@ def s1call(url, service, obj, company, id, data):
 					'prsn': data['prsn']
 				})
 			call = requests.request('POST', url + '/js/connector.connector/getPrsn', headers=headers, data=data)
+
+		elif obj == "toptrdr":
+			data = json.dumps(
+				{
+					"clientID": id,
+					"company": session['companycode'],
+					"sodtype": data['sodtype']
+				})
+			call = requests.request('POST', url + '/js/connector.connector/getTopTrdr', headers=headers, data=data)
+
 		elif obj == "trdrcode":
 			data = json.dumps(
 				{
@@ -760,6 +880,7 @@ def s1call(url, service, obj, company, id, data):
 					"company": session['companycode']
 				})
 			call = requests.request('POST', url + '/js/connector.connector/getTrdrSelectorByCode', headers=headers, data=data)
+
 		elif obj == "trdrname":
 			data = json.dumps(
 				{
@@ -768,6 +889,7 @@ def s1call(url, service, obj, company, id, data):
 					"company": session['companycode']
 				})
 			call = requests.request('POST', url + '/js/connector.connector/getTrdrSelectorByName', headers=headers, data=data)
+
 		elif obj == "mtrlname":
 			data = json.dumps(
 				{
@@ -777,6 +899,7 @@ def s1call(url, service, obj, company, id, data):
 					"sodtype": data['sodtype']
 				})
 			call = requests.request('POST', url + '/js/connector.connector/getMtrlSelectorByName', headers=headers, data=data)
+
 		elif obj == "mtrlcode":
 			data = json.dumps(
 				{
@@ -786,6 +909,7 @@ def s1call(url, service, obj, company, id, data):
 					"sodtype": data['sodtype']
 				})
 			call = requests.request('POST', url + '/js/connector.connector/getMtrlSelectorByCode', headers=headers, data=data)
+
 		elif obj == "trdraddress":
 			data = json.dumps(
 				{
@@ -793,6 +917,7 @@ def s1call(url, service, obj, company, id, data):
 					"trdr": data['trdr']
 				})
 			call = requests.request('POST', url + '/js/connector.connector/getTrdrAddress', headers=headers, data=data)
+
 		elif obj == "trdrpeople":
 			data = json.dumps(
 				{
@@ -800,6 +925,7 @@ def s1call(url, service, obj, company, id, data):
 					"trdr": data['trdr']
 				})
 			call = requests.request('POST', url + '/js/connector.connector/getTrdrPeople', headers=headers, data=data)
+
 		elif obj == "trdropenorders":
 			data = json.dumps(
 				{
@@ -807,14 +933,17 @@ def s1call(url, service, obj, company, id, data):
 					"trdr": data['trdr'],
 					"company": data['company']
 				})
-			call = requests.request('POST', url + '/js/connector.connector/getTrdrOpenOrders', headers=headers,	data=data)
+			call = requests.request('POST', url + '/js/connector.connector/getTrdrOpenOrders', headers=headers, data=data)
+
 		elif obj == 'soaction':
 			data = json.dumps(
 				{
 					'clientID': id,
-					'soaction': data['soaction']
+					'soaction': data['soaction'],
+					'company': session['companycode']
 				})
 			call = requests.request('POST', url + '/js/connector.connector/getSoaction', headers=headers, data=data)
+
 		elif obj == 'soactionseries':
 			data = json.dumps(
 				{
@@ -822,6 +951,7 @@ def s1call(url, service, obj, company, id, data):
 					'company': data['company']
 				})
 			call = requests.request('POST', url + '/js/connector.connector/getSoactionSeries', headers=headers, data=data)
+
 		elif obj == 'findoc':
 			data = json.dumps(
 				{
@@ -829,6 +959,7 @@ def s1call(url, service, obj, company, id, data):
 					'findoc': data['findoc']
 				})
 			call = requests.request('POST', url + '/js/connector.connector/getFindoc', headers=headers, data=data)
+
 		elif obj == 'printoutform':
 			data = json.dumps(
 				{
@@ -839,10 +970,28 @@ def s1call(url, service, obj, company, id, data):
 					'TemplateCode': data['TemplateCode']
 				})
 			call = requests.request('POST', url + '/js/connector.connector/PrintS1Template', headers=headers, data=data)
+
 		elif obj == 'calendar':
-			call = getCalendar(session['url'], session['id'])
+			data = json.dumps(
+				{
+					'clientID': id,
+					'company': session['companycode'],
+					'prsn': session['prsn']
+				})
+			call = requests.request('POST', url + '/js/connector.connector/getCalendar', headers=headers, data=data)
+
+		elif obj == 'calls':
+			data = json.dumps(
+				{
+					'clientID': id,
+					'company': session['companycode'],
+					'prsn': session['prsn']
+				})
+
+			call = requests.request('POST', url + '/js/connector.connector/getCalls', headers=headers, data=data)
 	elif service == "set":
 		call = setData(url, obj, id, "", data)
+
 	return call
 
 
@@ -858,6 +1007,7 @@ def setData(url, obj, id, key, data):
 			"data": data
 		})
 	response = requests.request("POST", url, headers=headers, data=payload)
+
 	return response
 
 
@@ -872,6 +1022,7 @@ def delData(url, obj, id, key):
 			"KEY": key
 		})
 	response = requests.request("POST", url, headers=headers, data=payload)
+
 	return response
 
 
@@ -886,6 +1037,7 @@ def getReportInfo(url, obj, id, trdrname, fdate):
 			"FILTERS": "QUESTIONS.FNAME=" + trdrname + "*;QUESTIONS.FROMDATE=" + fdate
 		})
 	response = requests.request("POST", url, headers=headers, data=payload)
+
 	return response
 
 
@@ -900,8 +1052,9 @@ def getReportData(url, id, reqID, page):
 			"PAGENUM": page
 		})
 	response = requests.get(url, headers=headers, data=payload)
+
 	return response
 
 
 if __name__ == "__main__":
-	app.run(debug=True)
+	app.run(debug=True, host='0.0.0.0')
