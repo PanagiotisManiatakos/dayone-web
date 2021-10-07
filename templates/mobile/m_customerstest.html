@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/html">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="keywords" content="footer, address, phone, icons" />
+    <meta name="keywords" content="footer, address, phone, icons"/>
     <title>Day-One</title>
     <link href="{{ url_for('static', filename= 'images/l.jpg') }}" rel="icon">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/general.css') }}">
@@ -16,168 +16,200 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Cookie" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/select/1.3.3/css/select.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/scroller/2.0.4/css/scroller.bulma.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/searchpanes/1.3.0/css/searchPanes.bulma.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap4.min.css">
     <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.25/js/dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/select/1.3.3/js/dataTables.select.min.js"></script>
     <script src="https://cdn.datatables.net/searchpanes/1.3.0/js/dataTables.searchPanes.min.js"></script>
-    <script src="https://cdn.datatables.net/searchpanes/1.3.0/js/searchPanes.min.js"></script>
     <script src="https://cdn.datatables.net/select/1.3.3/js/dataTables.select.min.js"></script>
     <script src="https://cdn.datatables.net/scroller/2.0.4/js/dataTables.scroller.min.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.9/js/responsive.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.2/js/dataTables.bootstrap4.min.js"></script>
     <script src="{{ url_for('static', filename= 'js/mobile/m_customers.js') }}"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename= 'css/customer.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename= 'css/globalStyling.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename= 'css/modal.css') }}">
     <script src="{{ url_for('static', filename= 'js/tabs.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
-    </script>
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
-    </script>
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </head>
 
-<body style="padding-top:57px;">
-    <div class="loader" id="loader"
-        style="z-index:999;position:fixed;top:50%;left:50%;margin-top:-60px;margin-left:-60px;display:none;"></div>
-    <div class="d-flex" id="wrapper">
+<body style="padding-top:57px" class="sb-sidenav-toggled">
+<script>
+if ($(window).width() < 767) {
+   $('body').prop('class',"");
+}
+</script>
 
-        <!-- Sidebar Menu-->
-        <ul id="contextMenu" class="dropdown-menu dropdown-menu-end" role="menu">
-            <li><a class="dropdown-item disable-select" tabindex="-1" onclick="expandAll()">Πλήρη ανάπτυξη</a></li>
-            <li><a class="dropdown-item disable-select" tabindex="-1" onclick="closeAll()">Πλήρη σύμπτηξη</a></li>
-            <li class="dropdown-divider"></li>
-            <li><a class="dropdown-item disable-select" tabindex="-1">Separated link</a></li>
-        </ul>
+<style>
+    #example tbody tr td {
+        max-width: 80px;
+        overflow: hidden; /* this is what fixes the expansion */
+        text-overflow: ellipsis; /* not supported in all browsers, but I accepted the tradeoff */
+        white-space: nowrap;
+    }
+    #peopletable tbody tr td {
+        max-width: 70px;
+        overflow: hidden; /* this is what fixes the expansion */
+        text-overflow: ellipsis; /* not supported in all browsers, but I accepted the tradeoff */
+        white-space: nowrap;
+    }
+    #openorderstable tbody tr td {
+        max-width: 70px;
+        overflow: hidden; /* this is what fixes the expansion */
+        text-overflow: ellipsis; /* not supported in all browsers, but I accepted the tradeoff */
+        white-space: nowrap;
+    }
+    #mtrltable tbody tr td {
+        max-width: 70px;
+        overflow: hidden; /* this is what fixes the expansion */
+        text-overflow: ellipsis; /* not supported in all browsers, but I accepted the tradeoff */
+        white-space: nowrap;
+    }
+</style>
 
-        <!-- Sidebar-->
-        <div class="border-end bg-light disable-select sideNav" id="sidebar-wrapper">
-            <div style="display:none;">
-                <div class="d-flex justify-content-center p-2" id="divIcons">
-                    <a href="/index" class="col-3 text-reset">
-                        <i class="bi bi-house-fill"></i>
-                    </a>
-                    <a href="#" class="col-3 text-reset">
-                        <i class="bi bi-gear-fill"></i>
-                    </a>
-                    <a href="#" class="col-3 text-reset">
-                        <i class="bi bi-person-fill"></i>
-                    </a>
-                    <a href="/logout" class="col-3 text-reset">
-                        <i class="bi bi-door-closed-fill"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="list-group sideList">
-                <a>
-                    <div>
-                        <div class="accordion accordion-flush" id="FindocExpand">
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="Findoc-headingOne">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                        data-bs-target="#Findoc-collapseOne" aria-expanded="false"
-                                        aria-controls="Findoc-collapseOne">
-                                        <a><i class="bi bi-cash"></i> Εμπορική Διαχείρηση</a>
-                                    </button>
-                                </h2>
-                                <div id="Findoc-collapseOne" class="accordion-collapse collapse"
-                                    aria-labelledby="Findoc-headingOne" data-bs-parent="#FindocExpand">
-                                    <div class="list-group">
-                                        <a class="list-group-item list-group-item-action list-group-item-light p-2"
-                                            href="#!"><i class="bi bi-card-list"></i> Πωλήσεις</a>
-                                        <a class="list-group-item list-group-item-action list-group-item-light p-2"
-                                            href="#!"><i class="bi bi-card-list"></i> Αγορές</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+<div class="loader" id="loader" style="z-index:99999;position:fixed;top:50%;left:50%;margin-top:-60px;margin-left:-60px;display:none;"></div>
+<div class="d-flex" id="wrapper">
+
+    <!-- Sidebar Menu-->
+    <ul id="contextMenu" class="dropdown-menu dropdown-menu-end" role="menu">
+        <li><a class="dropdown-item disable-select" tabindex="-1" onclick="expandAll()">Πλήρη ανάπτυξη</a></li>
+        <li><a class="dropdown-item disable-select" tabindex="-1" onclick="closeAll()">Πλήρη σύμπτηξη</a></li>
+        <li class="dropdown-divider"></li>
+        <li><a class="dropdown-item disable-select" tabindex="-1">Separated link</a></li>
+    </ul>
+
+    <!-- Sidebar-->
+    <div class="border-end bg-light disable-select sideNav" id="sidebar-wrapper">
+        <div style="display:none;">
+            <div class="d-flex justify-content-center p-2" id="divIcons">
+                <a href="/index" class="col-3 text-reset">
+                    <i class="bi bi-house-fill"></i>
                 </a>
-                <a>
-                    <div class="accordion accordion-flush" id="TrdrExpand">
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="Trdr-headingOne">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#Trdr-collapseOne" aria-expanded="false"
-                                    aria-controls="Trdr-collapseOne">
-                                    <a><i class="bi bi-people"></i> Συναλασσόμενοι</a>
-                                </button>
-                            </h2>
-                            <div id="Trdr-collapseOne" class="accordion-collapse collapse"
-                                aria-labelledby="Trdr-headingOne" data-bs-parent="#TrdrExpand">
-                                <div class="list-group">
-                                    <a class="list-group-item list-group-item-action list-group-item-light p-2"
-                                        href="/customers"><i class="bi bi-card-list"></i> Πελάτες</a>
-                                    <a class="list-group-item list-group-item-action list-group-item-light p-2"
-                                        href="#!"><i class="bi bi-card-list"></i> Προμηθευτές</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <a href="#" class="col-3 text-reset">
+                    <i class="bi bi-gear-fill"></i>
                 </a>
-                <a>
-                    <div class="accordion accordion-flush" id="CrmExpand">
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="Crm-headingOne">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#Crm-collapseOne" aria-expanded="false"
-                                    aria-controls="Crm-collapseOne">
-                                    <a><i class="bi bi-pie-chart"></i> CRM</a>
-                                </button>
-                            </h2>
-                            <div id="Crm-collapseOne" class="accordion-collapse collapse"
-                                aria-labelledby="Crm-headingOne" data-bs-parent="#CrmExpand">
-                                <div class="list-group">
-                                    <a class="list-group-item list-group-item-action list-group-item-light p-2"
-                                        href="/calendar"><i class="bi bi-calendar-date"></i> Ημερολόγιο</a>
-                                    <a class="list-group-item list-group-item-action list-group-item-light p-2"
-                                        href="/meetings"><i class="bi bi-card-list"></i> Συναντήσεις</a>
-                                    <a class="list-group-item list-group-item-action list-group-item-light p-2"
-                                        href="#!"><i class="bi bi-list-task"></i> Εκρεμότητες</a>
-                                    <a class="list-group-item list-group-item-action list-group-item-light p-2"
-                                        href="#!"><i class="bi bi-telephone"></i> Κλήσεις</a>
-                                    <a class="list-group-item list-group-item-action list-group-item-light p-2"
-                                        href="#!"><i class="bi bi-calendar"></i> Εορτολόγιο</a>
-                                    <a class="list-group-item list-group-item-action list-group-item-light p-2"
-                                        href="#!"><i class="bi bi-check2-square"></i> Εγκρίσεις</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <a href="#" class="col-3 text-reset">
+                    <i class="bi bi-person-fill"></i>
                 </a>
-                <a>
-                    <div>
-                        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!"><i
-                                class="bi bi-clock"></i> Ραντεβού</a>
-                        <a class="list-group-item list-group-item-action list-group-item-light p-3"
-                            href="/parousiologio"><i class="bi bi-book"></i> Παρουσιολόγιο</a>
-                    </div>
+                <a href="/logout" class="col-3 text-reset">
+                    <i class="bi bi-door-closed-fill"></i>
                 </a>
             </div>
         </div>
+        <div class="list-group sideList">
+            <a>
+                <div>
+                    <div class="accordion accordion-flush" id="FindocExpand">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="Findoc-headingOne">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#Findoc-collapseOne" aria-expanded="false"
+                                        aria-controls="Findoc-collapseOne">
+                                    <a><i class="bi bi-cash"></i> Εμπορική Διαχείρηση</a>
+                                </button>
+                            </h2>
+                            <div id="Findoc-collapseOne" class="accordion-collapse collapse"
+                                 aria-labelledby="Findoc-headingOne" data-bs-parent="#FindocExpand">
+                                <div class="list-group">
+                                    <a class="list-group-item list-group-item-action list-group-item-light p-2"
+                                       href="#!"><i class="bi bi-card-list"></i> Πωλήσεις</a>
+                                    <a class="list-group-item list-group-item-action list-group-item-light p-2"
+                                       href="#!"><i class="bi bi-card-list"></i> Αγορές</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            <a>
+                <div class="accordion accordion-flush" id="TrdrExpand">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="Trdr-headingOne">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#Trdr-collapseOne" aria-expanded="false"
+                                    aria-controls="Trdr-collapseOne">
+                                <a><i class="bi bi-people"></i> Συναλασσόμενοι</a>
+                            </button>
+                        </h2>
+                        <div id="Trdr-collapseOne" class="accordion-collapse collapse"
+                             aria-labelledby="Trdr-headingOne" data-bs-parent="#TrdrExpand">
+                            <div class="list-group">
+                                <a class="list-group-item list-group-item-action list-group-item-light p-2"
+                                   href="/customers"><i class="bi bi-card-list"></i> Πελάτες</a>
+                                <a class="list-group-item list-group-item-action list-group-item-light p-2"
+                                   href="#!"><i class="bi bi-card-list"></i> Προμηθευτές</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            <a>
+                <div class="accordion accordion-flush" id="CrmExpand">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="Crm-headingOne">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#Crm-collapseOne" aria-expanded="false"
+                                    aria-controls="Crm-collapseOne">
+                                <a><i class="bi bi-pie-chart"></i> CRM</a>
+                            </button>
+                        </h2>
+                        <div id="Crm-collapseOne" class="accordion-collapse collapse"
+                             aria-labelledby="Crm-headingOne" data-bs-parent="#CrmExpand">
+                            <div class="list-group">
+                                <a class="list-group-item list-group-item-action list-group-item-light p-2"
+                                   href="/calendar"><i class="bi bi-calendar-date"></i> Ημερολόγιο</a>
+                                <a class="list-group-item list-group-item-action list-group-item-light p-2"
+                                   href="/meetings"><i class="bi bi-card-list"></i> Συναντήσεις</a>
+                                <a class="list-group-item list-group-item-action list-group-item-light p-2"
+                                   href="#!"><i class="bi bi-list-task"></i> Εκρεμότητες</a>
+                                <a class="list-group-item list-group-item-action list-group-item-light p-2"
+                                   href="#!"><i class="bi bi-telephone"></i> Κλήσεις</a>
+                                <a class="list-group-item list-group-item-action list-group-item-light p-2"
+                                   href="#!"><i class="bi bi-calendar"></i> Εορτολόγιο</a>
+                                <a class="list-group-item list-group-item-action list-group-item-light p-2"
+                                   href="#!"><i class="bi bi-check2-square"></i> Εγκρίσεις</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            <a>
+                <div>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!"><i
+                            class="bi bi-clock"></i> Ραντεβού</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3"
+                       href="/parousiologio"><i class="bi bi-book"></i> Παρουσιολόγιο</a>
+                </div>
+            </a>
+        </div>
     </div>
+</div>
 
-    <!-- Page content wrapper-->
-    <div id="page-content-wrapper">
-        <button type="button" id="btnew" class="btn btn-primary addIcon"><i class="bi bi-plus"></i></button>
-        <!-- Top navigation-->
-        <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom fixed-top disable-select">
-            <div class="container-fluid">
+<!-- Page content wrapper-->
+<div id="page-content-wrapper">
+    <button type="button" id="btnew" class="btn btn-primary addIcon"><i class="bi bi-plus"></i></button>
+    <!-- Top navigation-->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom fixed-top disable-select">
+        <div class="container-fluid">
 
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" aria-expanded="false"
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" aria-expanded="false"
                     aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <button class="btn btn-outline-secondary" id="sidebarToggle"><span
-                            class="navbar-toggler-icon"></span></button>
-                    <script>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <button class="btn btn-outline-secondary" id="sidebarToggle"><span
+                        class="navbar-toggler-icon"></span></button>
+                <script>
+
                         if ($('.navbar-toggler').css('display') == 'none') {} else {
                             $('#sidebarToggle').css('display', 'none');
                             $('#divIcons').parent().css('display', 'block');
@@ -188,496 +220,872 @@
                             table.columns.adjust();
                             table.draw();
                         });
-                    </script>
-                    <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
+                </script>
+                <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
 
-                        <li class="nav-item"><a class="nav-link" href="/"><i class="bi bi-house-fill"></i>
-                                {{session['companyname']}}</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/"><i class="bi bi-house-fill"></i>
+                        {{session['companyname']}}</a></li>
 
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
-                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
-                                    class="bi bi-person-fill"></i> {{session['username']}}</a>
-                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="/"><i class="bi bi-house-fill"></i>
-                                    {{session['companyname']}}</a>
-                                <a class="dropdown-item" href="#!"><i class="bi bi-person-fill"></i>
-                                    {{session['username']}}</a>
-                                <a class="dropdown-item" href="#!"><i class="bi bi-gear-fill"></i> Settings</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="/logout"><i class="bi bi-door-closed-fill"></i>
-                                    Αποσύνδεση</a>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-        <!-- Page content-->
-        <div class="container-fluid disable-select">
-            <br />
-            <div class="btn-toolbar inpCenter" role="toolbar" aria-label="Toolbar with button groups">
-
-                <div class="btn-group mr-2" role="group" aria-label="First group">
-                    <button class="btn btn-secondary" id='Load'>Browse</button>
-                    <button class="btn btn-secondary" id="btnfilters" disabled="true" ><i
-                            class="bi bi-funnel"></i></button>
-                </div>
-                <div class="btn-group mr-2" role="group" aria-label="First group" style="display:none !important;">
-                    <button class="btn btn-secondary" id='btndelete' disabled="true">Delete</button>
-                </div>
-                <div class="btn-group mr-2 maxWidth" role="group" aria-label="Third group">
-                    <input type="text" class="form-control" placeholder="Search" id="SearchPanel" disabled="true">
-                </div>
-                <div class="btn-group mr-2" role="group" aria-label="Fourth group" style="display:none !important;">
-                    <button class="btn btn-secondary" id="btnrefresh" disabled="true"><i
-                            class="bi bi-arrow-repeat"></i></button>
-                </div>
-            </div>
-
-            <br>
-            <!--QUESTIONS-->
-            <div id="questionsdiv" style="display:block;width:100%;height:100%">
-                <form name="questions">
-                    <div class="col-sm-6">
-                        <div class="form-group row">
-                            <input type="text" class="form-control" id="qcode" placeholder="Κωδικός">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
+                           data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
+                                class="bi bi-person-fill"></i> {{session['username']}}</a>
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="/"><i class="bi bi-house-fill"></i>
+                                {{session['companyname']}}</a>
+                            <a class="dropdown-item" href="#!"><i class="bi bi-person-fill"></i>
+                                {{session['username']}}</a>
+                            <a class="dropdown-item" href="#!"><i class="bi bi-gear-fill"></i> Settings</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="/logout"><i class="bi bi-door-closed-fill"></i>
+                                Αποσύνδεση</a>
                         </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- Page content-->
+    <div class="container-fluid disable-select">
+        <br/>
+        <div class="btn-toolbar inpCenter" role="toolbar" aria-label="Toolbar with button groups">
 
-                        <div class="form-group row">
-                            <input type="text" class="form-control" id="qname" placeholder="Όνομα">
-                        </div>
+            <div class="btn-group mr-2" role="group" aria-label="First group">
+                <button class="btn btn-secondary" id='Load'>Browse</button>
+                <button class="btn btn-secondary" id="btnfilters" disabled=true><i class="bi bi-funnel"></i></button>
+            </div>
+            <div class="btn-group mr-2" role="group" aria-label="First group" style="display:none !important;">
+                <button class="btn btn-secondary" id='btndelete' disabled="true">Delete</button>
+            </div>
+            <div class="btn-group mr-2 maxWidth" role="group" aria-label="Third group">
+                <input type="text" class="form-control" autocomplete="off" placeholder="Search" id="SearchPanel" disabled="true">
+            </div>
+            <div class="btn-group mr-2" role="group" aria-label="Fourth group" style="display:none !important;">
+                <button class="btn btn-secondary" id="btnrefresh" disabled="true"><i
+                        class="bi bi-arrow-repeat"></i></button>
+            </div>
+        </div>
+
+        <br>
+        <!--QUESTIONS-->
+        <div id="questionsdiv" style="display:block;width:100%;height:100%">
+            <form name="questions">
+                <div class="col-sm-6">
+                    <div class="form-group row">
+                        <input type="text" class="form-control" autocomplete="off" id="qcode" placeholder="Κωδικός">
                     </div>
-                </form>
-            </div>
 
-            <!--Datatable-->
-            <div id="tablediv" style="display:none;">
-                <table id="example" class="display" style="width:100%;cursor:pointer;">
-                    <thead>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-            </div>
-
-            <!--MODALS-->
-            <div class="disable-select">
-                <!--DeleteModal-->
-                <div class="modal fade" tabindex="-1" role="dialog" id="deleteform" aria-labelledby="exampleModalLabel"
-                    aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title">Διαγραφή</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span id="cancelm2">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <p>Επιβεβαίωση Διαγραφής</p>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" id="cancelm22"
-                                    aria-label="cancel">Άκυρο</button>
-                                <button type="button" class="btn btn-danger" id="savem2">Διαγραφή</button>
-                            </div>
-                        </div>
+                    <div class="form-group row">
+                        <input type="text" class="form-control" autocomplete="off" id="qname" placeholder="Όνομα">
                     </div>
                 </div>
+            </form>
+        </div>
 
-                <!--ScreenModal-->
-                <div class="modal fade" tabindex="-1" role="dialog" id="screenform" aria-labelledby="exampleModalLabel"
-                    aria-hidden="true">
-                    <div class="modal-dialog modal-fullscreen" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title">Στοιχεία Πελάτη</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span id="cancelm1">&times;</span>
-                                </button>
-                            </div>
-                            <div>
-                                <div class="row">
+        <!--Datatable-->
+        <div id="tablediv" style="display:none;">
+            <table id="example" class="display" style="width:100%;cursor:pointer;">
+                <thead>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+
+        <!--MODALS-->
+        <div class="disable-select">
+            <!--DeleteModal-->
+            <div class="modal fade" tabindex="-1" role="dialog" id="deleteform" aria-labelledby="exampleModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Διαγραφή</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span id="cancelm2">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Επιβεβαίωση Διαγραφής</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" id="cancelm22"
+                                    aria-label="cancel">Άκυρο
+                            </button>
+                            <button type="button" class="btn btn-danger" id="savem2">Διαγραφή</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--ScreenModal-->
+            <div class="modal fade" tabindex="-1" role="dialog" id="screenform" aria-labelledby="exampleModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog modal-fullscreen" role="document">
+                    <div class="loader" id="loader"
+                         style="z-index:99999;position:fixed;top:50%;left:50%;margin-top:-60px;margin-left:-60px;display:none;">
+                    </div>
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Στοιχεία Πελάτη</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span id="cancelm1">&times;</span>
+                            </button>
+                        </div>
+                        <div>
+                            <div class="row">
                                 <!--TABS-->
-                                    <div class="col-10">
-                                        <nav>
-                                            <div class="nav nav-tabs" id="nav-tab" role="tablist"
-                                                style="overflow-y:hidden;overflow-x: auto;flex-wrap: nowrap;">
-                                                <button class="nav-link active" id="generalscreen-tab" data-bs-toggle="tab"
+                                <div class="col-11">
+                                    <nav>
+                                        <div class="nav nav-tabs" id="nav-tab" role="tablist"
+                                             style="overflow-y:hidden;overflow-x: auto;flex-wrap: nowrap;">
+                                            <button class="nav-link active" id="generalscreen-tab" data-bs-toggle="tab"
                                                     data-bs-target="#generalscreen" type="button" role="tab"
-                                                    aria-controls="generalscreen" aria-selected="true" style="white-space: nowrap;">Γενικά Στοιχεία</button>
-                                                <button class="nav-link" id="commscreen-tab" data-bs-toggle="tab"
+                                                    aria-controls="generalscreen" aria-selected="true" style="white-space: nowrap;">Γενικά Στοιχεία
+                                            </button>
+                                            <button class="nav-link" id="commscreen-tab" data-bs-toggle="tab"
                                                     data-bs-target="#commscreen" type="button" role="tab"
                                                     aria-controls="commscreen" aria-selected="false" style="white-space: nowrap;">Στοιχεία
-                                                    Επικοινωνίας</button>
-                                                <button class="nav-link" id="telscreen-tab" data-bs-toggle="tab"
-                                                    data-bs-target="#telscreen" type="button" role="tab"
-                                                    aria-controls="telscreen" aria-selected="false" style="white-space: nowrap;">Contact</button>
-                                            </div>
-                                        </nav>
-                                    </div>
-                                    <div class="col-2">
-                                        <div class="dropdown">
-                                            <button class="btn bi-three-dots-vertical " type="button" id="dropdownMenuButton"
-                                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                Επικοινωνίας
                                             </button>
-                                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                                                <a class="dropdown-item" href="#"><i class="bi bi-person-lines-fill"></i>Επαφές</a>
-                                                <a class="dropdown-item" href="#"><i class="bi bi-cart-check-fill"></i>Προιόντα</a>
-                                                <a class="dropdown-item" href="#"><i class="bi bi-receipt-cutoff"></i>Καρτέλα</a>
-                                                <a class="dropdown-item" href="#"><i class="bi bi-ui-checks-grid"></i>Ανοιχτές παραγγελίες</a>
-                                                <a class="dropdown-item" href="#"><i class="bi bi-calendar-day-fill"></i>Ραντεβου</a>
-                                                <a class="dropdown-item" href="#"><i class="bi bi-briefcase-fill"></i>Εργασίες</a>
-                                                <a class="dropdown-item" href="#" onclick="gotomaps()"><i class="bi bi-map-fill"></i>Χαρτης</a>
-                                            </div>
+                                            <button class="nav-link" id="telscreen-tab" data-bs-toggle="tab"
+                                                    data-bs-target="#telscreen" type="button" role="tab"
+                                                    aria-controls="telscreen" aria-selected="false" style="white-space: nowrap;">Contact
+                                            </button>
+                                        </div>
+                                    </nav>
+                                </div>
+                                <div class="col-1" style="display: flex;flex-wrap: wrap;justify-content: flex-end;">
+                                    <div class="dropdown">
+                                        <button class="btn bi-three-dots-vertical " type="button" id="dropdownMenuButton"
+                                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                                            <a class="dropdown-item" href="#" onclick="gotopeople()"><i class="bi bi-person-lines-fill"></i>Επαφές</a>
+                                            <a class="dropdown-item" href="#"><i class="bi bi-cart-check-fill"></i>Προιόντα</a>
+                                            <a class="dropdown-item" href="#" onclick="gotokartela()"><i class="bi bi-receipt-cutoff"></i>Καρτέλα</a>
+                                            <a class="dropdown-item" href="#" onclick="gotoopenorders()"><i class="bi bi-ui-checks-grid"></i>Ανοιχτές
+                                                παραγγελίες</a>
+                                            <a class="dropdown-item" href="#"><i class="bi bi-calendar-day-fill"></i>Ραντεβου</a>
+                                            <a class="dropdown-item" href="#"><i class="bi bi-briefcase-fill"></i>Εργασίες</a>
+                                            <a class="dropdown-item" href="#" onclick="gotomaps()"><i class="bi bi-map-fill"></i>Χαρτης</a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="modal-body">
+                        </div>
+                        <div class="modal-body">
 
-                                <!--TAB CONTENTS-->
-                                <div class="tab-content" id="nav-tabContent">
+                            <!--TAB CONTENTS-->
+                            <div class="tab-content" id="nav-tabContent">
 
-                                    <div class="tab-pane fade show active" id="generalscreen" role="tabpanel"
-                                        aria-labelledby="generalscreen-tab">
-                                        <form>
-                                            <div class="form-group">
-                                                <div class="form-group row" style="display:none;">
-                                                    <input type="text" class="form-control" id="ftrdr"
-                                                        placeholder="trdr">
+                                <div class="tab-pane fade show active" id="generalscreen" role="tabpanel"
+                                     aria-labelledby="generalscreen-tab">
+                                    <form>
+                                        <div class="form-group">
+                                            <div class="form-group row" style="display:none;">
+                                                <input type="text" class="form-control" id="ftrdr"
+                                                       placeholder="trdr">
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <label for="fcode" class="col-sm-2 col-form-label">Πελάτης:</label>
+                                                <div class="col-sm-3">
+                                                    <input type="text" class="form-control" id="fcode"
+                                                           placeholder="Κωδικός">
                                                 </div>
-
-                                                <div class="form-group row">
-                                                    <label for="fcode" class="col-sm-2 col-form-label">Πελάτης:</label>
-                                                    <div class="col-sm-3">
-                                                        <input type="text" class="form-control" id="fcode"
-                                                            placeholder="Κωδικός">
-                                                    </div>
-                                                    <div class="col-sm-7">
-                                                        <input type="text" class="form-control" id="fname"
-                                                            placeholder="Επωνυμίας">
-                                                    </div>
+                                                <div class="col-sm-7">
+                                                    <input type="text" class="form-control" id="fname"
+                                                           placeholder="Επωνυμίας">
                                                 </div>
+                                            </div>
 
-                                                <div class="form-group row">
-                                                    <label for="fafm" class="col-sm-2 col-form-label">ΑΦΜ:</label>
-                                                    <div class="col-sm-10">
-                                                        <input type="text" class="form-control" id="fafm"
-                                                            placeholder="ΑΦΜ">
-                                                    </div>
+                                            <div class="form-group row">
+                                                <label for="fafm" class="col-sm-2 col-form-label">ΑΦΜ:</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" id="fafm"
+                                                           placeholder="ΑΦΜ">
                                                 </div>
+                                            </div>
 
-                                                <div class="form-group row">
-                                                    <label for="faddress"
-                                                        class="col-sm-2 col-form-label disable-select">Διεύθυνση:</label>
-                                                    <div class="col-sm-10">
-                                                        <div class="input-group">
-                                                            <input type="text" class="form-control locked" autocomplete="off"
-                                                                id="faddress" placeholder="Διεύθυνση" onfocusout="updAll.call(this,event);">
-                                                            <span class="input-group-append">
+                                            <div class="form-group row">
+                                                <label for="faddress"
+                                                       class="col-sm-2 col-form-label disable-select">Διεύθυνση:</label>
+                                                <div class="col-sm-10">
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control locked" autocomplete="off"
+                                                               id="faddress" placeholder="Διεύθυνση" onfocusout="updAll.call(this,event);">
+                                                        <span class="input-group-append">
                                                                 <a id="mapp" class="btn btn-outline-secondary bg-white ms-n3" onclick="gotomaps()">
                                                                     <i class="bi bi-geo-alt"></i>
                                                                 </a>
                                                             </span>
-                                                        </div>
                                                     </div>
                                                 </div>
+                                            </div>
 
-                                                <div class="form-group row">
-                                                    <label for="fphone01" class="col-sm-2 col-form-label">Τηλ.1:</label>
-                                                    <div class="col-sm-10">
-                                                        <div class="input-group">
-                                                            <input type="text" class="form-control" id="fphone01"
-                                                                placeholder="Τηλ.1" onfocusout="updAll.call(this,event);">
-                                                            <span class="input-group-append">
-                                                                <a id="ffphone01call" class="btn btn-outline-secondary bg-white ms-n3" onclick="makephonecall(this,document.getElementById('fphone01'))">
+                                            <div class="form-group row">
+                                                <label for="fphone01" class="col-sm-2 col-form-label">Τηλ.1:</label>
+                                                <div class="col-sm-10">
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control" id="fphone01"
+                                                               placeholder="Τηλ.1" onfocusout="updAll.call(this,event);">
+                                                        <span class="input-group-append">
+                                                                <a id="ffphone01call" class="btn btn-outline-secondary bg-white ms-n3"
+                                                                   onclick="makephonecall(this,document.getElementById('fphone01'))">
                                                                     <i class="bi bi-telephone"></i>
                                                                 </a>
                                                             </span>
-                                                        </div>
                                                     </div>
                                                 </div>
+                                            </div>
 
-                                                <div class="form-group row">
-                                                    <label for="femail" class="col-sm-2 col-form-label">Email:</label>
-                                                    <div class="col-sm-10">
-                                                        <div class="input-group">
-                                                            <input type="text" class="form-control" id="femail"
-                                                                placeholder="Email" onfocusout="updAll.call(this,event);">
-                                                            <span class="input-group-append">
-                                                                <a class="btn btn-outline-secondary bg-white ms-n3" onclick="emailcall(this,document.getElementById('femail'))">
+                                            <div class="form-group row">
+                                                <label for="femail" class="col-sm-2 col-form-label">Email:</label>
+                                                <div class="col-sm-10">
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control" id="femail"
+                                                               placeholder="Email" onfocusout="updAll.call(this,event);">
+                                                        <span class="input-group-append">
+                                                                <a class="btn btn-outline-secondary bg-white ms-n3"
+                                                                   onclick="emailcall(this,document.getElementById('femail'))">
                                                                     <i class="bi bi-envelope"></i>
                                                                 </a>
                                                             </span>
-                                                        </div>
                                                     </div>
                                                 </div>
-
-                                                <div class="form-group row">
-                                                    <label for="fremarks"
-                                                        class="col-sm-2 col-form-label">Σχόλια:</label>
-                                                    <div class="col-sm-10">
-                                                        <textarea class="form-control" id="fremarks" rows="3"
-                                                            onfocusout="updAll.call(this,event);"
-                                                            placeholder="Σχόλια"></textarea>
-                                                    </div>
-                                                </div>
-
                                             </div>
-                                        </form>
-                                    </div>
 
-                                    <div class="tab-pane fade" id="commscreen" role="tabpanel"
-                                        aria-labelledby="commscreen-tab">
-                                        <form>
-                                            <div class="form-group">
-                                                <div class="form-group row">
-                                                    <label for="ftown" class="col-sm-2 col-form-label">Πόλη:</label>
-                                                    <div class="col-sm-10">
-                                                        <input type="text" class="form-control" id="ftown"
-                                                            placeholder="Πόλη" onfocusout="updAll.call(this,event);">
-                                                    </div>
+                                            <div class="form-group row">
+                                                <label for="fremarks"
+                                                       class="col-sm-2 col-form-label">Σχόλια:</label>
+                                                <div class="col-sm-10">
+                                                        <textarea class="form-control" id="fremarks" rows="3"
+                                                                  onfocusout="updAll.call(this,event);"
+                                                                  placeholder="Σχόλια"></textarea>
                                                 </div>
+                                            </div>
 
-                                                <div class="form-group row">
-                                                    <label for="faddress"
-                                                        class="col-sm-2 col-form-label">Διεύθυνση:</label>
-                                                    <div class="col-sm-10">
-                                                        <input type="text" class="form-control" id="faddress"
-                                                            placeholder="Διεύθυνση"
-                                                            onfocusout="updAll.call(this,event);">
-                                                    </div>
+                                        </div>
+                                    </form>
+                                </div>
+
+                                <div class="tab-pane fade" id="commscreen" role="tabpanel"
+                                     aria-labelledby="commscreen-tab">
+                                    <form>
+                                        <div class="form-group">
+                                            <div class="form-group row">
+                                                <label for="ftown" class="col-sm-2 col-form-label">Πόλη:</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" id="ftown"
+                                                           placeholder="Πόλη" onfocusout="updAll.call(this,event);">
                                                 </div>
+                                            </div>
 
-                                                <div class="form-group row">
-                                                    <label for="fzip" class="col-sm-2 col-form-label">T.K.:</label>
-                                                    <div class="col-sm-10">
-                                                        <input type="text" class="form-control" id="fzip"
-                                                            placeholder="T.K." onfocusout="updAll.call(this,event);">
-                                                    </div>
+                                            <div class="form-group row">
+                                                <label for="faddress"
+                                                       class="col-sm-2 col-form-label">Διεύθυνση:</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" id="faddress"
+                                                           placeholder="Διεύθυνση"
+                                                           onfocusout="updAll.call(this,event);">
                                                 </div>
+                                            </div>
 
-                                                <div class="form-group row">
-                                                    <label for="fdistrict"
-                                                        class="col-sm-2 col-form-label">Περιοχή:</label>
-                                                    <div class="col-sm-10">
-                                                        <input type="text" class="form-control" id="fdistrict"
-                                                            placeholder="Περιοχή" onfocusout="updAll.call(this,event);">
-                                                    </div>
+                                            <div class="form-group row">
+                                                <label for="fzip" class="col-sm-2 col-form-label">T.K.:</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" id="fzip"
+                                                           placeholder="T.K." onfocusout="updAll.call(this,event);">
                                                 </div>
+                                            </div>
 
-                                                <div class="form-group row">
-                                                    <label for="fphone01" class="col-sm-2 col-form-label">Τηλ.1:</label>
-                                                    <div class="col-sm-10">
-                                                        <div class="input-group">
-                                                            <input type="text" class="form-control" id="fphone01"
-                                                                placeholder="Τηλ.1" onfocusout="updAll.call(this,event);">
-                                                            <span class="input-group-append">
-                                                                <a id="ffphone01call" class="btn btn-outline-secondary bg-white ms-n3" onclick="makephonecall(this,document.getElementById('fphone01'))">
+                                            <div class="form-group row">
+                                                <label for="fdistrict"
+                                                       class="col-sm-2 col-form-label">Περιοχή:</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" id="fdistrict"
+                                                           placeholder="Περιοχή" onfocusout="updAll.call(this,event);">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <label for="fphone01" class="col-sm-2 col-form-label">Τηλ.1:</label>
+                                                <div class="col-sm-10">
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control" id="fphone01"
+                                                               placeholder="Τηλ.1" onfocusout="updAll.call(this,event);">
+                                                        <span class="input-group-append">
+                                                                <a id="ffphone01call" class="btn btn-outline-secondary bg-white ms-n3"
+                                                                   onclick="makephonecall(this,document.getElementById('fphone01'))">
                                                                     <i class="bi bi-telephone"></i>
                                                                 </a>
                                                             </span>
-                                                        </div>
                                                     </div>
                                                 </div>
+                                            </div>
 
-                                                <div class="form-group row">
-                                                    <label for="fphone02" class="col-sm-2 col-form-label">Τηλ.2:</label>
-                                                    <div class="col-sm-10">
-                                                        <div class="input-group">
-                                                            <input type="text" class="form-control" id="fphone02"
-                                                                placeholder="Τηλ.2" onfocusout="updAll.call(this,event);">
-                                                            <span class="input-group-append">
-                                                                <a id="ffphone02call" class="btn btn-outline-secondary bg-white ms-n3" onclick="makephonecall(this,document.getElementById('fphone02'))">
+                                            <div class="form-group row">
+                                                <label for="fphone02" class="col-sm-2 col-form-label">Τηλ.2:</label>
+                                                <div class="col-sm-10">
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control" id="fphone02"
+                                                               placeholder="Τηλ.2" onfocusout="updAll.call(this,event);">
+                                                        <span class="input-group-append">
+                                                                <a id="ffphone02call" class="btn btn-outline-secondary bg-white ms-n3"
+                                                                   onclick="makephonecall(this,document.getElementById('fphone02'))">
                                                                     <i class="bi bi-telephone"></i>
                                                                 </a>
                                                             </span>
-                                                        </div>
                                                     </div>
                                                 </div>
+                                            </div>
 
-                                                <div class="form-group row">
-                                                    <label for="femail" class="col-sm-2 col-form-label">Email:</label>
-                                                    <div class="col-sm-10">
-                                                        <div class="input-group">
-                                                            <input type="text" class="form-control" id="femail"
-                                                                placeholder="Email" onfocusout="updAll.call(this,event);">
-                                                            <span class="input-group-append">
-                                                                <a class="btn btn-outline-secondary bg-white ms-n3" onclick="emailcall(this,document.getElementById('femail'))">
+                                            <div class="form-group row">
+                                                <label for="femail" class="col-sm-2 col-form-label">Email:</label>
+                                                <div class="col-sm-10">
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control" id="femail"
+                                                               placeholder="Email" onfocusout="updAll.call(this,event);">
+                                                        <span class="input-group-append">
+                                                                <a class="btn btn-outline-secondary bg-white ms-n3"
+                                                                   onclick="emailcall(this,document.getElementById('femail'))">
                                                                     <i class="bi bi-envelope"></i>
                                                                 </a>
                                                             </span>
-                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </form>
-                                    </div>
-                                    <div class="tab-pane fade" id="telscreen" role="tabpanel"
-                                        aria-labelledby="telscreen-tab">
-                                        <form>
-                                            <div class="form-group">
-                                                <div class="form-group row">
-                                                    <label for="fremarks"
-                                                        class="col-sm-2 col-form-label">Σχόλια:</label>
-                                                    <div class="col-sm-10">
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="tab-pane fade" id="telscreen" role="tabpanel"
+                                     aria-labelledby="telscreen-tab">
+                                    <form>
+                                        <div class="form-group">
+                                            <div class="form-group row">
+                                                <label for="fremarks"
+                                                       class="col-sm-2 col-form-label">Σχόλια:</label>
+                                                <div class="col-sm-10">
                                                         <textarea class="form-control" id="fremarks" rows="3"
-                                                            onfocusout="updAll.call(this,event);"
-                                                            placeholder="Σχόλια"></textarea>
-                                                    </div>
+                                                                  onfocusout="updAll.call(this,event);"
+                                                                  placeholder="Σχόλια"></textarea>
                                                 </div>
                                             </div>
-                                        </form>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" id="savem1"
+                                    disabled="true">Αποθήκευση
+                            </button>
+                            <button type="button" class="btn btn-secondary" id="editm1"
+                                    aria-label="cancel">Edit
+                            </button>
+                            <button type="button" class="btn btn-danger" id="cancelm12">Ακύρωση</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--PeopleModal-->
+            <div class="modal fade" tabindex="-1" role="dialog" id="peoplemodal" aria-labelledby="exampleModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog modal-fullscreen" role="document">
+                    <div class="modal-content">
+                        <div class="loader" id="loader"
+                             style="z-index:99999;position:fixed;top:50%;left:50%;margin-top:-60px;margin-left:-60px;display:none;">
+                        </div>
+                        <div class="modal-header">
+                            <h5 class="modal-title">Επαφές Πελάτη</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span id="cancelmpeople1">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <table id="peopletable" class="display nowrap" style="width:100%;cursor:pointer;">
+                                <thead>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                        <button type="button" id="btnewpeople" class="btn btn-primary addIconPeople"><i class="bi bi-plus"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <!--PeopleScreenModal-->
+            <div class="modal fade" tabindex="-1" role="dialog" id="peoplescreenform" aria-labelledby="exampleModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog modal-fullscreen" role="document">
+                    <div class="loader" id="loader"
+                         style="z-index:99999;position:fixed;top:50%;left:50%;margin-top:-60px;margin-left:-60px;display:none;">
+                    </div>
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Στοιχεία Επαφής</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span id="cancelmpeoplescreen1">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+
+                            <form>
+                                <div class="form-group">
+                                    <div class="form-group row" style="display:none;">
+                                        <input type="text" class="form-control" id="fprsn"
+                                               placeholder="trdr">
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="fcode" class="col-sm-2 col-form-label">Κωδικός:</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" id="fpeoplecode"
+                                                   placeholder="Κωδικός">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="fpeoplename" class="col-sm-2 col-form-label">Όνομα:</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" id="fpeoplename"
+                                                   placeholder="Όνομα">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="fpeoplename2" class="col-sm-2 col-form-label">Επώνυμο:</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" id="fpeoplename2"
+                                                   placeholder="Επώνυμο">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="fpeoplephone01" class="col-sm-2 col-form-label">Τηλ.1:</label>
+                                        <div class="col-sm-10">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" id="fpeoplephone01"
+                                                       placeholder="Τηλ.1" onfocusout="updAll.call(this,event);">
+                                                <span class="input-group-append">
+                                                        <a id="ffpeoplephone01call" class="btn btn-outline-secondary bg-white ms-n3"
+                                                           onclick="makephonecall(this,document.getElementById('fpeoplephone01'))">
+                                                            <i class="bi bi-telephone"></i>
+                                                        </a>
+                                                    </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="fpeoplephone02" class="col-sm-2 col-form-label">Τηλ.2:</label>
+                                        <div class="col-sm-10">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" id="fpeoplephone02"
+                                                       placeholder="Τηλ.2" onfocusout="updAll.call(this,event);">
+                                                <span class="input-group-append">
+                                                        <a id="ffpeoplephone02call" class="btn btn-outline-secondary bg-white ms-n3"
+                                                           onclick="makephonecall(this,document.getElementById('fpeoplephone02'))">
+                                                            <i class="bi bi-telephone"></i>
+                                                        </a>
+                                                    </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="fpeoplemobilephone" class="col-sm-2 col-form-label">Κινητό:</label>
+                                        <div class="col-sm-10">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" id="fpeoplemobilephone"
+                                                       placeholder="Κινητό" onfocusout="updAll.call(this,event);">
+                                                <span class="input-group-append">
+                                                        <a id="ffpeoplephone01call" class="btn btn-outline-secondary bg-white ms-n3"
+                                                           onclick="makephonecall(this,document.getElementById('fpeoplemobilephone'))">
+                                                            <i class="bi bi-telephone"></i>
+                                                        </a>
+                                                    </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="fpeopleemail" class="col-sm-2 col-form-label">Email:</label>
+                                        <div class="col-sm-10">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" id="fpeopleemail"
+                                                       placeholder="Email" onfocusout="updAll.call(this,event);">
+                                                <span class="input-group-append">
+                                                        <a class="btn btn-outline-secondary bg-white ms-n3"
+                                                           onclick="emailcall(this,document.getElementById('fpeopleemail'))">
+                                                            <i class="bi bi-envelope"></i>
+                                                        </a>
+                                                    </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="fpeoplefax" class="col-sm-2 col-form-label">Fax:</label>
+                                        <div class="col-sm-10">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" id="fpeoplefax"
+                                                       placeholder="Fax" onfocusout="updAll.call(this,event);">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" id="savempeoplescreen1"
+                                    disabled="true">Αποθήκευση
+                            </button>
+                            <button type="button" class="btn btn-secondary" id="editmpeoplescreen1"
+                                    aria-label="cancel">Edit
+                            </button>
+                            <button type="button" class="btn btn-danger" id="cancelmpeoplescreen12">Ακύρωση</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--Καρτελα Modal-->
+            <div class="modal fade" tabindex="-1" role="dialog" id="kartelamodal" aria-labelledby="exampleModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog modal-fullscreen" role="document">
+                    <div class="modal-content">
+                        <div class="loader" id="loader"
+                             style="z-index:99999;position:fixed;top:50%;left:50%;margin-top:-60px;margin-left:-60px;display:none;">
+                        </div>
+                        <div class="modal-header">
+                            <h5 class="modal-title">Καρτέλα Πελάτη</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span id="cancelmkartela1">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                                <div class="btn-group mr-2" role="group" aria-label="First group">
+                                    <button class="btn btn-secondary" id='kartelaLoad' onclick="document.getElementById('kartelasubmit').click()">
+                                        Browse
+                                    </button>
+                                    <button class="btn btn-secondary" id="kartelabtnfilters" disabled="true"><i class="bi bi-funnel"></i></button>
+                                </div>
+                            </div>
+                            <br/>
+                            <div id="kartelaquestions">
+                                <form method="POST" onsubmit="loadkartela()">
+                                    <select id="karteladate" class="form-select" required>
+                                        <option value="101">Σήμερα</option>
+                                        <option value="102">Χθές</option>
+                                        <option value="111">Τρέχουσα Εβδομάδα</option>
+                                        <option value="121">Τρέχων μήνας</option>
+                                        <option value="122">Προηγούμενος μήνας</option>
+                                        <option selected value="131">Τρέχον έτος</option>
+                                        <option value="133">Προηγούμενο έτος</option>
+                                    </select>
+                                    <button type="submit" id="kartelasubmit" style="display:none"></button>
+                                </form>
+                            </div>
+                            <div id="kartelabody" style="display:none;overflow:scroll;width:100%;height:90%">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--OpenOrdersModal-->
+            <div class="modal fade" tabindex="-1" role="dialog" id="openordersmodal" aria-labelledby="exampleModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog modal-fullscreen" role="document">
+                    <div class="modal-content">
+                        <div class="loader" id="loader"
+                             style="z-index:99999;position:fixed;top:50%;left:50%;margin-top:-60px;margin-left:-60px;display:none;">
+                        </div>
+                        <div class="modal-header">
+                            <h5 class="modal-title">Ανοιχτές Παραγγελίες</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span id="cancelmopenorders1">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <table id="openorderstable" class="display nowrap" style="width:100%;cursor:pointer;">
+                                <thead>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                        <button type="button" id="btnewpeople" class="btn btn-primary addIconPeople"><i class="bi bi-plus"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <!--OpenOrdersScreenModal-->
+            <div class="modal fade" tabindex="-1" role="dialog" id="openordersscreenform" aria-labelledby="exampleModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog modal-fullscreen" role="document">
+                    <div class="loader" id="loader"
+                         style="z-index:99999;position:fixed;top:50%;left:50%;margin-top:-60px;margin-left:-60px;display:none;">
+                    </div>
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Παραγγελία</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span id="cancelmopenordersscreen1">&times;</span>
+                            </button>
+                        </div>
+                        <div>
+                            <div class="row">
+                                <!--TABS-->
+                                <div class="col-11">
+                                    <nav>
+                                        <div class="nav nav-tabs" id="nav-tab" role="tablist"
+                                             style="overflow-y:hidden;overflow-x: auto;flex-wrap: nowrap;">
+                                            <button class="nav-link active" id="generalscreen-tab" data-bs-toggle="tab"
+                                                    data-bs-target="#generalscreen" type="button" role="tab"
+                                                    aria-controls="generalscreen" aria-selected="true" style="white-space: nowrap;">Γενικά
+                                                Στοιχεία
+                                            </button>
+                                            <button class="nav-link" id="commscreen-tab" data-bs-toggle="tab"
+                                                    data-bs-target="#commscreen" type="button" role="tab"
+                                                    aria-controls="commscreen" aria-selected="false" style="white-space: nowrap;">Στοιχεία
+                                                Επικοινωνίας
+                                            </button>
+                                            <button class="nav-link" id="telscreen-tab" data-bs-toggle="tab"
+                                                    data-bs-target="#telscreen" type="button" role="tab"
+                                                    aria-controls="telscreen" aria-selected="false" style="white-space: nowrap;">Contact
+                                            </button>
+                                        </div>
+                                    </nav>
+                                </div>
+                                <div class="col-1" style="display: flex;flex-wrap: wrap;justify-content: flex-end;">
+                                    <div class="dropdown">
+                                        <button class="btn bi-three-dots-vertical " type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                                                aria-haspopup="true" aria-expanded="false">
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                                            <a class="dropdown-item" id="openordersprintoutform" href="#"><i class="bi bi-printer"></i>
+                                                Εκτύπωση</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="form-group">
+                                    <div class="form-group row" style="display:none;">
+                                        <input type="text" class="form-control" id="fopenordersfindoc"
+                                               placeholder="findoc">
+                                    </div>
+
+                                    <div class="form-group row" style="display:none;">
+                                        <input type="text" class="form-control" id="fopenorderstrdr"
+                                               placeholder="trdr">
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="fopenordersseries" class="col-sm-2 col-form-label">Σειρά:</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" id="fopenordersseries"
+                                                   placeholder="Σειρά">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="fopenordersfincode" class="col-sm-2 col-form-label">Παραστατικό:</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" id="fopenordersfincode"
+                                                   placeholder="Παραστατικό">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="fopenorderstrndate" class="col-sm-2 col-form-label">Ημ/νία:</label>
+                                        <div class="col-sm-10">
+                                            <input type="date" class="form-control" id="fopenorderstrndate"
+                                                   placeholder="Ημ/νία">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="fopenorderstrdrcode" class="col-sm-2 col-form-label">Κωδικός:</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" id="fopenorderstrdrcode"
+                                                   placeholder="Κωδικός">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="fopenorderstrdrname" class="col-sm-2 col-form-label">Επωνυμία:</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" id="fopenorderstrdrname"
+                                                   placeholder="Επωνυμία">
+                                        </div>
+                                    </div>
+
+                                    <button type="button" class="btn btn-secondary" id="additelines"><i class="bi bi-bag-plus"></i></button>
+                                    <div class="form-group row">
+                                        <table id="mtrltable" class="display nowrap" style="width:100%;cursor:pointer;">
+                                            <thead>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" id="savempeoplescreen1"
+                                    disabled="true">Αποθήκευση
+                            </button>
+                            <button type="button" class="btn btn-secondary" id="editmpeoplescreen1"
+                                    aria-label="cancel">Edit
+                            </button>
+                            <button type="button" class="btn btn-danger" id="cancelmpeoplescreen12">Ακύρωση</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--PrintOutFormModal-->
+            <div class="modal fade" id="printmodal" role="dialog">
+                <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Επιλογή φόρμας εκτύπωσης</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span id="cancelmprintscreen1">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <select id="printoutformselection">
+                            </select>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" id="savem1"
-                                    disabled="true">Αποθήκευση</button>
-                                <button type="button" class="btn btn-secondary" id="editm1"
-                                    aria-label="cancel">Edit</button>
-                                <button type="button" class="btn btn-danger" id="cancelm12">Ακύρωση</button>
+                                <button type="button" class="btn btn-secondary" id="savemprintscreen1">Συνέχεια</button>
+                                <button type="button" class="btn btn-danger" id="cancelmprintscreen12">Ακύρωση</button>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <!--SuccessModal-->
-                <div class="modal fade" id="successmodal" role="dialog">
-                    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-                        <div class="modal-content">
-                            <div class="modal-body">
-                                <div class="container">
-                                    <div class="row">
-                                        <div class="d-flex justify-content-center">
-                                            <img src="{{ url_for('static', filename= 'images/Green-Tick.png') }}"
-                                                style="width:50%">
+            <!--Itelinesmodal-->
+            <div class="modal fade" id="itelinesmodal" role="dialog">
+                <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Προσθήκη είδους</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span id="cancelmitelines1">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="form-group">
+                                    <div class="form-group row" style="display:none;">
+                                        <input type="text" class="form-control" id="fitelinesmtrl" placeholder="mtrl">
+                                    </div>
+
+                                    <div class="form-group row" style="display:none;">
+                                        <input type="text" class="form-control" id="fitelinesupdate" placeholder="UPDATE">
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="fitelinescode" class="col-sm-2 col-form-label">Κωδικός:</label>
+                                        <div class="col-sm-10">
+                                            <div class="input-group">
+                                                <input type="text" autocomplete="off" class="form-control" id="fitelinescode" placeholder="Κωδικός"
+                                                       onkeyup="mtrlSelectorByCode()">
+                                                <span class="input-group-append">
+                                                        <button class="btn btn-outline-secondary bg-white ms-n3 locked" type="button" disabled="true">
+                                                            <i class="fa fa-search"></i>
+                                                        </button>
+                                                    </span>
+                                            </div>
+                                            <div class="dropdown">
+                                                <ul id="Selectormtrlcode" class="dropdown-menu"></ul>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="d-flex justify-content-center">
-                                            <p style="font-size:20px">Επιτυχής καταχώρηση</p>
+
+                                    <div class="form-group row">
+                                        <label for="fitelinesname" class="col-sm-2 col-form-label">Περιγραφή:</label>
+                                        <div class="col-sm-10">
+                                            <div class="input-group">
+                                                <input type="text" autocomplete="off" class="form-control" id="fitelinesname" placeholder="Περιγραφή"
+                                                       onkeyup="mtrlSelectorByName()">
+                                                <span class="input-group-append">
+                                                        <button class="btn btn-outline-secondary bg-white ms-n3 locked" type="button" disabled="true">
+                                                            <i class="fa fa-search"></i>
+                                                        </button>
+                                                    </span>
+                                            </div>
+                                            <div class="dropdown">
+                                                <ul id="Selectormtrlname" class="dropdown-menu"></ul>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="d-flex justify-content-center">
-                                            <h4>ID:<span id="insertID"></span></h4>
+
+
+                                    <div class="form-group row">
+                                        <label for="fitelinesqty1" class="col-sm-2 col-form-label">Ποσότητα:</label>
+                                        <div class="col-sm-10">
+                                            <input type="number" autocomplete="off" class="form-control" id="fitelinesqty1" placeholder="Ποσότητα">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="fitelinesdisc1prsc" class="col-sm-2 col-form-label">Έκπτωση:</label>
+                                        <div class="col-sm-10">
+                                            <input type="number" class="form-control" id="fitelinesdisc1prsc" placeholder="Έκπτωση%">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="fitelinesdprice" class="col-sm-2 col-form-label">Τιμή:</label>
+                                        <div class="col-sm-10">
+                                            <input type="number" class="form-control" id="fitelinesdprice" placeholder="Τιμή">
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" id="savemitelinesscreen1">Προσθήκη</button>
+                            <button type="button" class="btn btn-danger" id="cancelmitelinescreen12">Ακύρωση</button>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <!--FailureModal-->
-                <div class="modal fade" id="failuremodal" role="dialog">
-                    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-                        <div class="modal-content">
-                            <div class="modal-body">
-                                <div class="container">
-                                    <div class="row">
-                                        <div class="d-flex justify-content-center">
-                                            <img src="{{ url_for('static', filename= 'images/Red-X.png') }}"
-                                                style="width:50%">
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="d-flex justify-content-center">
-                                            <p style="font-size:20px">Κάτι πήγε στραβά</p>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="d-flex justify-content-center">
-                                            <span id="insertIDFail"></span>
-                                        </div>
+            <!--SuccessModal-->
+            <div class="modal fade" id="successmodal" role="dialog">
+                <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="d-flex justify-content-center">
+                                        <img src="{{ url_for('static', filename= 'images/Green-Tick.png') }}"
+                                             style="width:50%">
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!--DeleteSuccessModal-->
-                <div class="modal fade" id="deletesuccessmodal" role="dialog">
-                    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-                        <div class="modal-content">
-                            <div class="modal-body">
-                                <div class="container">
-                                    <div class="row">
-                                        <div class="d-flex justify-content-center">
-                                            <img src="{{ url_for('static', filename= 'images/Green-Tick.png') }}"
-                                                style="width:50%">
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="d-flex justify-content-center">
-                                            <p style="font-size:20px">Επιτυχής Διαγραφή</p>
-                                        </div>
+                                <div class="row">
+                                    <div class="d-flex justify-content-center">
+                                        <p style="font-size:20px">Επιτυχής καταχώρηση</p>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!--DeleteFailureModal-->
-                <div class="modal fade" id="deletefailuremodal" role="dialog">
-                    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-                        <div class="modal-content">
-                            <div class="modal-body">
-                                <div class="container">
-                                    <div class="row">
-                                        <div class="d-flex justify-content-center">
-                                            <img src="{{ url_for('static', filename= 'images/Red-X.png') }}"
-                                                style="width:50%">
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="d-flex justify-content-center">
-                                            <p style="font-size:20px">Κάτι πήγε στραβά</p>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="d-flex justify-content-center">
-                                            <span id="deleteIDFail"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!--DeleteMultipleFailureModal-->
-                <div class="modal fade" id="deletemultiplefailuremodal" role="dialog">
-                    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-                        <div class="modal-content">
-                            <div class="modal-body">
-                                <div class="container">
-                                    <div class="row">
-                                        <div class="d-flex justify-content-center">
-                                            <img src="{{ url_for('static', filename= 'images/Green-Tick.png') }}"
-                                                style="width:50%">
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="d-flex justify-content-center">
-                                            <span id="multipledeleteID"></span>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="d-flex justify-content-center">
-                                            <img src="{{ url_for('static', filename= 'images/Red-X.png') }}"
-                                                style="width:50%">
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="d-flex justify-content-center">
-                                            <span id="multipledeleteIDFail"></span>
-                                        </div>
+                                <div class="row">
+                                    <div class="d-flex justify-content-center">
+                                        <h4>ID:<span id="insertID"></span></h4>
                                     </div>
                                 </div>
                             </div>
@@ -686,35 +1094,149 @@
                 </div>
             </div>
 
-        </div>
-    </div>
+            <!--FailureModal-->
+            <div class="modal fade" id="failuremodal" role="dialog">
+                <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="d-flex justify-content-center">
+                                        <img src="{{ url_for('static', filename= 'images/Red-X.png') }}"
+                                             style="width:50%">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="d-flex justify-content-center">
+                                        <p style="font-size:20px">Κάτι πήγε στραβά</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="d-flex justify-content-center">
+                                        <span id="insertIDFail"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-    <!-- Footer -->
-    <footer class="bg-light border-top text-muted fixed-bottom d-flex justify-content-center p-2 disable-select">
-        <!-- Section: Social media -->
-        <div>
-            <a href="https://www.facebook.com/DayOne-1099718003526187/" target="_blank" class="me-4 text-reset">
-                <i class="bi bi-facebook"></i>
-            </a>
-            <a href="" class="me-4 text-reset">
-                <i class="bi bi-twitter"></i>
-            </a>
-            <a href="https://www.day-one.gr/" target="_blank" class="me-4 text-reset">
-                <i class="bi bi-google"></i>
-            </a>
-            <a href="" class="me-4 text-reset">
-                <i class="bi bi-instagram"></i>
-            </a>
-            <a href="https://www.linkedin.com/company/dayone-company" target="_blank" class="me-4 text-reset">
-                <i class="bi bi-linkedin"></i>
-            </a>
+            <!--DeleteSuccessModal-->
+            <div class="modal fade" id="deletesuccessmodal" role="dialog">
+                <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="d-flex justify-content-center">
+                                        <img src="{{ url_for('static', filename= 'images/Green-Tick.png') }}"
+                                             style="width:50%">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="d-flex justify-content-center">
+                                        <p style="font-size:20px">Επιτυχής Διαγραφή</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--DeleteFailureModal-->
+            <div class="modal fade" id="deletefailuremodal" role="dialog">
+                <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="d-flex justify-content-center">
+                                        <img src="{{ url_for('static', filename= 'images/Red-X.png') }}"
+                                             style="width:50%">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="d-flex justify-content-center">
+                                        <p style="font-size:20px">Κάτι πήγε στραβά</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="d-flex justify-content-center">
+                                        <span id="deleteIDFail"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--DeleteMultipleFailureModal-->
+            <div class="modal fade" id="deletemultiplefailuremodal" role="dialog">
+                <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="d-flex justify-content-center">
+                                        <img src="{{ url_for('static', filename= 'images/Green-Tick.png') }}"
+                                             style="width:50%">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="d-flex justify-content-center">
+                                        <span id="multipledeleteID"></span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="d-flex justify-content-center">
+                                        <img src="{{ url_for('static', filename= 'images/Red-X.png') }}"
+                                             style="width:50%">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="d-flex justify-content-center">
+                                        <span id="multipledeleteIDFail"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <!-- Section: Social media -->
-    </footer>
-    <!-- Footer -->
-    <!-- Bootstrap core JS-->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Core theme JS-->
+
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-light border-top text-muted fixed-bottom d-flex justify-content-center p-2 disable-select">
+    <!-- Section: Social media -->
+    <div>
+        <a href="https://www.facebook.com/DayOne-1099718003526187/" target="_blank" class="me-4 text-reset">
+            <i class="bi bi-facebook"></i>
+        </a>
+        <a href="" class="me-4 text-reset">
+            <i class="bi bi-twitter"></i>
+        </a>
+        <a href="https://www.day-one.gr/" target="_blank" class="me-4 text-reset">
+            <i class="bi bi-google"></i>
+        </a>
+        <a href="" class="me-4 text-reset">
+            <i class="bi bi-instagram"></i>
+        </a>
+        <a href="https://www.linkedin.com/company/dayone-company" target="_blank" class="me-4 text-reset">
+            <i class="bi bi-linkedin"></i>
+        </a>
+    </div>
+    <!-- Section: Social media -->
+</footer>
+<!-- Footer -->
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Core theme JS-->
 </body>
 
 </html>

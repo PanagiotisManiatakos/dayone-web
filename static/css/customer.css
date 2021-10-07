@@ -19,6 +19,27 @@
   font-size: 30px;
 }
 
+.addIconPeople {
+  width: 60px;
+  height: 60px;
+  position: fixed;
+  bottom: 75px;
+  right: 25px;
+  z-index: 99;
+  cursor: pointer;
+  border-radius: 50px;
+}
+
+.addIconPeople>i {
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+}
+
 .inpCenter {
   display: flex;
   justify-content: center;

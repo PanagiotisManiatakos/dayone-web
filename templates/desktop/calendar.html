@@ -2,158 +2,158 @@
 <html>
 
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="keywords" content="footer, address, phone, icons" />
-	<title>Ημερολόγιο</title>
-	<link href="{{ url_for('static', filename= 'images/l.jpg') }}" rel="icon">
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/general.css') }}">
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-	<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-	<script src="{{ url_for('static', filename= 'js/general.js') }}"></script>
-	<script src="{{ url_for('static', filename= 'js/user.js') }}"></script>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-		integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-	<link href="https://fonts.googleapis.com/css?family=Cookie" rel="stylesheet" type="text/css">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='js/fullcalendar/lib/main.css') }}">
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/modal.css') }}">
-	<script src="{{ url_for('static', filename= 'js/fullcalendar/lib/main.js') }}"></script>
-	<script src="{{ url_for('static', filename= 'js/desktop/calendar.js') }}"></script>
-	<link rel="stylesheet" href="{{ url_for('static', filename= 'css/globalStyling.css') }}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="keywords" content="footer, address, phone, icons"/>
+    <title>Ημερολόγιο</title>
+    <link href="{{ url_for('static', filename= 'images/l.jpg') }}" rel="icon">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/general.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="{{ url_for('static', filename= 'js/general.js') }}"></script>
+    <script src="{{ url_for('static', filename= 'js/user.js') }}"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Cookie" rel="stylesheet" type="text/css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='js/fullcalendar/lib/main.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/modal.css') }}">
+    <script src="{{ url_for('static', filename= 'js/fullcalendar/lib/main.js') }}"></script>
+    <script src="{{ url_for('static', filename= 'js/desktop/calendar.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename= 'css/globalStyling.css') }}">
 </head>
 
 <body style="padding-top:57px">
-	<div class="loader" id="loader"
-		style="z-index:999;position:fixed;top:50%;left:50%;margin-top:-60px;margin-left:-60px;display:none;"></div>
-	<div class="d-flex" id="wrapper">
-		<!-- Sidebar Menu-->
-		<ul id="contextMenu">
-			<li><a class="disable-select" tabindex="-1" onclick="expandAll()">Πλήρη ανάπτυξη</a></li>
-			<li><a class="disable-select" tabindex="-1" onclick="closeAll()">Πλήρη σύμπτηξη</a></li>
-			<li class="dropdown-divider"></li>
-			<li><a class="disable-select" tabindex="-1">Separated link</a></li>
-		</ul>
+<div class="loader" id="loader"
+     style="z-index:999;position:fixed;top:50%;left:50%;margin-top:-60px;margin-left:-60px;display:none;"></div>
+<div class="d-flex" id="wrapper">
+    <!-- Sidebar Menu-->
+    <ul id="contextMenu">
+        <li><a class="disable-select" tabindex="-1" onclick="expandAll()">Πλήρη ανάπτυξη</a></li>
+        <li><a class="disable-select" tabindex="-1" onclick="closeAll()">Πλήρη σύμπτηξη</a></li>
+        <li class="dropdown-divider"></li>
+        <li><a class="disable-select" tabindex="-1">Separated link</a></li>
+    </ul>
 
-		<!-- Sidebar-->
-		<div class="border-end bg-light disable-select" id="sidebar-wrapper">
-			<div class="list-group">
-				<div class="disable-select" style="display:none;">
-					<div class="d-flex justify-content-center p-2" id="divIcons">
-						<a href="/index" class="col-3 text-reset">
-							<i class="bi bi-house-fill"></i>
-						</a>
-						<a href="#" class="col-3 text-reset">
-							<i class="bi bi-gear-fill"></i>
-						</a>
-						<a class="col-3 text-reset" onclick="user()" style="cursor: pointer">
-							<i class="bi bi-person-fill"></i>
-						</a>
-						<a href="/logout" class="col-3 text-reset">
-							<i class="bi bi-door-closed-fill"></i>
-						</a>
-					</div>
-				</div>
-				<a>
-					<div class="accordion accordion-flush" id="FindocExpand">
-						<div class="accordion-item">
-							<h2 class="accordion-header" id="Findoc-headingOne">
-								<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-									data-bs-target="#Findoc-collapseOne" aria-expanded="false"
-									aria-controls="Findoc-collapseOne">
-									<a><i class="bi bi-cash"></i> Εμπορική Διαχείρηση</a>
-								</button>
-							</h2>
-							<div id="Findoc-collapseOne" class="accordion-collapse collapse"
-								aria-labelledby="Findoc-headingOne" data-bs-parent="#FindocExpand">
-								<div class="list-group">
-									<a class="list-group-item list-group-item-action list-group-item-light p-2"
-										href="#!"><i class="bi bi-card-list"></i> Πωλήσεις</a>
-									<a class="list-group-item list-group-item-action list-group-item-light p-2"
-										href="#!"><i class="bi bi-card-list"></i> Αγορές</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</a>
-				<a>
-					<div class="accordion accordion-flush" id="TrdrExpand">
-						<div class="accordion-item">
-							<h2 class="accordion-header" id="Trdr-headingOne">
-								<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-									data-bs-target="#Trdr-collapseOne" aria-expanded="false"
-									aria-controls="Trdr-collapseOne">
-									<a><i class="bi bi-people"></i> Συναλασσόμενοι</a>
-								</button>
-							</h2>
-							<div id="Trdr-collapseOne" class="accordion-collapse collapse"
-								aria-labelledby="Trdr-headingOne" data-bs-parent="#TrdrExpand">
-								<div class="list-group">
-									<a class="list-group-item list-group-item-action list-group-item-light p-2"
-										href="/customers"><i class="bi bi-card-list"></i> Πελάτες</a>
-									<a class="list-group-item list-group-item-action list-group-item-light p-2"
-										href="#!"><i class="bi bi-card-list"></i> Προμηθευτές</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</a>
-				<a>
-					<div class="accordion accordion-flush" id="CrmExpand">
-						<div class="accordion-item">
-							<h2 class="accordion-header" id="Crm-headingOne">
-								<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-									data-bs-target="#Crm-collapseOne" aria-expanded="false"
-									aria-controls="Crm-collapseOne">
-									<a><i class="bi bi-pie-chart"></i> CRM</a>
-								</button>
-							</h2>
-							<div id="Crm-collapseOne" class="accordion-collapse collapse"
-								aria-labelledby="Crm-headingOne" data-bs-parent="#CrmExpand">
-								<div class="list-group">
-									<a class="list-group-item list-group-item-action list-group-item-light p-2"
-										href="/calendar"><i class="bi bi-calendar-date"></i> Ημερολόγιο</a>
-									<a class="list-group-item list-group-item-action list-group-item-light p-2"
-										href="/meetings"><i class="bi bi-card-list"></i> Συναντήσεις</a>
-									<a class="list-group-item list-group-item-action list-group-item-light p-2"
-										href="#!"><i class="bi bi-list-task"></i> Εκρεμότητες</a>
-									<a class="list-group-item list-group-item-action list-group-item-light p-2"
-										href="#!"><i class="bi bi-telephone"></i> Κλήσεις</a>
-									<a class="list-group-item list-group-item-action list-group-item-light p-2"
-										href="#!"><i class="bi bi-calendar"></i> Εορτολόγιο</a>
-									<a class="list-group-item list-group-item-action list-group-item-light p-2"
-										href="#!"><i class="bi bi-check2-square"></i> Εγκρίσεις</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</a>
-				<a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!"><i
-						class="bi bi-clock"></i> Ραντεβού</a>
-				<a class="list-group-item list-group-item-action list-group-item-light p-3" href="/parousiologio"><i
-						class="bi bi-book"></i> Παρουσιολόγιο</a>
-			</div>
-		</div>
-		<!-- Page content wrapper-->
-		<div id="page-content-wrapper">
-			<!-- Top navigation-->
-			<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom fixed-top">
-				<div class="container-fluid">
+    <!-- Sidebar-->
+    <div class="border-end bg-light disable-select" id="sidebar-wrapper">
+        <div class="list-group">
+            <div class="disable-select" style="display:none;">
+                <div class="d-flex justify-content-center p-2" id="divIcons">
+                    <a href="/index" class="col-3 text-reset">
+                        <i class="bi bi-house-fill"></i>
+                    </a>
+                    <a href="#" class="col-3 text-reset">
+                        <i class="bi bi-gear-fill"></i>
+                    </a>
+                    <a class="col-3 text-reset" onclick="user()" style="cursor: pointer">
+                        <i class="bi bi-person-fill"></i>
+                    </a>
+                    <a href="/logout" class="col-3 text-reset">
+                        <i class="bi bi-door-closed-fill"></i>
+                    </a>
+                </div>
+            </div>
+            <a>
+                <div class="accordion accordion-flush" id="FindocExpand">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="Findoc-headingOne">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#Findoc-collapseOne" aria-expanded="false"
+                                    aria-controls="Findoc-collapseOne">
+                                <a><i class="bi bi-cash"></i> Εμπορική Διαχείρηση</a>
+                            </button>
+                        </h2>
+                        <div id="Findoc-collapseOne" class="accordion-collapse collapse"
+                             aria-labelledby="Findoc-headingOne" data-bs-parent="#FindocExpand">
+                            <div class="list-group">
+                                <a class="list-group-item list-group-item-action list-group-item-light p-2"
+                                   href="#!"><i class="bi bi-card-list"></i> Πωλήσεις</a>
+                                <a class="list-group-item list-group-item-action list-group-item-light p-2"
+                                   href="#!"><i class="bi bi-card-list"></i> Αγορές</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            <a>
+                <div class="accordion accordion-flush" id="TrdrExpand">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="Trdr-headingOne">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#Trdr-collapseOne" aria-expanded="false"
+                                    aria-controls="Trdr-collapseOne">
+                                <a><i class="bi bi-people"></i> Συναλασσόμενοι</a>
+                            </button>
+                        </h2>
+                        <div id="Trdr-collapseOne" class="accordion-collapse collapse"
+                             aria-labelledby="Trdr-headingOne" data-bs-parent="#TrdrExpand">
+                            <div class="list-group">
+                                <a class="list-group-item list-group-item-action list-group-item-light p-2"
+                                   href="/customers"><i class="bi bi-card-list"></i> Πελάτες</a>
+                                <a class="list-group-item list-group-item-action list-group-item-light p-2"
+                                   href="#!"><i class="bi bi-card-list"></i> Προμηθευτές</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            <a>
+                <div class="accordion accordion-flush" id="CrmExpand">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="Crm-headingOne">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#Crm-collapseOne" aria-expanded="false"
+                                    aria-controls="Crm-collapseOne">
+                                <a><i class="bi bi-pie-chart"></i> CRM</a>
+                            </button>
+                        </h2>
+                        <div id="Crm-collapseOne" class="accordion-collapse collapse"
+                             aria-labelledby="Crm-headingOne" data-bs-parent="#CrmExpand">
+                            <div class="list-group">
+                                <a class="list-group-item list-group-item-action list-group-item-light p-2"
+                                   href="/calendar"><i class="bi bi-calendar-date"></i> Ημερολόγιο</a>
+                                <a class="list-group-item list-group-item-action list-group-item-light p-2"
+                                   href="/meetings"><i class="bi bi-card-list"></i> Συναντήσεις</a>
+                                <a class="list-group-item list-group-item-action list-group-item-light p-2"
+                                   href="#!"><i class="bi bi-list-task"></i> Εκρεμότητες</a>
+                                <a class="list-group-item list-group-item-action list-group-item-light p-2"
+                                   href="#!"><i class="bi bi-telephone"></i> Κλήσεις</a>
+                                <a class="list-group-item list-group-item-action list-group-item-light p-2"
+                                   href="#!"><i class="bi bi-calendar"></i> Εορτολόγιο</a>
+                                <a class="list-group-item list-group-item-action list-group-item-light p-2"
+                                   href="#!"><i class="bi bi-check2-square"></i> Εγκρίσεις</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!"><i
+                    class="bi bi-clock"></i> Ραντεβού</a>
+            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/parousiologio"><i
+                    class="bi bi-book"></i> Παρουσιολόγιο</a>
+        </div>
+    </div>
+    <!-- Page content wrapper-->
+    <div id="page-content-wrapper">
+        <!-- Top navigation-->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom fixed-top">
+            <div class="container-fluid">
 
-					<button class="navbar-toggler" type="button" data-bs-toggle="collapse" aria-expanded="false"
-						aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-					<div class="collapse navbar-collapse" id="navbarSupportedContent">
-						<button class="btn btn-outline-secondary" id="sidebarToggle"
-							onclick="setTimeout(function(){updatethesize();}, 260);"><span
-								class="navbar-toggler-icon"></span></button>
-						<script>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" aria-expanded="false"
+                        aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <button class="btn btn-outline-secondary" id="sidebarToggle"
+                            onclick="setTimeout(function(){updatethesize();}, 260);"><span
+                            class="navbar-toggler-icon"></span></button>
+                    <script>
 							if ($('.navbar-toggler').css('display') == 'none') {} else {
 								$('#sidebarToggle').css('display', 'none');
 								$('#divIcons').parent().css('display', 'block');
@@ -162,344 +162,567 @@
 							$('.navbar-toggler').on('click', function () {
 								$('#sidebarToggle').click();
 							});
-						</script>
-						<ul class="navbar-nav ms-auto mt-2 mt-lg-0">
 
-							<li class="nav-item"><a class="nav-link" href="/"><i class="bi bi-house-fill"></i>
-									{{session['companyname']}}</a></li>
 
-							<li class="nav-item dropdown">
-								<a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
-									data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
-										class="bi bi-person-fill"></i> {{session['username']}}</a>
-								<div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-									<a class="dropdown-item" href="/"><i class="bi bi-house-fill"></i>
-										{{session['companyname']}}</a>
-									<a class="dropdown-item" onclick="user()" style="cursor: pointer"><i
-											class="bi bi-person-fill"></i> {{session['username']}}</a>
-									<a class="dropdown-item" href="#!"><i class="bi bi-gear-fill"></i> Settings</a>
-									<div class="dropdown-divider"></div>
-									<a class="dropdown-item" href="/logout"><i class="bi bi-door-closed-fill"></i>
-										Αποσύνδεση</a>
-								</div>
-							</li>
-						</ul>
-					</div>
-				</div>
-			</nav>
 
-			<!-- Page content-->
-			<div class="container-fluid mt-2" id="page-content-wrapper">
-				<div id="calendar"></div>
-			</div>
 
-		</div>
-	<!--MODALS-->
 
-	<!--SuccessModal-->
-	<div class="modal fade" id="successmodal" role="dialog">
-		<div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-			<div class="modal-content">
-				<div class="modal-body">
-					<div class="container">
-						<div class="row">
-							<div class="d-flex justify-content-center">
-								<img src="{{ url_for('static', filename= 'images/Green-Tick.png') }}" style="width:50%">
-							</div>
-						</div>
-						<div class="row">
-							<div class="d-flex justify-content-center">
-								<p style="font-size:20px">Επιτυχής καταχώρηση</p>
-							</div>
-						</div>
-						<div class="row">
-							<div class="d-flex justify-content-center">
-								<h4>ID:<span id="insertID"></span></h4>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
 
-	<!--FailureModal-->
-	<div class="modal fade" id="failuremodal" role="dialog">
-		<div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-			<div class="modal-content">
-				<div class="modal-body">
-					<div class="container">
-						<div class="row">
-							<div class="d-flex justify-content-center">
-								<img src="{{ url_for('static', filename= 'images/Red-X.png') }}" style="width:50%">
-							</div>
-						</div>
-						<div class="row">
-							<div class="d-flex justify-content-center">
-								<p style="font-size:20px">Κάτι πήγε στραβά</p>
-							</div>
-						</div>
-						<div class="row">
-							<div class="d-flex justify-content-center">
-								<span id="insertIDFail"></span>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
 
-	<!--ScreenModal-->
-	<div class="modal fade" tabindex="-1" role="dialog" id="screenform" style="display:none"
-		aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="loader" id="loader"
-			style="z-index:999;position:fixed;top:50%;left:50%;margin-top:-60px;margin-left:-60px;display:none;"></div>
-		<div class="modal-dialog modal-lg">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title">Στοιχεία Συνάντησης</h5>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span id="cancelm1">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body">
-					<!--TABS-->
-					<nav style="padding-bottom:1rem">
-						<div class="nav nav-tabs" id="nav-tab" role="tablist"
-							style="overflow-y:hidden;overflow-x: auto;flex-wrap: nowrap;">
-							<button class="nav-link active" id="generalscreen-tab" data-bs-toggle="tab"
-								data-bs-target="#generalscreen" type="button" role="tab" aria-controls="generalscreen"
-								aria-selected="true" style="white-space: nowrap;">Γενικά Στοιχεία</button>
-							<button class="nav-link" id="commscreen-tab" data-bs-toggle="tab"
-								data-bs-target="#commscreen" type="button" role="tab" aria-controls="commscreen"
-								aria-selected="false" style="white-space: nowrap;">Στοιχεία Επικοινωνίας</button>
-							<button class="nav-link" id="telscreen-tab" data-bs-toggle="tab" data-bs-target="#telscreen"
-								type="button" role="tab" aria-controls="telscreen" aria-selected="false"
-								style="white-space: nowrap;">Contact</button>
-						</div>
-					</nav>
-					<!--TAB CONTENTS-->
-					<div class="tab-content" id="nav-tabContent">
-						<!--GENERAL CONTENT-->
-						<div class="tab-pane fade show active" id="generalscreen" role="tabpanel"
-							aria-labelledby="generalscreen-tab">
-							<form>
-								<div class="form-group">
-									<div class="form-group row" style="display:none;">
-										<input type="text" class="form-control" id="ftrdr" placeholder="trdr">
-									</div>
 
-									<div class="form-group row" style="display:none;">
-										<input type="text" class="form-control" id="fsoaction" placeholder="soaction">
-									</div>
 
-									<div class="form-group row">
-										<label for="fsoactioncode"
-											class="col-sm-2 col-form-label disable-select">Συνάντηση:</label>
-										<div class="col-sm-10">
-											<div class="input-group">
-												<input class="form-control locked" type="text" autocomplete="off"
-													id="fsoactioncode" placeholder="Κωδικός Συνάντησης">
-											</div>
-										</div>
-									</div>
 
-									<div class="form-group row">
-										<label for="fcomments"
-											class="col-sm-2 col-form-label disable-select">Σχόλια:</label>
-										<div class="col-sm-10">
+                    </script>
+                    <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
+
+                        <li class="nav-item"><a class="nav-link" href="/"><i class="bi bi-house-fill"></i>
+                            {{session['companyname']}}</a></li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
+                               data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
+                                    class="bi bi-person-fill"></i> {{session['username']}}</a>
+                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="/"><i class="bi bi-house-fill"></i>
+                                    {{session['companyname']}}</a>
+                                <a class="dropdown-item" onclick="user()" style="cursor: pointer"><i
+                                        class="bi bi-person-fill"></i> {{session['username']}}</a>
+                                <a class="dropdown-item" href="#!"><i class="bi bi-gear-fill"></i> Settings</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="/logout"><i class="bi bi-door-closed-fill"></i>
+                                    Αποσύνδεση</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Page content-->
+        <div class="container-fluid mt-2" id="page-content-wrapper">
+            <div id="calendar"></div>
+        </div>
+
+    </div>
+    <!--MODALS-->
+
+    <!--SuccessModal-->
+    <div class="modal fade" id="successmodal" role="dialog">
+        <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row">
+                            <div class="d-flex justify-content-center">
+                                <img src="{{ url_for('static', filename= 'images/Green-Tick.png') }}" style="width:50%">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="d-flex justify-content-center">
+                                <p style="font-size:20px">Επιτυχής καταχώρηση</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="d-flex justify-content-center">
+                                <h4>ID:<span id="insertID"></span></h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--FailureModal-->
+    <div class="modal fade" id="failuremodal" role="dialog">
+        <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row">
+                            <div class="d-flex justify-content-center">
+                                <img src="{{ url_for('static', filename= 'images/Red-X.png') }}" style="width:50%">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="d-flex justify-content-center">
+                                <p style="font-size:20px">Κάτι πήγε στραβά</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="d-flex justify-content-center">
+                                <span id="insertIDFail"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--ScreenModal-->
+    <div class="modal fade" tabindex="-1" role="dialog" id="screenform" style="display:none"
+         aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="loader" id="loader"
+             style="z-index:999;position:fixed;top:50%;left:50%;margin-top:-60px;margin-left:-60px;display:none;"></div>
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Στοιχεία Συνάντησης</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span id="cancelm1">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!--TABS-->
+                    <nav style="padding-bottom:1rem">
+                        <div class="nav nav-tabs" id="nav-tab" role="tablist"
+                             style="overflow-y:hidden;overflow-x: auto;flex-wrap: nowrap;">
+                            <button class="nav-link active" id="generalscreen-tab" data-bs-toggle="tab"
+                                    data-bs-target="#generalscreen" type="button" role="tab"
+                                    aria-controls="generalscreen"
+                                    aria-selected="true" style="white-space: nowrap;">Γενικά Στοιχεία
+                            </button>
+                            <button class="nav-link" id="commscreen-tab" data-bs-toggle="tab"
+                                    data-bs-target="#commscreen" type="button" role="tab" aria-controls="commscreen"
+                                    aria-selected="false" style="white-space: nowrap;">Στοιχεία Επικοινωνίας
+                            </button>
+                            <button class="nav-link" id="telscreen-tab" data-bs-toggle="tab" data-bs-target="#telscreen"
+                                    type="button" role="tab" aria-controls="telscreen" aria-selected="false"
+                                    style="white-space: nowrap;">Contact
+                            </button>
+                        </div>
+                    </nav>
+                    <!--TAB CONTENTS-->
+                    <div class="tab-content" id="nav-tabContent">
+                        <!--GENERAL CONTENT-->
+                        <div class="tab-pane fade show active" id="generalscreen" role="tabpanel"
+                             aria-labelledby="generalscreen-tab">
+                            <form>
+                                <div class="form-group">
+                                    <div class="form-group row" style="display:none;">
+                                        <input type="text" class="form-control" id="ftrdr" placeholder="trdr">
+                                    </div>
+
+                                    <div class="form-group row" style="display:none;">
+                                        <input type="text" class="form-control" id="fsoaction" placeholder="soaction">
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="fsoactioncode"
+                                               class="col-sm-2 col-form-label disable-select">Συνάντηση:</label>
+                                        <div class="col-sm-10">
+                                            <div class="input-group">
+                                                <input class="form-control locked" type="text" autocomplete="off"
+                                                       id="fsoactioncode" placeholder="Κωδικός Συνάντησης">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="fcomments"
+                                               class="col-sm-2 col-form-label disable-select">Σχόλια:</label>
+                                        <div class="col-sm-10">
 											<textarea class="form-control" id="fcomments" rows="1"
-												onfocusout="updAll.call(this,event);" placeholder="Θέμα"></textarea>
-										</div>
-									</div>
+                                                      onfocusout="updAll.call(this,event);"
+                                                      placeholder="Θέμα"></textarea>
+                                        </div>
+                                    </div>
 
-									<div class="form-group row">
-										<label for="ffromdate"
-											class="col-sm-2 col-form-label disable-select">Από:</label>
-										<div class="col-sm-5">
-											<input class="form-control" type="datetime-local" autocomplete="off"
-												id="ffromdate">
-										</div>
+                                    <div class="form-group row">
+                                        <label for="ffromdate"
+                                               class="col-sm-2 col-form-label disable-select">Από:</label>
+                                        <div class="col-sm-5">
+                                            <input class="form-control" type="datetime-local" autocomplete="off"
+                                                   id="ffromdate">
+                                        </div>
 
-										<label for="ffinaldate"
-											class="col-sm-1 col-form-label disable-select">Έως:</label>
-										<div class="col-sm-4">
-											<input class="form-control" type="datetime-local" autocomplete="off"
-												id="ffinaldate">
-										</div>
-									</div>
+                                        <label for="ffinaldate"
+                                               class="col-sm-1 col-form-label disable-select">Έως:</label>
+                                        <div class="col-sm-4">
+                                            <input class="form-control" type="datetime-local" autocomplete="off"
+                                                   id="ffinaldate">
+                                        </div>
+                                    </div>
 
-									<div class="form-group row">
-										<label for="fcode"
-											class="col-sm-2 col-form-label disable-select">Κωδικός:</label>
-										<div class="col-sm-10">
-											<div class="input-group">
-												<input class="form-control" type="text" autocomplete="off" id="fcode"
-													placeholder="Κωδικός Πελάτη">
-												<span class="input-group-append">
+                                    <div class="form-group row">
+                                        <label for="fcode"
+                                               class="col-sm-2 col-form-label disable-select">Κωδικός:</label>
+                                        <div class="col-sm-10">
+                                            <div class="input-group">
+                                                <input class="form-control" type="text" autocomplete="off" id="fcode"
+                                                       placeholder="Κωδικός Πελάτη">
+                                                <span class="input-group-append">
 													<button class="btn btn-outline-secondary bg-white ms-n3 locked"
-														type="button">
+                                                            type="button">
 														<i class="fa fa-search"></i>
 													</button>
 												</span>
-											</div>
-										</div>
-										<div class="dropdown" style="position:absolute">
-											<ul id="Selectorcode" class="dropdown-menu"></ul>
-										</div>
-									</div>
+                                            </div>
+                                        </div>
+                                        <div class="dropdown" style="position:absolute">
+                                            <ul id="Selectorcode" class="dropdown-menu"></ul>
+                                        </div>
+                                    </div>
 
-									<div class="form-group row">
-										<label for="fname"
-											class="col-sm-2 col-form-label disable-select">Επωνυμία:</label>
-										<div class="col-sm-10">
-											<div class="input-group">
-												<input class="form-control" type="text" autocomplete="off" id="fname"
-													placeholder="Επωνυμία Πελάτη" onkeyup="trdrSelectorByName()">
-												<span class="input-group-append">
+                                    <div class="form-group row">
+                                        <label for="fname"
+                                               class="col-sm-2 col-form-label disable-select">Επωνυμία:</label>
+                                        <div class="col-sm-10">
+                                            <div class="input-group">
+                                                <input class="form-control" type="text" autocomplete="off" id="fname"
+                                                       placeholder="Επωνυμία Πελάτη" onkeyup="trdrSelectorByName()">
+                                                <span class="input-group-append">
 													<button class="btn btn-outline-secondary bg-white ms-n3 locked"
-														type="button">
+                                                            type="button">
 														<i class="fa fa-search"></i>
 													</button>
 												</span>
-											</div>
-										</div>
-										<div class="dropdown" style="position:absolute">
-											<ul id="Selectorname" class="dropdown-menu"></ul>
-										</div>
-									</div>
+                                            </div>
+                                        </div>
+                                        <div class="dropdown" style="position:absolute">
+                                            <ul id="Selectorname" class="dropdown-menu"></ul>
+                                        </div>
+                                    </div>
 
-									<div class="form-group row">
-										<label for="faddress"
-											class="col-sm-2 col-form-label disable-select">Διεύθυνση:</label>
-										<div class="col-sm-10">
-											<div class="input-group">
-												<input type="text" class="form-control locked" autocomplete="off"
-													id="faddress" placeholder="Διεύθυνση">
-												<span class="input-group-append">
-													<a id="mapp" class="btn btn-outline-secondary bg-white ms-n3" onclick="gotomaps()">
+                                    <div class="form-group row">
+                                        <label for="faddress"
+                                               class="col-sm-2 col-form-label disable-select">Διεύθυνση:</label>
+                                        <div class="col-sm-10">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control locked" autocomplete="off"
+                                                       id="faddress" placeholder="Διεύθυνση">
+                                                <span class="input-group-append">
+													<a id="mapp" class="btn btn-outline-secondary bg-white ms-n3"
+                                                       onclick="gotomaps()">
 														<i class="bi bi-geo-alt"></i>
 													</a>
 												</span>
-											</div>
-										</div>
-									</div>
+                                            </div>
+                                        </div>
+                                    </div>
 
-									<div class="form-group row">
-										<label for="fphone01"
-											class="col-sm-2 col-form-label disable-select">Τηλ.1:</label>
-										<div class="col-sm-10">
-											<input type="text" class="form-control locked" id="fphone01"
-												placeholder="Τηλ.1" onfocusout="updAll.call(this,event);">
-										</div>
-									</div>
+                                    <div class="form-group row">
+                                        <label for="fphone01"
+                                               class="col-sm-2 col-form-label disable-select">Τηλ.1:</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control locked" id="fphone01"
+                                                   placeholder="Τηλ.1" onfocusout="updAll.call(this,event);">
+                                        </div>
+                                    </div>
 
-									<div class="form-group row">
-										<label for="fremarks"
-											class="col-sm-2 col-form-label disable-select">Σχόλια:</label>
-										<div class="col-sm-10">
+                                    <div class="form-group row">
+                                        <label for="fremarks"
+                                               class="col-sm-2 col-form-label disable-select">Σχόλια:</label>
+                                        <div class="col-sm-10">
 											<textarea class="form-control" id="fremarks" rows="3"
-												onfocusout="updAll.call(this,event);" placeholder="Σχόλια"></textarea>
-										</div>
-									</div>
+                                                      onfocusout="updAll.call(this,event);"
+                                                      placeholder="Σχόλια"></textarea>
+                                        </div>
+                                    </div>
 
-								</div>
-							</form>
-						</div>
-						<!--COMMUNICATION CONTENT-->
-						<div class="tab-pane fade" id="commscreen" role="tabpanel" aria-labelledby="commscreen-tab">
-							<form>
-								<div class="form-group">
-									<div class="form-group row" style="display:none;">
-										<input type="text" class="form-control" id="ftrdr" placeholder="trdr">
-									</div>
+                                </div>
+                            </form>
+                        </div>
+                        <!--COMMUNICATION CONTENT-->
+                        <div class="tab-pane fade" id="commscreen" role="tabpanel" aria-labelledby="commscreen-tab">
+                            <form>
+                                <div class="form-group">
+                                    <div class="form-group row" style="display:none;">
+                                        <input type="text" class="form-control" id="ftrdr" placeholder="trdr">
+                                    </div>
 
-									<div class="form-group row" style="display:none;">
-										<input type="text" class="form-control" id="fsoaction" placeholder="soaction">
-									</div>
+                                    <div class="form-group row" style="display:none;">
+                                        <input type="text" class="form-control" id="fsoaction" placeholder="soaction">
+                                    </div>
 
-									<div class="form-group row">
-										<label for="fname" class="col-sm-2 col-form-label">Επωνυμία:</label>
-										<div class="col-sm-10">
-											<div class="input-group">
-												<input class="form-control" type="text" autocomplete="off" id="fname"
-													placeholder="Επωνυμία Πελάτη">
-												<span class="input-group-append">
+                                    <div class="form-group row">
+                                        <label for="fname" class="col-sm-2 col-form-label">Επωνυμία:</label>
+                                        <div class="col-sm-10">
+                                            <div class="input-group">
+                                                <input class="form-control" type="text" autocomplete="off" id="fname"
+                                                       placeholder="Επωνυμία Πελάτη">
+                                                <span class="input-group-append">
 													<button class="btn btn-outline-secondary bg-white ms-n3"
-														type="button">
+                                                            type="button">
 														<i class="fa fa-search"></i>
 													</button>
 												</span>
-											</div>
-										</div>
-									</div>
+                                            </div>
+                                        </div>
+                                    </div>
 
-									<div class="form-group row">
-										<label for="faddress" class="col-sm-2 col-form-label">Διεύθυνση:</label>
-										<div class="col-sm-10">
-											<input type="text" class="form-control" id="faddress"
-												placeholder="Διεύθυνση" onfocusout="updAll.call(this,event);">
-										</div>
-									</div>
+                                    <div class="form-group row">
+                                        <label for="faddress" class="col-sm-2 col-form-label">Διεύθυνση:</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" id="faddress"
+                                                   placeholder="Διεύθυνση" onfocusout="updAll.call(this,event);">
+                                        </div>
+                                    </div>
 
-									<div class="form-group row">
-										<label for="fphone01" class="col-sm-2 col-form-label">Τηλ.1:</label>
-										<div class="col-sm-10">
-											<input type="text" class="form-control" id="fphone01" placeholder="Τηλ.1"
-												onfocusout="updAll.call(this,event);">
-										</div>
-									</div>
+                                    <div class="form-group row">
+                                        <label for="fphone01" class="col-sm-2 col-form-label">Τηλ.1:</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" id="fphone01" placeholder="Τηλ.1"
+                                                   onfocusout="updAll.call(this,event);">
+                                        </div>
+                                    </div>
 
 
-									<div class="form-group row">
-										<label for="fremarks" class="col-sm-2 col-form-label">Σχόλια:</label>
-										<div class="col-sm-10">
+                                    <div class="form-group row">
+                                        <label for="fremarks" class="col-sm-2 col-form-label">Σχόλια:</label>
+                                        <div class="col-sm-10">
 											<textarea class="form-control" id="fremarks" rows="3"
-												onfocusout="updAll.call(this,event);" placeholder="Σχόλια"></textarea>
-										</div>
-									</div>
+                                                      onfocusout="updAll.call(this,event);"
+                                                      placeholder="Σχόλια"></textarea>
+                                        </div>
+                                    </div>
 
-								</div>
-							</form>
-						</div>
+                                </div>
+                            </form>
+                        </div>
 
-					</div>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" id="savem1" disabled="true">Αποθήκευση</button>
-					<button type="button" class="btn btn-secondary" id="editm1" aria-label="cancel">Edit</button>
-					<button type="button" class="btn btn-danger" id="cancelm12">Ακύρωση</button>
-				</div>
-			</div>
-		</div>
-	</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="savem1" disabled="true">Αποθήκευση</button>
+                    <button type="button" class="btn btn-secondary" id="editm1" aria-label="cancel">Edit</button>
+                    <button type="button" class="btn btn-danger" id="cancelm12">Ακύρωση</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-	</div>
-	<!-- Bootstrap core JS-->
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
-	<!-- Core theme JS-->
+</div>
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Core theme JS-->
 </body>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, "0");
+    var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+    var yyyy = today.getFullYear();
+    window.today = yyyy + "-" + mm + "/" + dd;
+
+    var calendarEl = document.getElementById("calendar");
+    window.calendar = new FullCalendar.Calendar(calendarEl, {
+        googleCalendarApiKey: 'AIzaSyDoLktGXzF2vcGnvMmNv7qrEgIyl4p-UBs',
+        selectable: true,
+        initialView: "timeGridWeek",
+        height: $("#calendar").parent().height() - 50,
+        initialDate: today,
+        locale: "gr",
+        editable: true,
+        buttonText: {
+            today: "Σήμερα",
+            month: "Μήνας",
+            week: "Εβομάδα",
+            day: "Μέρα",
+            list: "Λίστα",
+        },
+        headerToolbar: {
+            left: "prev,next today",
+            center: "title",
+            right: "dayGridMonth,timeGridWeek,timeGridDay,listMonth",
+        },
+        eventSources: [
+        {
+            events : function (fetchInfo, successCallback, failureCallback) {
+                $("#loader").css("display", "block");
+                $.ajax({
+                    url: "/D1ServicesIN",
+                    type: "POST",
+                    data: {
+                        service: "get",
+                        object: "calendar",
+                    },
+                    success: function (data) {
+                        var events = [];
+                        $.each(data["data"], function (key, val) {
+                            d = JSON.parse(JSON.stringify(this));
+                            var allDay;
+                            if (d.FINALDATE) {
+                                allDay = false;
+                            } else {
+                                allDay = true;
+                            }
+                            if (allDay) {
+                                events.push({
+                                    id: d.SOACTION,
+                                    start: d.FROMDATE,
+                                    allDay: true,
+                                    title: d.TRDRNAME,
+                                    extendedProps: {
+                                        comments: d.COMMENTS,
+                                        prjc: d.PRJC,
+                                    },
+                                });
+                            } else {
+                                events.push({
+                                    id: d.SOACTION,
+                                    start: d.FROMDATE,
+                                    end: d.FINALDATE,
+                                    title: d.TRDRNAME,
+                                    extendedProps: {
+                                        comments: d.COMMENTS,
+                                        prjc: d.PRJC,
+                                    },
+                                });
+                            }
+                        });
+                        successCallback(events);
+                    },
+                    error: function () {
+                        alert("Failed!");
+                    },
+                    complete: function () {
+                        $("#loader").css("display", "none");
+                    },
+                 });
+            }
+        },
+        {% for n in cdata['data'] %}
+				{
+					googleCalendarId: '{{n['CALENDAR']}}',
+					color: '{{n['COLOR']}}',
+        		},
+		{% endfor %}
+    ],
+    select: function (info) {
+        var title = prompt("Enter Event Title");
+        if (title) {
+            $("#loader").css("display", "block");
+            $.ajax({
+                url: "calendar/insert",
+                type: "POST",
+                data: { title: title, start: info.startStr, end: info.endStr },
+                success: function (data) {
+                    calendar.refetchEvents();
+                },
+                complete: function () {
+                    $("#loader").css("display", "none");
+                },
+            });
+        }
+    },
+    eventResize: function (info) {
+        var start = info.event.startStr;
+        var end = info.event.endStr;
+        var id = info.oldEvent.id;
+        $("#loader").css("display", "block");
+        $.ajax({
+            url: "calendar/update",
+            type: "POST",
+            data: { start: start, end: end, id: id },
+            success: function () {
+                calendar.refetchEvents();
+            },
+            complete: function () {
+                $("#loader").css("display", "none");
+            },
+        });
+    },
+    eventDrop: function (info) {
+        var start = info.event.startStr;
+        var id = info.event.id;
+        dd = new Date(start);
+        var datestring = (dd.getFullYear()+ "-" + ("0"+(dd.getMonth()+1)).slice(-2) + "-" + ("0" + dd.getDate()).slice(-2))  + "T" + ("0" + dd.getHours()).slice(-2) + ":" + ("0" + dd.getMinutes()).slice(-2)+":00+03:00";
+        var end = info.event.allDay ? "" : info.event.endStr=="" ? datestring : info.event.endStr ;
+        $("#loader").css("display", "block");
+        $.ajax({
+            url: "calendar/update",
+            type: "POST",
+            data: { start: start, end: end, id: id },
+            success: function () {
+                calendar.refetchEvents();
+            },
+            complete: function () {
+                $("#loader").css("display", "none");
+            },
+        });
+    },
+    eventClick: function (info) {
+        $("#loader").css("display", "block");
+        $.ajax({
+            url: "/D1ServicesIN",
+            method: "POST",
+            data: {
+                service: "get",
+                object: "soaction",
+                id: info.event.id,
+            },
+            success: function (d) {
+                data = jQuery.parseJSON(JSON.stringify(d.data[0]));
+                $("[id='fsoaction']").val(data.SOACTION);
+                $("[id='fsoactioncode']").val(data.SOACTIONCODE);
+                $("[id='ffromdate']").val(data.FROMDATE.replace(" ", "T"));
+                $("[id='ffinaldate']").val(
+                    info.event.endStr.replace(" ", "T").slice(0, 16)
+                );
+                $("[id='ftrdr']").val(data.TRDR);
+                $("[id='fcode']").val(data.CODE);
+                $("[id='fname']").val(data.NAME);
+                $("[id='faddress']").val(data.ADDRESS);
+                $("[id='fphone01']").val(data.PHONE01);
+                $("[id='fremarks']").val(data.REMARKS);
+                $("[id='fcomments']").val(data.COMMENTS);
+                $("#editm1").css("display", "block");
+                $("#savem1").prop("disabled", true);
+                $("#loader").css("display", "none");
+                $("#screenform .modal-content .modal-body .tab-content")
+                    .find("*")
+                    .not('#mapp')
+                    .attr("disabled", true);
+                $("#screenform").modal("toggle");
+            },
+        });
+      //if (confirm("Are you sure you want to remove?")){
+      //    var id = info.event.id;
+      //    $("#loader").css("display", "block");
+      //    $.ajax({
+      //        url:"calendar/delete",
+      //        type:"POST",
+      //        data:{id:id},
+      //        success : function(){
+      //            calendar.refetchEvents();
+      //            calendarl.refetchEvents();
+      //        },
+      //        complete : function(){$("#loader").css("display", "block");}
+      //    })
+      //}
+        },
+    });
+    calendar.render();
+});
+
+function updatethesize() {
+  	calendar.updateSize();
+}
+
+
+</script>
 <footer class="bg-light border-top text-muted fixed-bottom d-flex justify-content-center p-2">
-	<!-- Section: Social media -->
-	<div>
-		<a href="https://www.facebook.com/DayOne-1099718003526187/" target="_blank" class="me-4 text-reset">
-			<i class="bi bi-facebook"></i>
-		</a>
-		<a href="" class="me-4 text-reset">
-			<i class="bi bi-twitter"></i>
-		</a>
-		<a href="https://www.day-one.gr/" target="_blank" class="me-4 text-reset">
-			<i class="bi bi-google"></i>
-		</a>
-		<a href="" class="me-4 text-reset">
-			<i class="bi bi-instagram"></i>
-		</a>
-		<a href="https://www.linkedin.com/company/dayone-company" target="_blank" class="me-4 text-reset">
-			<i class="bi bi-linkedin"></i>
-		</a>
-	</div>
-	<!-- Section: Social media -->
+    <!-- Section: Social media -->
+    <div>
+        <a href="https://www.facebook.com/DayOne-1099718003526187/" target="_blank" class="me-4 text-reset">
+            <i class="bi bi-facebook"></i>
+        </a>
+        <a href="" class="me-4 text-reset">
+            <i class="bi bi-twitter"></i>
+        </a>
+        <a href="https://www.day-one.gr/" target="_blank" class="me-4 text-reset">
+            <i class="bi bi-google"></i>
+        </a>
+        <a href="" class="me-4 text-reset">
+            <i class="bi bi-instagram"></i>
+        </a>
+        <a href="https://www.linkedin.com/company/dayone-company" target="_blank" class="me-4 text-reset">
+            <i class="bi bi-linkedin"></i>
+        </a>
+    </div>
+    <!-- Section: Social media -->
 </footer>
 
 </html>
