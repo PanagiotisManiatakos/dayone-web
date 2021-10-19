@@ -162,16 +162,6 @@
 							$('.navbar-toggler').on('click', function () {
 								$('#sidebarToggle').click();
 							});
-
-
-
-
-
-
-
-
-
-
                     </script>
                     <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
 
@@ -591,21 +581,26 @@ document.addEventListener("DOMContentLoaded", function () {
 		{% endfor %}
     ],
     select: function (info) {
-        var title = prompt("Enter Event Title");
-        if (title) {
-            $("#loader").css("display", "block");
-            $.ajax({
-                url: "calendar/insert",
-                type: "POST",
-                data: { title: title, start: info.startStr, end: info.endStr },
-                success: function (data) {
-                    calendar.refetchEvents();
-                },
-                complete: function () {
-                    $("#loader").css("display", "none");
-                },
-            });
-        }
+        $("[id='ffromdate']").val((info.startStr).slice(0,16));
+        $("[id='ffinaldate']").val((info.endStr).slice(0,16));
+        $("[id='fsoactionseries']").css("background-color","transparent");
+        $("[id='fsoactionseries']").attr('readonly', 'true');
+        $("[id='fsoactionseries']").removeClass( "locked" );
+        $("[id='fsoactionseries']").prop("disabled",'false');
+        $("[id='fsoactionseries']").val("");
+        $("[id='fsoaction']").val("");
+        $("[id='fsoactioncode']").val("");
+        $("[id='ftrdr']").val("");
+        $("[id='fcode']").val("");
+        $("[id='fname']").val("");
+        $("[id='faddress']").val("");
+        $("[id='fphone01']").val("");
+        $("[id='fremarks']").val("");
+        $("[id='fcomments']").val("");
+        $("#screenform .modal-content .modal-body .tab-content")
+            .find("*")
+            .attr("disabled", false);
+        $("#screenform").modal("toggle");
     },
     eventResize: function (info) {
         var start = info.event.startStr;
@@ -700,8 +695,6 @@ document.addEventListener("DOMContentLoaded", function () {
 function updatethesize() {
   	calendar.updateSize();
 }
-
-
 </script>
 <footer class="bg-light border-top text-muted fixed-bottom d-flex justify-content-center p-2">
     <!-- Section: Social media -->

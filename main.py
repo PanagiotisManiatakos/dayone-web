@@ -2,32 +2,14 @@ import json
 import requests
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_mobility import Mobility
-from datetime import timedelta
+from datetime import timedelta, date, datetime
 from bs4 import BeautifulSoup
 
 app = Flask(__name__)
 Mobility(app)
 app.secret_key = 'hell'
-app.permanent_session_lifetime = timedelta(days=1)
 
-
-@app.route("/")
-def reindex():
-	if 'id' in session:
-		return redirect(url_for('index'))
-	else:
-		return redirect(url_for('login'))
-
-
-@app.route("/index")
-def index():
-	if 'id' in session:
-		if request.MOBILE:
-			return render_template("mobile/m_home.html")
-		else:
-			return render_template("desktop/home.html")
-	else:
-		return redirect(url_for('login'))
+diff = 0
 
 
 # Route for handling the login page logic
@@ -47,29 +29,58 @@ def login():
 		url = "http://" + connection + ".oncloud.gr/s1services"
 		log = s1login(url)
 		auth = s1authenticate(url, log, companycode)
-		session['erp'] = erp
-		session['id'] = auth
-		session['url'] = url
-		session['companycode'] = companycode
-		session['companyname'] = companyname
-		session['username'] = username
-		session['password'] = password
-		getcred = s1get_Credentials(url, password, username, session['companycode'])
+		getcred = s1get_Credentials(url, password, username, companycode)
 		if getcred['success']:
+
+			session['sn'] = getcred['data'][0]['sn']
 			session['prsn'] = getcred['data'][0]['prsn']
 			session['users'] = getcred['data'][0]['users']
 			session['isadmin'] = getcred['data'][0]['isadmin']
 			session['name'] = getcred['data'][0]['name']
 			session['name2'] = getcred['data'][0]['name2']
+
+			vD1DatesUsers = s1get_DateUsers(getcred['data'][0]['sn'])
+
+			blcdate = vD1DatesUsers['data'][0]['BLCKDATE']
+			users = vD1DatesUsers['data'][0]['USERS']
+			today = date.today()
+			blckdate = datetime.strptime(blcdate, '%Y-%m-%d %H:%M:%S')
+			global diff
+			diff = (blckdate.date() - today).days
+
 			session['cccwebaccounts'] = getcred['data'][0]['cccwebaccounts']
+			session['erp'] = erp
+			session['id'] = auth
+			session['url'] = url
+			session['companycode'] = companycode
+			session['companyname'] = companyname
+			session['username'] = username
+			session['password'] = password
+			session['blckdate'] = blckdate
+			session['users'] = users
 
-			return redirect(url_for('index'))
-
+			if diff >= 0:
+				vcheck = check_if_logged_in(getcred['data'][0]['sn'], username)  	# Κανω κλήση για να δω εαν είναι συνδεδεμενος
+				print(vcheck)
+				if vcheck['success']:  												# Εάν είναι συνδεδεμένος
+					logout_from_log(vcheck['data'][0]['CCCLOGINLOG'])  				# Τον αφαιρώ
+				vActives = get_actives(getcred['data'][0]['sn'])['data'][0]['ACTIVES']
+				print('USERS:'+users+' ACTIVES:'+vActives)
+				if users > vActives:												# Αν οι users είναι περισότεροι απο τους active
+					login_to_log()  												# Τον προσθέτω
+				else:																# Αλλιώς
+					session.clear()
+					error = 'Υπέρβαση χρηστών'										# Επιστρέφω σφάλμα
+					return render_template('login.html', error=error)				# Υπέρβασης χρηστών
+				return redirect(url_for('index'))
+			else:
+				session['expired'] = True
+				return redirect(url_for('renew'))
 		else:
 			error = 'Try again '
 
 	else:
-		if 'id' in session:
+		if 'id' in session and 'expired' not in session:
 			return redirect(url_for('index'))
 
 	return render_template('login.html', error=error)
@@ -83,8 +94,7 @@ def companies():
 		company = request.form['companyname']
 		url = "http://" + company + ".oncloud.gr/s1services"
 		creds = s1get_Credentials1(url, password, username)
-		if creds.status_code == 200:
-			print(creds.json())
+		if type(creds) is requests.models.Response and creds.status_code == 200:
 			if creds.json()['success']:
 				data = creds.json()['data'][0]
 				return getCompanies(url, data['cccwebaccounts']).json()
@@ -95,15 +105,47 @@ def companies():
 			return {'success': False, 'error': 'domain'}
 
 
-@app.route('/logout', methods=['GET', 'POST'])
+@app.route('/logout')
 def logout():
-	session.clear()
+	if 'id' in session:
+		logout_from_log(session['loginid'])
+		session.clear()
 	return redirect(url_for('login'))
+
+
+@app.route("/")
+def reindex():
+	if 'id' in session and 'expired' not in session:
+		return redirect(url_for('index'))
+	else:
+		return redirect(url_for('logout'))
+
+
+@app.route("/index")
+def index():
+	if 'id' in session and 'expired' not in session:
+		if request.MOBILE:
+			return render_template("mobile/m_home.html", datedif={'datedif': diff})
+		else:
+			return render_template("desktop/home.html", datedif={'datedif': diff})
+	else:
+		return redirect(url_for('logout'))
+
+
+@app.route("/renew")
+def renew():
+	if 'id' in session and 'expired' in session:
+		if request.MOBILE:
+			return render_template("mobile/m_renew.html", datedif={'datedif': diff})
+		else:
+			return render_template("desktop/home.html", datedif={'datedif': diff})
+	else:
+		return redirect(url_for('logout'))
 
 
 @app.route('/changepassword', methods=['GET', 'POST'])
 def changepassword():
-	if 'id' in session:
+	if 'id' in session and 'expired' not in session:
 		if request.method == "POST":
 			id = session['cccwebaccounts']
 			data = {"cccWEBACCOUNTS": [{"password": request.form['newpassword']}]}
@@ -114,21 +156,21 @@ def changepassword():
 
 			return response.json()
 	else:
-		return redirect(url_for('login'))
+		return redirect(url_for('logout'))
 
 
 @app.route('/meetings')
 def meetings():
-	if 'id' in session:
+	if 'id' in session and 'expired' not in session:
 		return render_template("desktop/meetings.html")
 
 	else:
-		return redirect(url_for('login'))
+		return redirect(url_for('logout'))
 
 
 @app.route('/meetings/insert', methods=["POST", "GET"])
 def insertMeet():
-	if 'id' in session:
+	if 'id' in session and 'expired' not in session:
 		if request.method == "POST":
 			data = {
 				"SOACTION": [
@@ -150,12 +192,12 @@ def insertMeet():
 			return response.json()
 	else:
 
-		return redirect(url_for('login'))
+		return redirect(url_for('logout'))
 
 
 @app.route('/meetings/update', methods=["POST", "GET"])
 def updtMeet():
-	if 'id' in session:
+	if 'id' in session and 'expired' not in session:
 		if request.method == "POST":
 			id = request.form['soaction']
 			data = {"SOACTION": [{
@@ -171,26 +213,26 @@ def updtMeet():
 			return response.json()
 	else:
 
-		return redirect(url_for('login'))
+		return redirect(url_for('logout'))
 
 
 @app.route('/customers')
 def customers():
-	if 'id' in session:
+	if 'id' in session and 'expired' not in session:
 		if request.MOBILE:
-			return render_template("mobile/m_customerstest.html")
+			return render_template("mobile/m_customerstest.html", datedif={'datedif': diff})
 
 		else:
-			return render_template("desktop/customerstest.html")
+			return render_template("desktop/customerstest.html", datedif={'datedif': diff})
 
 	else:
 
-		return redirect(url_for('login'))
+		return redirect(url_for('logout'))
 
 
 @app.route('/customers/insert', methods=["POST", "GET"])
 def insertCust():
-	if 'id' in session:
+	if 'id' in session and 'expired' not in session:
 		if request.method == "POST":
 			data = {
 				"CUSTOMER": [
@@ -214,12 +256,12 @@ def insertCust():
 			return response.json()
 	else:
 
-		return redirect(url_for('login'))
+		return redirect(url_for('logout'))
 
 
 @app.route('/customers/update', methods=["POST", "GET"])
 def updtCust():
-	if 'id' in session:
+	if 'id' in session and 'expired' not in session:
 		if request.method == "POST":
 			id = request.form['trdr']
 			data = {
@@ -242,23 +284,23 @@ def updtCust():
 			response = setData(session['url'], 'CUSTOMER', session['id'], id, data)
 			return response.json()
 	else:
-		return redirect(url_for('login'))
+		return redirect(url_for('logout'))
 
 
 @app.route('/customers/delete', methods=["POST", "GET"])
 def deleteCust():
-	if 'id' in session:
+	if 'id' in session and 'expired' not in session:
 		if request.method == "POST":
 			id = request.form['id']
 			response = delData(session['url'], 'CUSTOMER', session['id'], id)
 			return response.json()
 	else:
-		return redirect(url_for('login'))
+		return redirect(url_for('logout'))
 
 
 @app.route('/trdprsn/insert', methods=["POST", "GET"])
 def instTrdrPrsn():
-	if 'id' in session:
+	if 'id' in session and 'expired' not in session:
 		if request.method == "POST":
 			data = {
 				"PRSNOUT": [
@@ -277,12 +319,12 @@ def instTrdrPrsn():
 				session['url'], 'PRSNOUT', session['id'], '', data)
 			return response.json()
 	else:
-		return redirect(url_for('login'))
+		return redirect(url_for('logout'))
 
 
 @app.route('/prsn/update', methods=["POST", "GET"])
 def updtPrsn():
-	if 'id' in session:
+	if 'id' in session and 'expired' not in session:
 		if request.method == "POST":
 			id = request.form['prsn']
 			data = {
@@ -301,12 +343,12 @@ def updtPrsn():
 				session['url'], 'PRSNOUT', session['id'], id, data)
 			return response.json()
 	else:
-		return redirect(url_for('login'))
+		return redirect(url_for('logout'))
 
 
 @app.route('/getKartela', methods=['GET', 'POST'])
 def getKartela():
-	if 'id' in session:
+	if 'id' in session and 'expired' not in session:
 		if request.method == "POST":
 			trdrname = request.form['trdrname']
 			fdate = request.form['fdate']
@@ -322,35 +364,35 @@ def getKartela():
 				'script': str(soup.script)
 			}
 	else:
-		return redirect(url_for('login'))
+		return redirect(url_for('logout'))
 
 
 @app.route('/parousiologio')
 def parousiologio():
-	if 'id' in session:
+	if 'id' in session and 'expired' not in session:
 		d1 = {'qrcode': session['url']}
 		if request.MOBILE:
-			return render_template("mobile/m_parousiologio.html", data=d1)
+			return render_template("mobile/m_parousiologio.html", data=d1, datedif={'datedif': diff})
 		else:
-			return render_template("desktop/parousiologio.html", data=d1)
+			return render_template("desktop/parousiologio.html", data=d1, datedif={'datedif': diff})
 
 	else:
-		return redirect(url_for('login'))
+		return redirect(url_for('logout'))
 
 
 @app.route('/parousiologio/insert', methods=["POST", "GET"])
 def insertParousiologio():
-	if 'id' in session:
+	if 'id' in session and 'expired' not in session:
 		if request.method == "POST":
 			message = request.form['qrcode']
 			if message.lower() == session['url'].lower():
-				date = request.form['date']
+				datee = request.form['date']
 				thecheck = s1_CheckForChekIn(
-					session['url'], session['prsn'], date, session['companycode'])
+					session['url'], session['prsn'], datee, session['companycode'])
 				if thecheck.json()['success']:
 					soaction = thecheck.json()['data'][0]['SOACTION']
 					data = {"SOPRSN": [{
-						"finaldate": date
+						"finaldate": datee
 					}]
 					}
 					setData(session['url'], 'SOPRSN', session['id'], soaction, data)
@@ -359,8 +401,8 @@ def insertParousiologio():
 					data = {
 						"SOPRSN": [
 							{
-								"trndate": date,
-								"fromdate": date,
+								"trndate": datee,
+								"fromdate": datee,
 								'series': 9889,
 								'actprsn': session['prsn']
 							}
@@ -371,37 +413,123 @@ def insertParousiologio():
 			else:
 				return {'success': True, 'status': 'qrcode'}
 	else:
-		return redirect(url_for('login'))
+		return redirect(url_for('logout'))
 
 
 @app.route('/calls')
 def calls():
-	if 'id' in session:
+	if 'id' in session and 'expired' not in session:
 		if request.MOBILE:
-			return render_template("mobile/m_calls.html")
+			return render_template("mobile/m_calls.html", datedif={'datedif': diff})
 		else:
-			return render_template("desktop/m_calls.html")
+			return render_template("desktop/m_calls.html", datedif={'datedif': diff})
 	else:
-		return redirect(url_for('login'))
+		return redirect(url_for('logout'))
+
+
+@app.route('/calls/insert', methods=["POST", "GET"])
+def insertcall():
+	if 'id' in session and 'expired' not in session:
+		if request.method == "POST":
+			if request.form['actstatus'] == 'true':
+				data = {
+					"SOACTION": [
+						{
+							"tsodtype": request.form.get('tsodtype'),
+							"fromdate": request.form.get('start'),
+							"finaldate": request.form.get('start'),
+							"actor": session['users'],
+							"actprsn": session['prsn'],
+							"comments": request.form.get('comments'),
+							"trdr": request.form.get('trdr'),
+							"trdprsn": request.form.get('prsn'),
+							"remarks": request.form.get('remarks'),
+							"actstatus": 3
+						}
+					]
+				}
+			else:
+				data = {
+					"SOACTION": [
+						{
+							"tsodtype": request.form.get('tsodtype'),
+							"fromdate": request.form.get('start'),
+							"actor": session['users'],
+							"actprsn": session['prsn'],
+							"comments": request.form.get('comments'),
+							"trdr": request.form.get('trdr'),
+							"trdprsn": request.form.get('prsn'),
+							"remarks": request.form.get('remarks'),
+						}
+					]
+				}
+
+			response = setData(session['url'], 'SOCALL', session['id'], "", data)
+
+			return response.text
+	else:
+		return redirect(url_for('logout'))
+
+
+@app.route('/calls/update', methods=["POST", "GET"])
+def updatecall():
+	if 'id' in session and 'expired' not in session:
+		if request.method == "POST":
+			id = request.form['soaction']
+			if request.form['actstatus'] == 'true':
+				data = {
+					"SOACTION": [
+						{
+							"tsodtype": request.form['tsodtype'],
+							"finaldate": request.form.get('start'),
+							"actor": session['users'],
+							"actprsn": session['prsn'],
+							"comments": request.form.get('comments'),
+							"trdr": request.form['trdr'],
+							"trdprsn": request.form.get('prsn'),
+							"remarks": request.form.get('remarks'),
+							"actstatus": 3
+						}
+					]
+				}
+			else:
+				data = {
+					"SOACTION": [
+						{
+							"tsodtype": request.form['tsodtype'],
+							"actor": session['users'],
+							"actprsn": session['prsn'],
+							"comments": request.form['comments'],
+							"trdr": request.form.get('trdr'),
+							"trdprsn": request.form.get('prsn'),
+							"remarks": request.form.get('remarks'),
+						}
+					]
+				}
+			response = setData(session['url'], 'SOCALL', session['id'], id, data)
+
+			return response.text
+	else:
+		return redirect(url_for('logout'))
 
 
 @app.route('/calendar')
 def calendar():
-	if 'id' in session:
+	if 'id' in session and 'expired' not in session:
 		headers = {'Content-Type': 'application/json'}
 		data = json.dumps({'clientID': session['id'], 'username': session['username']})
 		call = requests.request('POST', session['url'] + '/js/connector.connector/getCalendarInfo', headers=headers, data=data)
 		if request.MOBILE:
-			return render_template("mobile/m_calendar.html", cdata=call.json())
+			return render_template("mobile/m_calendar.html", cdata=call.json(), datedif={'datedif': diff})
 		else:
-			return render_template("desktop/calendar.html", cdata=call.json())
+			return render_template("desktop/calendar.html", cdata=call.json(), datedif={'datedif': diff})
 	else:
-		return redirect(url_for('login'))
+		return redirect(url_for('logout'))
 
 
 @app.route('/calendar/insert', methods=["POST", "GET"])
 def insertcal():
-	if 'id' in session:
+	if 'id' in session and 'expired' not in session:
 		if request.method == "POST":
 			data = {
 				"SOACTION": [
@@ -418,12 +546,12 @@ def insertcal():
 				session['url'], 'SOMEETING', session['id'], "", data)
 			return response.text
 	else:
-		return redirect(url_for('login'))
+		return redirect(url_for('logout'))
 
 
 @app.route('/calendar/update', methods=["POST", "GET"])
 def updatecal():
-	if 'id' in session:
+	if 'id' in session and 'expired' not in session:
 		if request.method == "POST":
 			id = request.form['id']
 			data = {
@@ -440,48 +568,48 @@ def updatecal():
 
 			return response.text
 	else:
-		return redirect(url_for('login'))
+		return redirect(url_for('logout'))
 
 
 @app.route('/calendar/delete', methods=["POST", "GET"])
 def deletecal():
-	if 'id' in session:
+	if 'id' in session and 'expired' not in session:
 		if request.method == "POST":
 			id = request.form['id']
 			response = delData(session['url'], 'SOMEETING', session['id'], id)
 
 			return response.text
 	else:
-		return redirect(url_for('login'))
+		return redirect(url_for('logout'))
 
 
 @app.route("/getProducts")
 def getProducts():
-	if 'id' in session:
+	if 'id' in session and 'expired' not in session:
 		url = 'http://dayone.oncloud.gr/s1services'
 		log = s1login(url)
 		auth = s1authenticate(url, log, session['companycode'])
 
 		return get_Products(url, auth)
 	else:
-		return redirect(url_for('login'))
+		return redirect(url_for('logout'))
 
 
 @app.route("/getPayments")
 def getPayments():
-	if 'id' in session:
+	if 'id' in session and 'expired' not in session:
 		url = 'http://dayone.oncloud.gr/s1services'
 		log = s1login(url)
 		auth = s1authenticate(url, log, session['companycode'])
 
 		return get_Payments(url, auth)
 	else:
-		return redirect(url_for('login'))
+		return redirect(url_for('logout'))
 
 
 @app.route("/getPrintOutForms", methods=["POST", "GET"])
 def getPrintOutForms():
-	if 'id' in session:
+	if 'id' in session and 'expired' not in session:
 		headers = {'Content-Type': 'application/json'}
 		sosource = request.form['sosource']
 		data = json.dumps(
@@ -495,7 +623,7 @@ def getPrintOutForms():
 
 		return call.json()
 	else:
-		return redirect(url_for('login'))
+		return redirect(url_for('logout'))
 
 
 @app.route("/D1ServicesIN", methods=['GET', 'POST'])
@@ -508,60 +636,47 @@ def D1ServicesIN():
 	auth = session['id']
 	if obj == 'findoc':
 		questions = {'findoc': request.form['id']}
-
 	elif obj == 'trdr':
 		questions = {'trdr': request.form['id']}
-
 	elif obj == 'mtrl':
 		questions = {'mtrl': request.form['id']}
-
 	elif obj == 'prsn':
 		questions = {'prsn': request.form['prsn']}
-
 	elif obj == 'toptrdr':
 		questions = {'sodtype': request.form['sodtype']}
-
 	elif obj == 'trdrcode':
 		questions = {'code': request.form['code']}
-
 	elif obj == 'trdrname':
 		questions = {'name': request.form['name']}
-
 	elif obj == 'mtrlname':
 		questions = {
 			'name': request.form['name'],
 			'sodtype': request.form['sodtype']
 		}
-
 	elif obj == 'mtrlcode':
 		questions = {
 			'code': request.form['code'],
 			'sodtype': request.form['sodtype']
 		}
-
 	elif obj == 'trdraddress':
 		questions = {'trdr': request.form['trdr']}
-
 	elif obj == 'trdrpeople':
 		questions = {'trdr': request.form['trdr']}
-
 	elif obj == 'trdropenorders':
 		questions = {
 			'trdr': request.form['trdr'],
 			'company': session['companycode']
 		}
-
 	elif obj == 'soaction':
 		questions = {'soaction': request.form['id']}
-
 	elif obj == 'soactionseries':
 		questions = {'company': session['companycode']}
-
 	elif obj == 'calendar':
 		questions = ''
-
 	elif obj == 'calls':
 		questions = ''
+	elif obj == 'callinfo':
+		questions = {'soaction': request.form['soaction']}
 
 	elif obj == 'printoutform':
 		questions = {
@@ -570,66 +685,127 @@ def D1ServicesIN():
 			'RecordID': request.form['id'],
 			'TemplateCode': request.form['TemplateCode']
 		}
-
 	else:
 		questions = {'qname': request.form['qname'], 'qcode': request.form['qcode']}
-
 	if service == "set":
 		data = request.form['data']
-
 	else:
 		data = questions
-
 	if erp == "Softone":
 		response = s1call(url, service, obj, company, auth, data)
 		if response.json()['success']:
 
 			return {'data': response.json()['data']}
-
 		else:
 
 			return {'error': response.json()['error']}
-
 	else:
 
 		return "Paizei mono gia Softone ...pros to parwn"
 
 
-@app.route("/D1Services", methods=['GET', 'POST'])
-def D1Services():
-	erp = request.json['erp']
-	service = request.json['service']
-	obj = request.json['object']
-	callfrom = request.json['callfrom']
+@app.route("/d1services", methods=['POST'])
+def d1services():
+	if request.method == "POST":
+		data1 = request.get_json()
+		data = dict((k.lower(), v) for k, v in data1.items())
+		erp = data.get('erp')
+		service = data.get('service')
+		connection = data.get('connection')
+		company = data.get('company')
+		if erp.lower() == "softone":
+			url = 'https://' + connection + '.oncloud.gr/s1services'
+			if service.lower() == "login":
+				company = data.get('company')
+				user = data.get('user')
+				password = data.get('password')
+				clientID = s1login_Out(url, user, password)
+				if clientID['success']:
+					auth = s1authenticate_Out(url, clientID['clientID'], company)
+					return auth
+				else:
+					return clientID
+			elif service.lower() == "get":
+				clientID = data.get('clientid')
+				obj = data.get('object')
+				key = data.get('key')
+				response = s1_get_call_out(url, clientID, company, obj)
+				return response
+			elif service.lower == "set":
+				return 1
+		else:
+			return {'success': False, 'error': 'false erp'}
 
-	if callfrom == 'out':
-		url = request.json['url']
-		company = request.json['company']
 
-	elif callfrom == 'in':
-		company = session['company']
-		if erp == 'Softone':
-			url = 'https://' + session['companycode'] + '/s1services'
+# -------------functions for CONTROL------------- #
 
-	else:
+def s1get_DateUsers(sn):
+	payload = json.dumps(
+		{
+			"sn": sn
+		})
+	response = requests.request('POST', 'http://dayone.oncloud.gr/s1services/js/ModuleCheck.D1WebServices/checkUsers', data=payload)
+	return response.json()
 
-		return 'Error:Not valid callfrom || Select callfrom out'
 
-	if service == "set":
-		data = request.json['data']
+def check_if_logged_in(sn, username):
+	payload = json.dumps(
+		{
+			"sn": sn,
+			"username": username
+		})
+	response = requests.request('POST', 'http://dayone.oncloud.gr/s1services/js/ModuleCheck.D1WebServices/checkIfUserIsLoggedIn', data=payload)
+	return response.json()
 
-	else:
-		data = ""
 
-	clientID = s1login(url)
-	auth = s1authenticate(url, clientID, company)
-	if erp == "Softone":
+def login_to_log():
+	payload = json.dumps(
+		{
+			"service": "setData",
+			"clientID": "9J8pJMXuSqrBL69JLqrtLrLvTK5oP4DCM45KLKHGLqHiP49CIanLJoKtHabpHKfaK4Po9JL3TIKrGr1DT5LtPMLKLbbcL4DLP5GbDKDPGKmbDKLXPavrH5D7Kr5r9JL4LL53JoKsC7HpL4fPHrH1HNKbDKDK9JL4Oqb2S6LHG4r5KIKrH5LcGaDeKqrnT75KLbLNLrXnSafaU6D9J2KsC6DJL4rtLrLvPKHpL6DEPcXpL695S5XVTLLEG6X2J4biObTV9JT4TKvhH792PNXaLNDnTLS",
+			"appId": "2001",
+			"OBJECT": "CCCLOGINLOG",
+			"KEY": "",
+			"data": {
+				"CCCLOGINLOG": [
+					{
+						"SN": session['sn'],
+						"ACCOUNT": session['cccwebaccounts'],
+						"USERNAME": session['username'],
+						"TYPE": 601,
+						"ID": session['id'],
+						"LOGIN": datetime.today().strftime('%Y-%m-%dT%H:%M')
+					}
+				]
+			}
+		})
+	response = requests.request('POST', 'http://dayone.oncloud.gr/s1services', data=payload)
+	session['loginid'] = response.json()['id']
+	return response.json()
 
-		return s1call(url, service, obj, company, auth, data)
 
-	else:
+def logout_from_log(key):
+	headers = {'Content-Type': 'application/json'}
+	payload = json.dumps(
+		{
+			"service": "delData",
+			"clientID": "9J8pJMXuSqrBL69JLqrtLrLvTK5oP4DCM45KLKHGLqHiP49CIanLJoKtHabpHKfaK4Po9JL3TIKrGr1DT5LtPMLKLbbcL4DLP5GbDKDPGKmbDKLXPavrH5D7Kr5r9JL4LL53JoKsC7HpL4fPHrH1HNKbDKDK9JL4Oqb2S6LHG4r5KIKrH5LcGaDeKqrnT75KLbLNLrXnSafaU6D9J2KsC6DJL4rtLrLvPKHpL6DEPcXpL695S5XVTLLEG6X2J4biObTV9JT4TKvhH792PNXaLNDnTLS",
+			"appId": "2001",
+			"OBJECT": "CCCLOGINLOG",
+			"KEY": key
+		})
+	response = requests.request("POST", 'http://dayone.oncloud.gr/s1services', headers=headers, data=payload)
 
-		return "Paizei mono gia Softone ...pros to parwn"
+	return response.json()
+
+
+def get_actives(sn):
+	payload = json.dumps(
+		{
+			"sn": sn
+		})
+	response = requests.request('POST', 'http://dayone.oncloud.gr/s1services/js/ModuleCheck.D1WebServices/getActiveUsers', data=payload)
+	return response.json()
 
 
 # -------------functions for LOGIN------------- #
@@ -646,6 +822,17 @@ def s1login(url):
 	return response.json()['clientID']
 
 
+def s1login_Out(url, username, password):
+	payload = json.dumps({
+		"service": "login",
+		"username": username,
+		"password": password,
+		"appId": "2001"})
+	response = requests.post(url + '/post', data=payload)
+
+	return response.json()
+
+
 def s1authenticate(url, id, company):
 	payload = json.dumps({
 		"service": "authenticate",
@@ -659,6 +846,19 @@ def s1authenticate(url, id, company):
 	return response.json()['clientID']
 
 
+def s1authenticate_Out(url, id, company):
+	payload = json.dumps({
+		"service": "authenticate",
+		"clientID": id,
+		"COMPANY": company,
+		"BRANCH": "1000",
+		"MODULE": "0",
+		"REFID": "303"})
+	response = requests.post(url + '/post', data=payload)
+
+	return response.json()
+
+
 def s1get_Credentials1(url, password, username):
 	payload = json.dumps({
 		"password": password,
@@ -668,11 +868,7 @@ def s1get_Credentials1(url, password, username):
 		response = requests.request('POST', url + '/js/connector.connector/getCredentials1', data=payload)
 		return response
 	except:
-
-		return {
-			'success': False,
-			'error': 'something went wrong'
-		}
+		return {'success': False, 'error': 'something went wrong'}
 
 
 def s1get_Credentials(url, password, username, company):
@@ -682,30 +878,27 @@ def s1get_Credentials(url, password, username, company):
 			"username": username,
 			"company": company
 		})
-	response = requests.request(
-		'POST', url + '/js/connector.connector/getCredentials', data=payload)
+	response = requests.request('POST', url + '/js/connector.connector/getCredentials', data=payload)
 
 	return response.json()
 
 
-def s1_CheckForChekIn(url, prsn, date, company):
+def s1_CheckForChekIn(url, prsn, datee, company):
 	payload = json.dumps(
 		{
 			"clientID": session['id'],
-			"date": date,
+			"date": datee,
 			"prsn": prsn,
 			"company": company
 		})
-	response = requests.request(
-		'POST', url + '/js/connector.connector/checkForCheckIn', data=payload)
+	response = requests.request('POST', url + '/js/connector.connector/checkForCheckIn', data=payload)
 
 	return response
 
 
 def getCompanies(url, cccwebaccounts):
 	payload = json.dumps({"cccwebaccounts": cccwebaccounts})
-	response = requests.request(
-		'POST', url + '/js/connector.connector/getCompanies', data=payload)
+	response = requests.request('POST', url + '/js/connector.connector/getCompanies', data=payload)
 
 	return response
 
@@ -717,8 +910,7 @@ def getCustomersSelector(url, id, company):
 	payload = json.dumps({
 		"clientID": id,
 		"company": company})
-	response = requests.request(
-		'POST', url + '/js/connector.connector/getCustomersSelector', data=payload)
+	response = requests.request('POST', url + '/js/connector.connector/getCustomersSelector', data=payload)
 
 	return response.json()['data']
 
@@ -727,8 +919,7 @@ def getPrjcSelector(url, id, company):
 	payload = json.dumps({
 		"clientID": id,
 		"company": company})
-	response = requests.request(
-		'POST', url + '/js/connector.connector/getPrjcSelector', data=payload)
+	response = requests.request('POST', url + '/js/connector.connector/getPrjcSelector', data=payload)
 
 	return response.json()['data']
 
@@ -770,8 +961,7 @@ def getCustomers(url, id, company):
 			'clientID': id,
 			'company': company
 		})
-	response = requests.request(
-		'POST', url + '/js/connector.connector/getCustomers', data=payload)
+	response = requests.request('POST', url + '/js/connector.connector/getCustomers', data=payload)
 
 	return response.json()['data']
 
@@ -783,8 +973,7 @@ def getSoaction(url, id):
 			'company': session['companycode'],
 			'prsn': session['prsn']
 		})
-	response = requests.request(
-		'POST', url + '/js/connector.connector/getSoaction', data=payload)
+	response = requests.request('POST', url + '/js/connector.connector/getSoaction', data=payload)
 
 	return response
 
@@ -796,24 +985,21 @@ def getCalendar(url, id):
 			'company': session['companycode'],
 			'prsn': session['prsn']
 		})
-	response = requests.request(
-		'POST', url + '/js/connector.connector/getCalendar', data=payload)
+	response = requests.request('POST', url + '/js/connector.connector/getCalendar', data=payload)
 
 	return response
 
 
 def get_Payments(url, id):
 	payload = json.dumps({'clientID': id})
-	response = requests.post(
-		url + '/js/connector.connector/getPayments/post', data=payload)
+	response = requests.post(url + '/js/connector.connector/getPayments/post', data=payload)
 
 	return response.text
 
 
 def get_Products(url, id):
 	payload = json.dumps({'clientID': id})
-	response = requests.post(
-		url + '/js/connector.connector/getProducts/post', data=payload)
+	response = requests.post(url + '/js/connector.connector/getProducts/post', data=payload)
 
 	return response.text
 
@@ -854,7 +1040,6 @@ def s1call(url, service, obj, company, id, data):
 					'mtrl': data['mtrl']
 				})
 			call = requests.request('POST', url + '/js/connector.connector/getMtrl', headers=headers, data=data)
-
 		elif obj == "prsn":
 			data = json.dumps(
 				{
@@ -862,7 +1047,6 @@ def s1call(url, service, obj, company, id, data):
 					'prsn': data['prsn']
 				})
 			call = requests.request('POST', url + '/js/connector.connector/getPrsn', headers=headers, data=data)
-
 		elif obj == "toptrdr":
 			data = json.dumps(
 				{
@@ -871,7 +1055,6 @@ def s1call(url, service, obj, company, id, data):
 					"sodtype": data['sodtype']
 				})
 			call = requests.request('POST', url + '/js/connector.connector/getTopTrdr', headers=headers, data=data)
-
 		elif obj == "trdrcode":
 			data = json.dumps(
 				{
@@ -880,7 +1063,6 @@ def s1call(url, service, obj, company, id, data):
 					"company": session['companycode']
 				})
 			call = requests.request('POST', url + '/js/connector.connector/getTrdrSelectorByCode', headers=headers, data=data)
-
 		elif obj == "trdrname":
 			data = json.dumps(
 				{
@@ -889,7 +1071,6 @@ def s1call(url, service, obj, company, id, data):
 					"company": session['companycode']
 				})
 			call = requests.request('POST', url + '/js/connector.connector/getTrdrSelectorByName', headers=headers, data=data)
-
 		elif obj == "mtrlname":
 			data = json.dumps(
 				{
@@ -899,7 +1080,6 @@ def s1call(url, service, obj, company, id, data):
 					"sodtype": data['sodtype']
 				})
 			call = requests.request('POST', url + '/js/connector.connector/getMtrlSelectorByName', headers=headers, data=data)
-
 		elif obj == "mtrlcode":
 			data = json.dumps(
 				{
@@ -909,7 +1089,6 @@ def s1call(url, service, obj, company, id, data):
 					"sodtype": data['sodtype']
 				})
 			call = requests.request('POST', url + '/js/connector.connector/getMtrlSelectorByCode', headers=headers, data=data)
-
 		elif obj == "trdraddress":
 			data = json.dumps(
 				{
@@ -917,7 +1096,6 @@ def s1call(url, service, obj, company, id, data):
 					"trdr": data['trdr']
 				})
 			call = requests.request('POST', url + '/js/connector.connector/getTrdrAddress', headers=headers, data=data)
-
 		elif obj == "trdrpeople":
 			data = json.dumps(
 				{
@@ -925,7 +1103,6 @@ def s1call(url, service, obj, company, id, data):
 					"trdr": data['trdr']
 				})
 			call = requests.request('POST', url + '/js/connector.connector/getTrdrPeople', headers=headers, data=data)
-
 		elif obj == "trdropenorders":
 			data = json.dumps(
 				{
@@ -934,7 +1111,6 @@ def s1call(url, service, obj, company, id, data):
 					"company": data['company']
 				})
 			call = requests.request('POST', url + '/js/connector.connector/getTrdrOpenOrders', headers=headers, data=data)
-
 		elif obj == 'soaction':
 			data = json.dumps(
 				{
@@ -943,7 +1119,6 @@ def s1call(url, service, obj, company, id, data):
 					'company': session['companycode']
 				})
 			call = requests.request('POST', url + '/js/connector.connector/getSoaction', headers=headers, data=data)
-
 		elif obj == 'soactionseries':
 			data = json.dumps(
 				{
@@ -951,7 +1126,6 @@ def s1call(url, service, obj, company, id, data):
 					'company': data['company']
 				})
 			call = requests.request('POST', url + '/js/connector.connector/getSoactionSeries', headers=headers, data=data)
-
 		elif obj == 'findoc':
 			data = json.dumps(
 				{
@@ -959,7 +1133,6 @@ def s1call(url, service, obj, company, id, data):
 					'findoc': data['findoc']
 				})
 			call = requests.request('POST', url + '/js/connector.connector/getFindoc', headers=headers, data=data)
-
 		elif obj == 'printoutform':
 			data = json.dumps(
 				{
@@ -970,7 +1143,6 @@ def s1call(url, service, obj, company, id, data):
 					'TemplateCode': data['TemplateCode']
 				})
 			call = requests.request('POST', url + '/js/connector.connector/PrintS1Template', headers=headers, data=data)
-
 		elif obj == 'calendar':
 			data = json.dumps(
 				{
@@ -979,7 +1151,6 @@ def s1call(url, service, obj, company, id, data):
 					'prsn': session['prsn']
 				})
 			call = requests.request('POST', url + '/js/connector.connector/getCalendar', headers=headers, data=data)
-
 		elif obj == 'calls':
 			data = json.dumps(
 				{
@@ -987,8 +1158,14 @@ def s1call(url, service, obj, company, id, data):
 					'company': session['companycode'],
 					'prsn': session['prsn']
 				})
-
 			call = requests.request('POST', url + '/js/connector.connector/getCalls', headers=headers, data=data)
+		elif obj == 'callinfo':
+			data = json.dumps(
+				{
+					'clientID': id,
+					'soaction': data['soaction']
+				})
+			call = requests.request('POST', url + '/js/connector.connector/getCallInfo', headers=headers, data=data)
 	elif service == "set":
 		call = setData(url, obj, id, "", data)
 
@@ -1054,6 +1231,19 @@ def getReportData(url, id, reqID, page):
 	response = requests.get(url, headers=headers, data=payload)
 
 	return response
+
+
+def s1_get_call_out(url, clientID, company, obj):
+	headers = {'Content-Type': 'application/json'}
+	if obj == 'items':
+		payload = json.dumps(
+			{
+				"clientID": clientID,
+				"company": company
+			})
+		response = requests.request('POST', url + '/js/connector.D1API/getProducts', headers=headers, data=payload)
+
+	return response.json()
 
 
 if __name__ == "__main__":

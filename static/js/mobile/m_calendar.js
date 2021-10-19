@@ -32,7 +32,7 @@ $(document).ready(function () {
             return false;
         }else{
             $("#screenform").modal("toggle");
-            $("#loader").css("display", "block");
+            startload()
             if ($("#fsoaction").val() == "") {
                 $.ajax({
                     url: "meetings/insert",
@@ -49,7 +49,7 @@ $(document).ready(function () {
                     success: function (data) {
                         calendarl.refetchEvents();
                         calendar.refetchEvents();
-                        $("#loader").css("display", "none");
+                        stopload()
                         if (data["success"]) {
                             $("#insertID").text(data["id"]);
                             $("#successmodal").modal("toggle");
@@ -84,7 +84,7 @@ $(document).ready(function () {
                     success: function (data) {
                         calendarl.refetchEvents();
                         calendar.refetchEvents();
-                        $("#loader").css("display", "none");
+                        stopload()
                         if (data["success"]) {
                             $("#insertID").text(data["id"]);
                             $("#successmodal").modal("toggle");
@@ -188,7 +188,7 @@ $(document).ready(function () {
     $("#fsoactionseries").on("click", function () {
         $("#fsoactionseries").css("border", "");
         if ($("Selectorseries").children().length==0){
-            $("[id='loader']").css("display", "block");
+            startload()
             $.ajax({
                 url: "/D1ServicesIN",
                 method: "POST",
@@ -240,7 +240,7 @@ $(document).ready(function () {
                             width: rect.right - rect.left,
                         });
                     }
-                    $("[id='loader']").css("display", "none");
+                    stopload()
                     $("#Selectorseries").css("display", "block");
                 }
             })
@@ -257,7 +257,7 @@ $(document).ready(function () {
     /*When Click on Selector Code fill the inputs*/
     $("#Selectorcode").on("click", ".row", function () {
         freezeClic = true;
-        $("[id='loader']").css("display", "block");
+        startload()
         $("#Selectorcode").css("display", "none");
         var id = $(this).data("slide");
         $.ajax({
@@ -277,7 +277,7 @@ $(document).ready(function () {
                 $("[id='fphone01']").val(data.PHONE01);
             },
             complete: function () {
-                $("[id='loader']").css("display", "none");
+                stopload()
                 freezeClic = false;
             },
         });
@@ -286,7 +286,7 @@ $(document).ready(function () {
     /*When Click on Selector Name fill the inputs*/
     $("#Selectorname").on("click", ".row", function () {
         freezeClic = true;
-        $("[id='loader']").css("display", "block");
+        startload()
         $("#Selectorname").css("display", "none");
         var id = $(this).data("slide");
         $.ajax({
@@ -306,7 +306,7 @@ $(document).ready(function () {
                 $("[id='fphone01']").val(data.PHONE01);
             },
             complete: function () {
-                $("[id='loader']").css("display", "none");
+                stopload()
                 freezeClic = false;
             },
         });
@@ -378,7 +378,7 @@ document.addEventListener("click", function (e) {
 });
 
 function gotomaps(){
-    $("[id='loader']").css("display", "block");
+    startload()
     var trdr =$("#ftrdr").val();
     $.ajax({
         url: "/D1ServicesIN",
@@ -396,7 +396,7 @@ function gotomaps(){
             var district = data.DISTRICT == undefined ? "" : data.DISTRICT;
             var address = address +','+ city +','+ zip +','+ district;
             address = encodeURIComponent(address);
-            $("[id='loader']").css("display", "none");
+            stopload()
             if ((navigator.platform.indexOf('iPhone') != -1) || (navigator.platform.indexOf('iPad') != -1) || (navigator.platform.indexOf('iPod') != -1)){/* if we're on iOS, open in Apple Maps */
                 window.open('http://maps.apple.com/?q=' + address);
             } else { /* else use Google */
@@ -462,4 +462,14 @@ function trdrSelectorByName() {
         clearTimeout(timer);
         $("#Selectorname").css("display", "none");
     }
+}
+
+function startload(){
+    $(".loaderr").css("display", "block");
+    $("body").append('<div id="overlayyy"</div>');
+}
+
+function stopload(){
+    $(".loaderr").css("display", "none");
+    $("#overlayyy").remove();
 }

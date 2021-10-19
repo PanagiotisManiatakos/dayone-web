@@ -21,6 +21,8 @@
     <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.2.9/js/responsive.bootstrap4.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.2/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <style>
         #calls tbody tr td {
             max-width: 100px;
@@ -43,7 +45,7 @@
         </div>
     </div>
     <button type="button" id="btnew" class="btn btn-primary addIcon"><i class="bi bi-plus"></i></button>
-    
+
     <!--ScreenModal-->
     <div class="modal fade" tabindex="-1" role="dialog" id="screenform" style="display:none" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="loader" id="loader" style="z-index:999;position:fixed;top:50%;left:50%;margin-top:-60px;margin-left:-60px;display:none;"></div>
@@ -56,8 +58,36 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <!--TAB CONTENTS-->
-                    <form>
+                    <div class="toolbar">
+                        <div class="row">
+                            <!--TABS-->
+                            <div class="col-11">
+                                <nav>
+                                    <div class="nav nav-tabs" id="nav-tab" role="tablist"
+                                         style="overflow-y:hidden;overflow-x: auto;flex-wrap: nowrap;">
+                                        <button class="nav-link active" id="generalscreen-tab" data-bs-toggle="tab"
+                                                data-bs-target="#generalscreen" type="button" role="tab"
+                                                aria-controls="generalscreen" aria-selected="true" style="white-space: nowrap;">Γενικά Στοιχεία
+                                        </button>
+                                    </div>
+                                </nav>
+                            </div>
+                            <div class="col-1" style="display: flex;flex-wrap: wrap;justify-content: flex-end;">
+                                <div class="dropdown">
+                                    <button class="btn bi-three-dots-vertical " type="button" id="dropdownMenuButton"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item" href="#" onclick="gotoinfo()"><i class="bi bi-info-circle-fill"></i></i>Πληροφορίες</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                    <div class="toolbody">
+                        <form>
                         <div class="form-group">
                             <div class="form-group row" style="display:none;">
                                 <input type="text" class="form-control" id="fsoaction" placeholder="soaction">
@@ -84,7 +114,7 @@
                             <div class="form-group row">
                                 <label for="fcomments" class="col-sm-2 col-form-label disable-select">Θέμα:</label>
                                 <div class="col-sm-10">
-                                    <textarea class="form-control" id="fcomments" rows="1" onfocusout="updAll.call(this,event);" placeholder="Θέμα"></textarea>
+                                    <textarea class="form-control" id="fcomments" rows="1" placeholder="Θέμα"></textarea>
                                 </div>
                             </div>
 
@@ -92,7 +122,7 @@
                                 <label for="ftrdrname" class="col-sm-2 col-form-label disable-select">Επωνυμία:</label>
                                 <div class="col-sm-10">
                                     <div class="input-group">
-                                        <input class="form-control required" type="text" autocomplete="off" id="ftrdrname" placeholder="Επωνυμία Πελάτη" onkeyup="trdrSelectorByName()">
+                                        <input class="form-control required" type="text" autocomplete="off" id="ftrdrname" data-trdr="" placeholder="Επωνυμία Πελάτη">
                                         <span class="input-group-append">
                                             <button class="btn btn-outline-secondary bg-white ms-n3" type="button" id="ftrdrnamesearch">
                                                 <i class="fa fa-search"></i>
@@ -109,7 +139,7 @@
                                 <label for="fprsname" class="col-sm-2 col-form-label disable-select">Επαφή:</label>
                                 <div class="col-sm-10">
                                     <div class="input-group">
-                                        <input class="form-control locked" type="text" autocomplete="off" id="fprsname" placeholder="Επαφή" onkeyup="prsnSelectorByName()">
+                                        <input class="form-control locked" type="text" autocomplete="off" id="fprsname" data-prsn="" placeholder="Επαφή">
                                         <span class="input-group-append">
                                             <button class="btn btn-outline-secondary bg-white ms-n3 locked" type="button" id="fprsnamesearch">
                                                 <i class="fa fa-search"></i>
@@ -125,19 +155,27 @@
                             <div class="form-group row" style="display:none">
                                 <label for="fphone01" class="col-sm-2 col-form-label disable-select">Τηλ.1:</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control locked" id="fphone01" placeholder="Τηλ.1" onfocusout="updAll.call(this,event);">
+                                    <input type="text" class="form-control locked" id="fphone01" placeholder="Τηλ.1">
                                 </div>
                             </div>
 
                             <div class="form-group row">
                                 <label for="fremarks" class="col-sm-2 col-form-label disable-select">Σχόλια:</label>
                                 <div class="col-sm-10">
-                                    <textarea class="form-control" id="fremarks" rows="3" onfocusout="updAll.call(this,event);" placeholder="Σχόλια"></textarea>
+                                    <textarea class="form-control" id="fremarks" rows="2" placeholder="Σχόλια"></textarea>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group row">
+                                <label for="fdone" class="col-sm-2 col-form-check-label disable-select" >Έκλεισε: </label>
+                                <div class="col-sm-10">
+                                    <input type="checkbox" id="fdone">
                                 </div>
                             </div>
 
                         </div>
                     </form>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" id="savem1" disabled="true">Αποθήκευση</button>
@@ -147,4 +185,114 @@
             </div>
         </div>
     </div>
+    <!--InfoModal-->
+    <div class="modal fade" tabindex="-1" role="dialog" id="callinfoform" style="display:none" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="loader" id="loader" style="z-index:999;position:fixed;top:50%;left:50%;margin-top:-60px;margin-left:-60px;display:none;"></div>
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Πληροφορίες κλήσης</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span id="cancelminfo1">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <h4 id="infotrdrname"></h4>
+                        <div class="panel-body">
+                            <div class="form-group row">
+                                <label for="fphone01" class="col-sm-2 col-form-label">Τηλ.1:</label>
+                                <div class="col-sm-10">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="fiphone01" placeholder="Τηλ.1" disabled>
+                                        <span class="input-group-append">
+                                            <a id="ffiphone01call" class="btn btn-outline-secondary bg-white ms-n3" onclick="makephonecall(this,document.getElementById('fiphone01'))">
+                                                <i class="bi bi-telephone"></i>
+                                            </a>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                
+                            <div class="form-group row">
+                                <label for="fiphone02" class="col-sm-2 col-form-label">Τηλ.2:</label>
+                                <div class="col-sm-10">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="fiphone02" placeholder="Τηλ.2" disabled>
+                                        <span class="input-group-append">
+                                            <a id="ffiphone02call" class="btn btn-outline-secondary bg-white ms-n3" onclick="makephonecall(this,document.getElementById('fiphone02'))">
+                                                <i class="bi bi-telephone"></i>
+                                            </a>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="infoprsnpanel">
+                            <h4 id="infoprsname">Basic Panel</h4>
+                            <div class="panel-body">
+                            
+                            <div class="form-group row">
+                                <label for="fiphone1" class="col-sm-2 col-form-label">Τηλ.1:</label>
+                                <div class="col-sm-10">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="fiphone1" placeholder="Τηλ.1" disabled>
+                                        <span class="input-group-append">
+                                            <a id="ffiphone1call" class="btn btn-outline-secondary bg-white ms-n3" onclick="makephonecall(this,document.getElementById('fiphone1'))">
+                                                <i class="bi bi-telephone"></i>
+                                            </a>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group row">
+                                <label for="fiphone2" class="col-sm-2 col-form-label">Τηλ.2:</label>
+                                <div class="col-sm-10">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="fiphone2" placeholder="Τηλ.2" disabled>
+                                        <span class="input-group-append">
+                                            <a id="ffiphone2call" class="btn btn-outline-secondary bg-white ms-n3" onclick="makephonecall(this,document.getElementById('fiphone2'))">
+                                                <i class="bi bi-telephone"></i>
+                                            </a>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group row">
+                                <label for="fiphoneext" class="col-sm-2 col-form-label">Εσωτ.:</label>
+                                <div class="col-sm-10">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="fiphoneext" placeholder="Εσωτ." disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group row">
+                                <label for="fimobilephone" class="col-sm-2 col-form-label">Κινητό:</label>
+                                <div class="col-sm-10">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="fimobilephone" placeholder="Κινητό" disabled>
+                                        <span class="input-group-append">
+                                            <a id="ffimobilephonecall" class="btn btn-outline-secondary bg-white ms-n3" onclick="makephonecall(this,document.getElementById('fimobilephone'))">
+                                                <i class="bi bi-telephone"></i>
+                                            </a>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" id="cancelminfo12">Ακύρωση</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 {% endblock %}

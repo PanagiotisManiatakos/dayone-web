@@ -1,20 +1,7 @@
 function companies() {
-    window.check =false;
-    $('.required').each(function (i, el) {
-        var data = $(el).val();
-        if(data==""){
-            $(el).css("border", "2px solid #f00");
-            $(el).focus();
-            check =true;
-            return false;
-        }else{
-            $(el).css("border", "");
-        };
-    });
-    if (check) {
-        return false;
-    }else{
-        $("#loader").css("display", "block");
+    if (!checkit()) {
+        startload()
+        $("#error").css('opacity',0);
         $("#error").hide();
         var companyname = document.forms["login"]["companyname"].value;
         var username = document.forms["login"]["username"].value;
@@ -25,18 +12,26 @@ function companies() {
             data: { companyname: companyname, username: username, password: password },
             success: function (data) {
                 if (data['success'] == false) {
+                    var rect = document
+                        .getElementById("btnext")
+                        .getBoundingClientRect();
                     if(data['error'] == 'domain'){
                         error = 'Ελέγξτε την σύνδεση σας'
                         $("#cname").css("border", "2px solid #f00");
                         $("#cname").focus();
                     }else{
-                        error = 'Ελέγξτε username ή password';
+                        error = 'Ελέγξτε username/password';
                         $("#uname").css("border", "2px solid #f00");
                         $("#password").css("border", "2px solid #f00");
                     }
-                    $("#loader").hide();
+                    stopload()
                     $("#errorDisplay").text(error);
-                    $("#error").css("display", "block");
+                    $("#error").show();
+                    $("#error").css({
+                        'opacity': 1,
+                        'left': rect.left,
+                        "top": rect.bottom
+                    });
                     return false;
                 }else{
                     data = JSON.parse(JSON.stringify(data)).data;
@@ -55,7 +50,7 @@ function companies() {
                     $("#divcom").css("display", "block");
                     $("#btlogin").css("display", "block");
                     $("#btnext").hide();
-                    $("#loader").hide();
+                    stopload()
                     $("#btlogin").focus();
                 }
             },
@@ -64,9 +59,46 @@ function companies() {
 }
 
 $(document).ready(function () {
-    $("#loader").css("display", "none");
+    stopload()
 
     $( "form" ).submit(function() {
-        $("#loader").css("display", "block");
+        startload()
     });
+    
+    if ($('#errorDisplay').text()!='None'){
+        var rect = document
+            .getElementById("btnext")
+            .getBoundingClientRect();
+        $("#error").show();
+        $("#error").css({
+            'opacity': 1,
+            'left': rect.left,
+            "top": rect.bottom
+        });
+    }
 });
+
+function checkit() {
+    var check = false;
+    $('.required').each(function (i, el) {
+        var data = $(el).val();
+        if(data==""){
+            $(el).css("border", "2px solid #f00");
+            if(i==0) $(el).focus();
+            check = true;
+        }else{
+            $(el).css("border", "");
+        };
+    });
+    return check;
+}
+
+function startload(){
+    $(".loaderr").css("display", "block");
+    $("body").append('<div id="overlayyy"</div>');
+}
+
+function stopload(){
+    $(".loaderr").css("display", "none");
+    $("#overlayyy").remove();
+}
