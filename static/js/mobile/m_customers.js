@@ -91,7 +91,7 @@ $(document).ready(function () {
 
     /*When Browse Button is pressed*/
     document.querySelector("#Load").addEventListener("click", function () {
-        $("#loader").css("display", "block");
+        startload();
         var qname = document.getElementById("qname").value.replace("*", "%") + "%";
         var qcode = document.getElementById("qcode").value.replace("*", "%") + "%";
 
@@ -137,7 +137,7 @@ $(document).ready(function () {
                 $("#SearchPanel").prop("disabled", false);
                 $("#btnrefresh").prop("disabled", false);
                 $("#btnfilters").prop("disabled", false);
-                $("#loader").css("display", "none");
+                stopload();
             },
         });
     });
@@ -165,7 +165,7 @@ $(document).ready(function () {
 
     /*When Refresh Button is pressed*/
     document.querySelector("#btnrefresh").addEventListener("click", function () {
-        $("#loader").css("display", "block");
+        startload();
         var table1 = $(".display tbody");
         var qname = document.getElementById("qname").value.replace("*", "%") + "%";
         var qcode = document.getElementById("qcode").value.replace("*", "%") + "%";
@@ -205,14 +205,14 @@ $(document).ready(function () {
                     ],
                     columnDefs: [{ className: "hide_column", targets: [7] }],
                 });
-                $("#loader").css("display", "none");
+                stopload();
             },
         });
     });
 
     /*Refresh People*/
     function RefreshThePeople() {
-        $("[id=loader]").css("display", "block");
+        startload();
         var trdr =$("#ftrdr").val();
         $.ajax({
             url: "/D1ServicesIN",
@@ -248,7 +248,7 @@ $(document).ready(function () {
                 });
                 peopletable.columns.adjust();
                 peopletable.draw();
-                $("[id=loader]").css("display", "none");
+                stopload();
             },
         });
     };
@@ -300,7 +300,7 @@ $(document).ready(function () {
 
     /*When Single click a row*/
     $("#example").on("click", "tr", function () {
-        $("#loader").css("display", "block");
+        startload();
         table.rows().deselect();
         table.rows($(this)).select();
         var d = table.rows({ selected: true }).data().toArray();
@@ -331,7 +331,7 @@ $(document).ready(function () {
                     .attr("disabled", true);
                 $("#editm1").css("display", "block");
                 $("#savem1").prop("disabled", true);
-                $("#loader").css("display", "none");
+                stopload();
                 $("#screenform").modal("toggle");
             },
         });
@@ -343,7 +343,7 @@ $(document).ready(function () {
         peopletable.rows($(this)).select();
         var d = peopletable.rows({ selected: true }).data().toArray();
         if(d.length>0){
-            $("[id=loader]").css("display", "block");
+            startload();
             $.ajax({
                 url: "/D1ServicesIN",
                 method: "POST",
@@ -368,7 +368,7 @@ $(document).ready(function () {
                         .attr("disabled", true);
                     $("#editmpeoplescreen1").css("display", "block");
                     $("#savempeoplescreen1").prop("disabled", true);
-                    $("[id=loader]").css("display", "none");
+                    stopload();
                     $("#peoplescreenform").modal("toggle");
                 },
             });
@@ -381,7 +381,7 @@ $(document).ready(function () {
         openorderstable.rows($(this)).select();
         var d = openorderstable.rows({ selected: true }).data().toArray();
         if(d.length>0){
-            $("[id=loader]").css("display", "block");
+            startload();
             $.ajax({
                 url: "/D1ServicesIN",
                 method: "POST",
@@ -436,7 +436,7 @@ $(document).ready(function () {
                             "LINEVAL"   : this['LINEVAL']
                         } ).draw();
                     });
-                    $("[id=loader]").css("display", "none");
+                    stopload();
                     $("#openordersscreenform").modal("toggle");
                 },
             });
@@ -449,7 +449,7 @@ $(document).ready(function () {
         mtrltable.rows($(this)).select();
         var data = mtrltable.rows({ selected: true }).data().toArray();
         if(data.length>0){
-            $("[id=loader]").css("display", "block");
+            startload();
             $("[id='fitelinesupdate']").val(1);
             $("[id='fitelinesmtrl']").val(data[0]['MTRL']);
             $("[id='fitelinescode']").val(data[0]['CODE']);
@@ -458,7 +458,7 @@ $(document).ready(function () {
             $("[id='fitelinesqty1']").val(data[0]['QTY1']);
             $("[id='fitelinesdisc1prsc']").val(data[0]['DISC1PRC']);
 
-            $("[id=loader]").css("display", "none");
+            stopload();
             $("#itelinesmodal").modal("toggle");
         }
     });
@@ -523,7 +523,7 @@ $(document).ready(function () {
     /*When Screen Save Button is pressed*/
     $("#savem1").click(function () {
         $("#screenform").modal("toggle");
-        $("#loader").css("display", "block");
+        startload();
         var trdr = $("#ftrdr").val();
         var code = $("#fcode").val();
         var name = $("#fname").val();
@@ -554,7 +554,7 @@ $(document).ready(function () {
                     district: district,
                 },
                 success: function (data) {
-                    $("#loader").css("display", "none");
+                    stopload();
                     if (data["success"]) {
                         if (!$("#btnrefresh").prop("disabled")) {
                             $("#btnrefresh").click();
@@ -593,7 +593,7 @@ $(document).ready(function () {
                 },
                 success: function (data) {
                     if (data["success"]) {
-                        $("#loader").css("display", "none");
+                        stopload();
                         $("#btnrefresh").click();
                         $("#insertID").text(data["id"]);
                         $("#successmodal").modal("toggle");
@@ -614,7 +614,7 @@ $(document).ready(function () {
 
     /*When PeopleScreen Save Button is pressed*/
     $("#savempeoplescreen1").click(function () {
-        $("[id=loader]").css("display", "block");
+        startload();
         var prsn = $("#fprsn").val();
         var code = $("#fpeoplecode").val();
         var name = $("#fpeoplename").val();
@@ -638,7 +638,7 @@ $(document).ready(function () {
                     trdr:$("#ftrdr").val()
                 },
                 success: function (data) {
-                    $("[id=loader]").css("display", "none");
+                    stopload();
                     if (data["success"]) {
                         $("#peoplescreenform").modal("toggle");
                         RefreshThePeople();
@@ -671,7 +671,7 @@ $(document).ready(function () {
                     fax:fax,
                 },
                 success: function (data) {
-                    $("[id=loader]").css("display", "none");
+                    stopload();
                     if (data["success"]) {
                         $("#peoplescreenform").modal("toggle");
                         RefreshThePeople();
@@ -694,7 +694,7 @@ $(document).ready(function () {
 
     /*When ItelinesScreen Save Button is pressed*/
     $("#savemitelinesscreen1").click(function () {
-        $("[id='loader']").css("display", "block");
+        startload();
         if ($("[id='fitelinesupdate']").val()==1){
             upd = mtrltable.rows({ selected: true }).data();
             upd['MTRL'] = $("[id='fitelinesmtrl']").val();
@@ -720,12 +720,12 @@ $(document).ready(function () {
             }).draw();
             $("#itelinesmodal").modal("toggle");
         }
-        $("[id='loader']").css("display", "none");
+        stopload();
     });
 
     /*When PronOrdersPrintoutForm Button is pressed*/
     $("#openordersprintoutform").click(function () {
-        $("[id=loader]").css("display", "block");
+        startload();
         $.ajax({
             url: "getPrintOutForms",
             type: "POST",
@@ -748,7 +748,7 @@ $(document).ready(function () {
                         '</option>'
                     );
                 });
-                $("[id=loader]").css("display", "none");
+                stopload();
                 $("#printmodal").modal("toggle");
             }
         });
@@ -902,7 +902,7 @@ $(document).ready(function () {
     /*When Delete Save Button is pressed*/
     document.querySelector("#savem2").addEventListener("click", function () {
         $("#deleteform").modal("toggle");
-        $("#loader").css("display", "block");
+        startload();
         var d = table.rows({ selected: true }).data().toArray();
         var count = 0;
         var err = [];
@@ -913,7 +913,7 @@ $(document).ready(function () {
                     type: "POST",
                     data: { id: d[i]["TRDR"] },
                     success: function (data) {
-                        $("#loader").css("display", "none");
+                        stopload();
                         if (data["success"]) {
                             $("#btnrefresh").click();
                             $("#deletesuccessmodal").modal("toggle");
@@ -954,13 +954,13 @@ $(document).ready(function () {
                                     $("#btnrefresh").click();
                                     document.getElementById("multipledeleteID").innerHTML = textSuccess;
                                     document.getElementById("multipledeleteIDFail").innerHTML = textFail;
-                                    $("#loader").css("display", "none");
+                                    stopload();
                                     $("#deletemultiplefailuremodal").modal("toggle");
                                     setTimeout(function () {
                                         $("#deletemultiplefailuremodal").modal("hide");
                                     }, 4000);
                                 } else {
-                                    $("#loader").css("display", "none");
+                                    stopload();
                                     $("#deleteIDFail").text("Δεν μπόρεσε να γίνει καμία διαγραφή");
                                     $("#deletefailuremodal").modal("toggle");
                                     setTimeout(function () {
@@ -969,7 +969,7 @@ $(document).ready(function () {
                                 }
                             } else {
                                 $("#btnrefresh").click();
-                                $("#loader").css("display", "none");
+                                stopload();
                                 $("#deletesuccessmodal").modal("toggle");
                                 setTimeout(function () {
                                     $("#deletesuccessmodal").modal("hide");
@@ -984,7 +984,7 @@ $(document).ready(function () {
         document.querySelector("#btndelete").disabled = true;
     });
 
-    const sidebarToggle = document.body.querySelector("#sidebarToggle");
+  /*  const sidebarToggle = document.body.querySelector("#sidebarToggle");
 
     sidebarToggle.addEventListener("click", (event) => {
         event.preventDefault();
@@ -994,7 +994,7 @@ $(document).ready(function () {
             table.columns.adjust();
             table.draw();
         }, 250);
-    });
+    });*/
 
     $("#screenform").on("hidden.bs.modal", function (e) {
         $(".nav-link").removeClass("active");
@@ -1009,7 +1009,7 @@ $(document).ready(function () {
 
     /*When Click on SelectorMtrlName fill the inputs*/
     $("#Selectormtrlname").on("click", ".row", function () {
-        $("[id='loader']").css("display", "block");
+        $startload();
         $("#Selectormtrlname").css("display", "none");
         var id = $(this).data("slide");
         $.ajax({
@@ -1030,14 +1030,14 @@ $(document).ready(function () {
                 $("[id='fitelinesqty1']").val(1);
             },
             complete: function () {
-                $("[id='loader']").css("display", "none");
+                stopload();
             },
         });
     });
 
     /*When Click on SelectorMtrlName fill the inputs*/
     $("#Selectormtrlcode").on("click", ".row", function () {
-        $("[id='loader']").css("display", "block");
+        startload();
         $("#Selectormtrlcode").css("display", "none");
         var id = $(this).data("slide");
         $.ajax({
@@ -1058,7 +1058,7 @@ $(document).ready(function () {
                 $("[id='fitelinesqty1']").val(1);
             },
             complete: function () {
-                $("[id='loader']").css("display", "none");
+                stopload();
             },
         });
     });
@@ -1092,7 +1092,7 @@ function closeAll() {
 }
 
 function gotomaps(){
-    $("[id='loader']").css("display", "block");
+    startload();
     var trdr =$("#ftrdr").val();
     $.ajax({
         url: "/D1ServicesIN",
@@ -1109,7 +1109,7 @@ function gotomaps(){
             var zip = data.ZIP == undefined ? "" : data.ZIP;
             var district = data.DISTRICT == undefined ? "" : data.DISTRICT;
             var address = address +' '+ city +' '+ zip +' '+ district;
-            $("[id='loader']").css("display", "none");
+            stopload();
             if ((navigator.platform.indexOf('iPhone') != -1) || (navigator.platform.indexOf('iPad') != -1) || (navigator.platform.indexOf('iPod') != -1)){/* if we're on iOS, open in Apple Maps */
                 window.open('http://maps.apple.com/?q=' + address);
             } else { /* else use Google */
@@ -1128,7 +1128,7 @@ function emailcall(id,email){
 }
 
 function gotopeople(){
-    $("[id=loader]").css("display", "block");
+    startload();
     var trdr =$("#ftrdr").val();
     $.ajax({
         url: "/D1ServicesIN",
@@ -1181,7 +1181,7 @@ function gotopeople(){
                 peopletable.clear().draw();
             }
 
-            $("[id=loader]").css("display", "none");
+            stopload();
 
             $("#peoplemodal").modal("toggle");
         },
@@ -1196,7 +1196,7 @@ function gotokartela(){
 }
 
 function gotoopenorders(){
-    $("[id=loader]").css("display", "block");
+    startload();
     var trdr =$("#ftrdr").val();
     $.ajax({
         url: "/D1ServicesIN",
@@ -1249,7 +1249,7 @@ function gotoopenorders(){
                 openorderstable.clear().draw();
             }
 
-            $("[id=loader]").css("display", "none");
+            stopload();
 
             $("#openordersmodal").modal("toggle");
         },
@@ -1258,7 +1258,7 @@ function gotoopenorders(){
 
 function loadkartela(){
     $("[id='kartelabody']").empty();
-    $("[id='loader']").css("display", "block");
+    startload();
     $("[id='kartelaquestions']").css("display", "none");
     $("[id='kartelabody']").css("display", "block");
     event.preventDefault();
@@ -1283,7 +1283,7 @@ function loadkartela(){
             $("#kartelabody").append(data['body'].substring(0, data['body'].length - 1).substring(1));
 
             $("#kartelabtnfilters").prop("disabled", false);
-            $("[id='loader']").css("display", "none");
+            stopload();
         }
     });
 }
@@ -1393,4 +1393,14 @@ function mtrlSelectorByCode() {
         clearTimeout(timer);
         $("#Selectormtrlcode").css("display", "none");
     }
+}
+
+function startload(){
+    $(".loaderr").css("display", "block");
+    $("body").append('<div id="overlayyy"</div>');
+}
+
+function stopload(){
+    $(".loaderr").css("display", "none");
+    $("#overlayyy").remove();
 }
