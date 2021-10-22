@@ -143,7 +143,7 @@ body.sb-sidenav-toggled #wrapper #sidebar-wrapper {
 }
 
 #overlayyy{
-    position:absolute;
+    position:fixed;
     top:0;left:0;
     height:100%;
     width:100%;
@@ -172,7 +172,7 @@ body.sb-sidenav-toggled #wrapper #sidebar-wrapper {
 
 
 .small-shadow, .medium-shadow, .large-shadow {
-  fill: rgba(0, 0, 0, 0.05); }
+  fill: rgba(0, 0, 0, 1); }
 
 .small {
   -webkit-animation: counter-rotation 2.5s infinite linear;
