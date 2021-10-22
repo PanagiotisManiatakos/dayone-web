@@ -40,7 +40,7 @@
             <div class="container">
                 <div class="columns is-centered">
                     <div class="column is-half">
-                        <form name="login" id="loginform" method="POST">
+                        <form name="login" id="loginform">
                             <div class="control has-icons-left" style="margin-bottom:10px;">
                                 <div class="select is-fullwidth">
                                     <select name="platform" id="platform" required>
@@ -103,7 +103,7 @@
     
                         <div id="btlogin" class="field" style="display:none;">
                             <div class="control">
-                                <button type="submit" form="loginform" id="bbtlogin" class="button is-info is-fullwidth">
+                                <button type="button" id="bbtlogin" class="button is-info is-fullwidth">
                                     Σύνδεση
                                 </button>
                             </div>
@@ -112,7 +112,7 @@
                 </div>
             </div>
             
-            <p class="error" id="error" style="opacity:0;position:absolute;transition:1s;bottom:0px"><strong>Αποτυχία σύνδεσης!</strong><br><label id="errorDisplay">{{error}}</label></p>
+            <p class="error" id="error" style="opacity:0;position:absolute;transition:1s;bottom:0px"><strong>Αποτυχία σύνδεσης!</strong><br><label style="white-space: pre-line;"id="errorDisplay">{{error}}</label></p>
         </div>
     </section>
 </body>
