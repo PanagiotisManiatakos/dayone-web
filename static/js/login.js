@@ -51,7 +51,6 @@ function companies() {
                     $("#btlogin").css("display", "block");
                     $("#btnext").hide();
                     stopload()
-                    $("#btlogin").focus();
                 }
             },
         });
@@ -60,25 +59,10 @@ function companies() {
 
 $(document).ready(function () {
     stopload()
-
-    $( "form" ).submit(function() {
-        startload()
-    });
-    
-    if ($('#errorDisplay').text()!='None'){
-        var rect = document
-            .getElementById("btnext")
-            .getBoundingClientRect();
-        $("#error").show();
-        $("#error").css({
-            'opacity': 1,
-            'left': rect.left,
-            "top": rect.bottom
-        });
-    }
     
     $('input').on('keydown',function(e){
         if(e.keyCode == 13) {
+            e.preventDefault();
             if ($(this).attr("id")=='platform'){
                 $('#cname').focus();
             }else if ($(this).attr("id")=='cname'){
@@ -89,7 +73,6 @@ $(document).ready(function () {
                 if ($('#bbtlogin').is(":visible")){
                      $('#bbtlogin').click();
                 }else{
-                    $('#bbtnext').focus();
                     $('#bbtnext').click();
                 }
             }
