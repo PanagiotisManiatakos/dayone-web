@@ -24,7 +24,6 @@
         var calendarEll = document.getElementById("calendarlist");
         window.calendar = new FullCalendar.Calendar(calendarEl, {
             googleCalendarApiKey: 'AIzaSyDoLktGXzF2vcGnvMmNv7qrEgIyl4p-UBs',
-            selectable: true,
             initialView: "dayGridMonth",
             initialDate: today,
             locale: "gr",
@@ -143,13 +142,10 @@
                         type: "POST",
                         data: { title: title, start: info.startStr, end: info.endStr },
                         success: function (data) {
-                            //alert(data)
                             calendar.refetchEvents();
                             calendarl.refetchEvents();
-                        },
-                        complete: function () {
                             stopload();
-                        },
+                        }
                     });
                 }
             },
@@ -161,14 +157,16 @@
                 $.ajax({
                     url: "calendar/update",
                     type: "POST",
-                    data: { start: start, end: end, id: id },
+                    data: { 
+                        start: start, 
+                        end: end, 
+                        id: id 
+                    },
                     success: function () {
                         calendar.refetchEvents();
                         calendarl.refetchEvents();
-                    },
-                    complete: function () {
                         stopload();
-                    },
+                    }
                 });
             },
             eventDrop: function (info) {
@@ -179,17 +177,20 @@
                 $.ajax({
                     url: "calendar/update",
                     type: "POST",
-                    data: { start: start, end: end, id: id },
+                    data: { 
+                        start: start, 
+                        end: end, 
+                        id: id 
+                    },
                     success: function () {
                         calendar.refetchEvents();
                         calendarl.refetchEvents();
-                    },
-                    complete: function () {
                         stopload();
                     },
                 });
             },
             eventClick: function (info) {
+                info.jsEvent.preventDefault();
                 calendarl.changeView("listDay", info.event.startStr);
                 calendarl.gotoDate(info.event.startStr);
             },
@@ -314,11 +315,9 @@
                                 }
                             });
                             successCallback(events);
+                            stopload();
                         },
                         error: function () {
-                            alert("Failed!");
-                        },
-                        complete: function () {
                             stopload();
                         }
                     });
@@ -349,56 +348,48 @@
                 });
             },
             eventClick: function (info) {
+                info.jsEvent.preventDefault();
                 startload();
-                $.ajax({
-                    url: "/D1ServicesIN",
-                    method: "POST",
-                    data: {
-                        service: "get",
-                        object: "soaction",
-                        id: info.event.id,
-                    },
-                    success: function (d) {
-                        data = jQuery.parseJSON(JSON.stringify(d.data[0]));
-                        $("[id='fsoactionseries']").addClass( "locked" );
-                        $("[id='fsoactionseries']").css( "background-color", "" );
-                        $("[id='fsoaction']").val(data.SOACTION);
-                        $("[id='fsoactionseries']").val(data.SERIESNAME);
-                        $("[id='fsoactionseries']").prop('data-id',data.SERIES);
-                        $("[id='fsoactioncode']").val(data.SOACTIONCODE);
-                        $("[id='ffromdate']").val(data.FROMDATE.replace(" ", "T"));
-                        $("[id='ffinaldate']").val(info.event.endStr.replace(" ", "T").slice(0, 16));
-                        $("[id='ftrdr']").val(data.TRDR);
-                        $("[id='fcode']").val(data.CODE);
-                        $("[id='fname']").val(data.NAME);
-                        $("[id='faddress']").val(data.ADDRESS);
-                        $("[id='fphone01']").val(data.PHONE01);
-                        $("[id='fremarks']").val(data.REMARKS);
-                        $("[id='fcomments']").val(data.COMMENTS);
-                        $("#editm1").css("display", "block");
-                        $("#savem1").prop("disabled", true);
-                        stopload();
-                        $("#screenform .modal-content .modal-body .tab-content")
-                            .find("*")
-                            .not('#mapp')
-                            .attr("disabled", true);
-                        $("#screenform").modal("toggle");
-                    },
-                });
-                  //if (confirm("Are you sure you want to remove?")){
-                  //    var id = info.event.id;
-                  //    startload();
-                  //    $.ajax({
-                  //        url:"calendar/delete",
-                  //        type:"POST",
-                  //        data:{id:id},
-                  //        success : function(){
-                  //            calendar.refetchEvents();
-                  //            calendarl.refetchEvents();
-                  //        },
-                  //        complete : function(){startload();}
-                  //    })
-                  //}
+                if (info.event.url==''){
+                    $.ajax({
+                        url: "/D1ServicesIN",
+                        method: "POST",
+                        data: {
+                            service: "get",
+                            object: "soaction",
+                            id: info.event.id,
+                        },
+                        success: function (d) {
+                            data = jQuery.parseJSON(JSON.stringify(d.data[0]));
+                            $("[id='fsoactionseries']").addClass( "locked" );
+                            $("[id='fsoactionseries']").css( "background-color", "" );
+                            $("[id='fsoaction']").val(data.SOACTION);
+                            $("[id='fsoactionseries']").val(data.SERIESNAME);
+                            $("[id='fsoactionseries']").prop('data-id',data.SERIES);
+                            $("[id='fsoactioncode']").val(data.SOACTIONCODE);
+                            $("[id='ffromdate']").val(data.FROMDATE.replace(" ", "T"));
+                            $("[id='ffinaldate']").val(info.event.endStr.replace(" ", "T").slice(0, 16));
+                            $("[id='ftrdr']").val(data.TRDR);
+                            $("[id='fcode']").val(data.CODE);
+                            $("[id='fname']").val(data.NAME);
+                            $("[id='faddress']").val(data.ADDRESS);
+                            $("[id='fphone01']").val(data.PHONE01);
+                            $("[id='fremarks']").val(data.REMARKS);
+                            $("[id='fcomments']").val(data.COMMENTS);
+                            $("#editm1").css("display", "block");
+                            $("#savem1").prop("disabled", true);
+                            stopload();
+                            $("#screenform .modal-content .modal-body .tab-content")
+                                .find("*")
+                                .not('#mapp')
+                                .attr("disabled", true);
+                            $("#screenform").modal("toggle");
+                        },
+                    });
+                }else{
+                    stopload();
+                    window.location.href = info.event.url;
+                }
             },
         });
         calendar.render();

@@ -51,7 +51,6 @@ function companies() {
                     $("#btlogin").css("display", "block");
                     $("#btnext").hide();
                     stopload()
-                    $("#btlogin").focus();
                 }
             },
         });
@@ -60,22 +59,59 @@ function companies() {
 
 $(document).ready(function () {
     stopload()
-
-    $( "form" ).submit(function() {
-        startload()
+    
+    $('input').on('keydown',function(e){
+        if(e.keyCode == 13) {
+            e.preventDefault();
+            if ($(this).attr("id")=='platform'){
+                $('#cname').focus();
+            }else if ($(this).attr("id")=='cname'){
+                $('#uname').focus();
+            }else if ($(this).attr("id")=='uname'){
+                $('#password').focus();
+            }else if ($(this).attr("id")=='password'){
+                if ($('#bbtlogin').is(":visible")){
+                     $('#bbtlogin').click();
+                }else{
+                    $('#bbtnext').click();
+                }
+            }
+        }
     });
     
-    if ($('#errorDisplay').text()!='None'){
-        var rect = document
-            .getElementById("btnext")
-            .getBoundingClientRect();
-        $("#error").show();
-        $("#error").css({
-            'opacity': 1,
-            'left': rect.left,
-            "top": rect.bottom
-        });
-    }
+    $('#bbtlogin').on('click',function(){
+        startload();
+        $("#error").css('opacity',0);
+        $("#error").hide();
+        $.ajax({
+            url: "login",
+            type: "POST",
+            data: { 
+                companyname: $("#cname").val(),
+                comcode: $("#comcode").val(),
+                username: $("#uname").val(),
+                password: $("#password").val(),
+                platform : $("#platform").val(),
+            },
+            success: function (data) {
+                if (data['success'] == true) {
+                    document.location.href="/"
+                }else{
+                    var rect = document
+                        .getElementById("bbtlogin")
+                        .getBoundingClientRect();
+                    stopload();
+                    $("#errorDisplay").text(data['error']);
+                    $("#error").show();
+                    $("#error").css({
+                        'opacity': 1,
+                        'left': rect.left,
+                        "top": rect.bottom
+                    });
+                }
+            }
+        });  
+    });
 });
 
 function checkit() {

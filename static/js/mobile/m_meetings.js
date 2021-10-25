@@ -9,7 +9,7 @@ $(document).ready(function () {
             object: "calls",
         },
         success: function (data) {
-            window.calls = $("#calls").DataTable({
+            window.meets = $("#meets").DataTable({
                 info: false,
                 deferRender: true,
                 scrollY: "75vh",
@@ -30,17 +30,17 @@ $(document).ready(function () {
                     { className: "hide_column", targets: [4] }],
             });
             stopload();
-            $("#callsdiv").css("display", "block");
-            calls.columns.adjust().draw();
+            $("#meetsdiv").css("display", "block");
+            meets.columns.adjust().draw();
         },
     });
     
     /*When Single click a calls row*/
-    $("#calls").on("click", "tr", function () {
+    $("#meets").on("click", "tr", function () {
         startload();
-        calls.rows().deselect();
-        calls.rows($(this)).select();
-        var d = calls.rows({ selected: true }).data().toArray();
+        meets.rows().deselect();
+        meets.rows($(this)).select();
+        var d = meets.rows({ selected: true }).data().toArray();
         $.ajax({
             url: "/D1ServicesIN",
             method: "POST",
@@ -70,7 +70,7 @@ $(document).ready(function () {
                 $("[id='fphone01']").val(data.PHONE01);
                 $("[id='fremarks']").val(data.REMARKS);
                 $("[id='fdone']").prop('checked',false);
-                $("#screenform .modal-content .modal-body .toolbody")
+                $("#screenform .modal-content .modal-body .tab-content")
                     .find("*")
                     .attr("disabled", true);
                 $("#editm1").css("display", "block");
@@ -98,7 +98,7 @@ $(document).ready(function () {
         if (check) {
             return false;
         }else{
-            startload();
+            $("[id=loader]").css("display", "block");
             if ($("#fsoaction").val() == "") {
                 $.ajax({
                     url: "calls/insert",
@@ -114,7 +114,7 @@ $(document).ready(function () {
                     },
                     success: function (d) {
                         var data = jQuery.parseJSON(d);
-                        stopload();
+                        $("[id=loader]").css("display", "none");
                         if (data['success']) {
                             refreshthecalls();
                             $("#screenform").modal("toggle");
@@ -148,7 +148,7 @@ $(document).ready(function () {
                     },
                     success: function (d) {
                         var data = jQuery.parseJSON(d);
-                        stopload();
+                        $("[id=loader]").css("display", "none");
                         if (data["success"]) {
                             refreshthecalls();
                             $("#screenform").modal("toggle");
@@ -361,7 +361,7 @@ $(document).ready(function () {
     
     /*When Search Trdr is pressed*/
     $("#ftrdrnamesearch").on("click", function () {
-        startload();
+        $("[id=loader]").css("display", "block");
         if($("#ftrdrname").val().length < 1){
             $.ajax({
                 url: "/D1ServicesIN",
@@ -393,7 +393,7 @@ $(document).ready(function () {
                             .parent()
                             .css({ "padding-top": rect.bottom - rect.top })
                     }
-                    stopload();
+                    $("[id=loader]").css("display", "none");
                     $("#Selectortrdrname").css({
                         'display': "block",
                         'left': rect.left,
@@ -437,7 +437,7 @@ $(document).ready(function () {
                             .parent()
                             .css({ "padding-top": rect.bottom - rect.top });
                     }
-                    stopload();
+                    $("[id=loader]").css("display", "none");
                     $("#Selectortrdrname").css({
                         'display': "block",
                         'left': rect.left,
@@ -453,7 +453,7 @@ $(document).ready(function () {
     
     /*When Search Prsn is pressed*/
     $("#fprsnamesearch").on("click", function () {
-        startload();
+        $("[id=loader]").css("display", "block");
         $.ajax({
             url: "/D1ServicesIN",
             method: "POST",
@@ -488,7 +488,7 @@ $(document).ready(function () {
                         .parent()
                         .css({ "padding-top": rect.bottom - rect.top })
                 }
-                stopload();
+                $("[id=loader]").css("display", "none");
                 $("#Selectorprsnname").css({
                     'display': "block",
                     'left': rect.left,
@@ -539,7 +539,7 @@ $(document).ready(function () {
 });
 
 function refreshthecalls() {
-    $startload();
+    $("#loader").css("display", "block");
 
     $.ajax({
         url: "/D1ServicesIN",
@@ -573,7 +573,7 @@ function refreshthecalls() {
                     { className: "hide_column", targets: [4] }],
             });
             calls.columns.adjust().draw();
-            stopload();
+            $("#loader").css("display", "none");
         },
     });
 }
@@ -581,7 +581,7 @@ function refreshthecalls() {
 function gotoinfo() {
     
     if ($('#fsoaction').val()!=''){
-        startload();
+        $("[id=loader]").css("display", "block");
         $.ajax({
             url: "/D1ServicesIN",
             method: "POST",
@@ -609,7 +609,7 @@ function gotoinfo() {
                 }else{
                     $('#infoprsnpanel').show();
                 }
-                stopload();
+                $("[id=loader]").css("display", "none");
                 $("#callinfoform").modal("toggle");
             },
         });
@@ -618,4 +618,14 @@ function gotoinfo() {
 
 function makephonecall(id,phone){
     id.href = "tel:"+phone.value;
+}
+
+function startload(){
+    $(".loaderr").css("display", "block");
+    $("body").append('<div id="overlayyy"</div>');
+}
+
+function stopload(){
+    $(".loaderr").css("display", "none");
+    $("#overlayyy").remove();
 }
