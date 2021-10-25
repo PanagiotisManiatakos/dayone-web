@@ -90,4 +90,39 @@ $(document).ready(function () {
         $("#newpasswchange").val("");
         $("#confirmpasswchange").val("");
     });
+    
+    $('#settingsclear').on('click',function(){
+        if (confirm('Με την διαγραφή της cache θα αποσυνδεθείτε απο την σελίδα.\nΕπιθυμείτε να συνεχίσετε;')) {
+            startload();
+            const clearCookies = document.cookie.split(';').forEach(
+                cookie => document.cookie = cookie.replace(/^ +/,'').replace(
+                    /=.*/,`=;expires=${new Date(0).toUTCString()};path=/`
+                )
+            );
+            $.ajax({
+                url: '/clearcache',
+                method: 'POST',
+                success: function (data){
+                    if (data['success']){
+                        stopload();
+                        window.location.href = '/logout';
+                    }else{
+                        stopload();
+                        alert('Κάτι πήγε στραβά.\nΠροσπαθήστε ξανά.')
+                    }
+                }
+            })
+        }
+    })
 });
+
+function startload(){
+    $(".loaderr").css("display", "block");
+    $("body").append('<div id="overlayyy"</div>');
+}
+
+function stopload(){
+    $(".loaderr").css("display", "none");
+    $("#overlayyy").remove();
+}
+

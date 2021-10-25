@@ -1,6 +1,6 @@
 $(document).ready(function () {
     /*Initialize table*/
-    $("#loader").css("display", "block");
+    startload();
     $.ajax({
         url: "/D1ServicesIN",
         method: "POST",
@@ -29,7 +29,7 @@ $(document).ready(function () {
                 columnDefs: [
                     { className: "hide_column", targets: [4] }],
             });
-            $("#loader").css("display", "none");
+            stopload();
             $("#callsdiv").css("display", "block");
             calls.columns.adjust().draw();
         },
@@ -37,7 +37,7 @@ $(document).ready(function () {
     
     /*When Single click a calls row*/
     $("#calls").on("click", "tr", function () {
-        $("#loader").css("display", "block");
+        startload();
         calls.rows().deselect();
         calls.rows($(this)).select();
         var d = calls.rows({ selected: true }).data().toArray();
@@ -75,7 +75,7 @@ $(document).ready(function () {
                     .attr("disabled", true);
                 $("#editm1").css("display", "block");
                 $("#savem1").prop("disabled", true);
-                $("#loader").css("display", "none");
+                stopload();
                 $("#screenform").modal("toggle");
             }
         });
@@ -98,7 +98,7 @@ $(document).ready(function () {
         if (check) {
             return false;
         }else{
-            $("[id=loader]").css("display", "block");
+            startload();
             if ($("#fsoaction").val() == "") {
                 $.ajax({
                     url: "calls/insert",
@@ -114,7 +114,7 @@ $(document).ready(function () {
                     },
                     success: function (d) {
                         var data = jQuery.parseJSON(d);
-                        $("[id=loader]").css("display", "none");
+                        stopload();
                         if (data['success']) {
                             refreshthecalls();
                             $("#screenform").modal("toggle");
@@ -148,7 +148,7 @@ $(document).ready(function () {
                     },
                     success: function (d) {
                         var data = jQuery.parseJSON(d);
-                        $("[id=loader]").css("display", "none");
+                        stopload();
                         if (data["success"]) {
                             refreshthecalls();
                             $("#screenform").modal("toggle");
@@ -361,7 +361,7 @@ $(document).ready(function () {
     
     /*When Search Trdr is pressed*/
     $("#ftrdrnamesearch").on("click", function () {
-        $("[id=loader]").css("display", "block");
+        startload();
         if($("#ftrdrname").val().length < 1){
             $.ajax({
                 url: "/D1ServicesIN",
@@ -393,7 +393,7 @@ $(document).ready(function () {
                             .parent()
                             .css({ "padding-top": rect.bottom - rect.top })
                     }
-                    $("[id=loader]").css("display", "none");
+                    stopload();
                     $("#Selectortrdrname").css({
                         'display': "block",
                         'left': rect.left,
@@ -437,7 +437,7 @@ $(document).ready(function () {
                             .parent()
                             .css({ "padding-top": rect.bottom - rect.top });
                     }
-                    $("[id=loader]").css("display", "none");
+                    stopload();
                     $("#Selectortrdrname").css({
                         'display': "block",
                         'left': rect.left,
@@ -453,7 +453,7 @@ $(document).ready(function () {
     
     /*When Search Prsn is pressed*/
     $("#fprsnamesearch").on("click", function () {
-        $("[id=loader]").css("display", "block");
+        startload();
         $.ajax({
             url: "/D1ServicesIN",
             method: "POST",
@@ -488,7 +488,7 @@ $(document).ready(function () {
                         .parent()
                         .css({ "padding-top": rect.bottom - rect.top })
                 }
-                $("[id=loader]").css("display", "none");
+                stopload();
                 $("#Selectorprsnname").css({
                     'display': "block",
                     'left': rect.left,
@@ -539,7 +539,7 @@ $(document).ready(function () {
 });
 
 function refreshthecalls() {
-    $("#loader").css("display", "block");
+    $startload();
 
     $.ajax({
         url: "/D1ServicesIN",
@@ -573,7 +573,7 @@ function refreshthecalls() {
                     { className: "hide_column", targets: [4] }],
             });
             calls.columns.adjust().draw();
-            $("#loader").css("display", "none");
+            stopload();
         },
     });
 }
@@ -581,7 +581,7 @@ function refreshthecalls() {
 function gotoinfo() {
     
     if ($('#fsoaction').val()!=''){
-        $("[id=loader]").css("display", "block");
+        startload();
         $.ajax({
             url: "/D1ServicesIN",
             method: "POST",
@@ -609,7 +609,7 @@ function gotoinfo() {
                 }else{
                     $('#infoprsnpanel').show();
                 }
-                $("[id=loader]").css("display", "none");
+                stopload();
                 $("#callinfoform").modal("toggle");
             },
         });
