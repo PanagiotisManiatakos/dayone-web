@@ -66,7 +66,7 @@
             <div style="display:none;">
                 <div class="d-flex justify-content-center p-2" id="divIcons">
                     <a href="/index" class="col-3 text-reset"> <i class="bi bi-house-fill"></i> </a>
-                    <a class="col-3 text-reset"> <i class="bi bi-gear-fill"></i> </a>
+                    <a class="col-3 text-reset"> <i class="bi bi-gear-fill" id="settingsclear"></i> </a>
                     <a class="col-3 text-reset"> <i class="bi bi-person-fill" onclick="user()"></i> </a>
                     <a href="/logout" class="col-3 text-reset"> <i class="bi bi-door-closed-fill"></i> </a>
                 </div>
@@ -247,10 +247,10 @@
                     <div class="modal-body">
                         <div class="container">
                             <div class="form-group">
-                                <h4>Το συμβόλαιο σας λήγει στις: <p><b id="expdate">{{ (session['blckdate']).date() }}</b></p></h4>
+                                <h4>Το συμβόλαιο σας λήγει στις: <p><b id="expdate1">{{ (session['blckdate']).date() }}</b></p></h4>
                             </div>
                             <div class="form-group">
-                                <h5><p>Επικοινωνήστε στο: 216 500 5060 για ανανέωση</p></h5>
+                                <h5><label id="experror1" style="white-space: pre-line;"></label></h5>
                             </div>
                         </div>
                     </div>
@@ -265,57 +265,15 @@
             </div>
         </div>
         <script>
-            const dateObj = new Date('{{ session['blckdate'] }}');
-            const month = String(dateObj.getMonth() + 1).padStart(2, '0') ;
-            const day = String(dateObj.getDate()).padStart(2, '0');
-            const year = dateObj.getFullYear();
-            const output = day  + '/'+ month  + '/' + year;
+            const dateObj1 = new Date('{{ session['blckdate'].date() }}');
+            const month1 = String(dateObj1.getMonth() + 1).padStart(2, '0') ;
+            const day1 = String(dateObj1.getDate()).padStart(2, '0');
+            const year1 = dateObj1.getFullYear();
+            const output1 = day1  + '/'+ month1  + '/' + year1;
         
-            document.querySelector('#expdate').textContent = output;
-        
+            $("#expdate1").text(output1);
             $('#expiremodal').modal('show');
-        </script>
-    {% elif datedif['datedif']<0 %}
-        <!--ExpireMOdal-->
-        <div class="modal fade show" id="expiremodal" role="dialog">
-            <div class="modal-dialog modal-md modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">ΠΡΟΣΟΧΗ</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span>&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="container">
-                            <div class="form-group">
-                                <h4>Το συμβόλαιο σας έληξε στις: <p><b id="expdate">{{ (session['blckdate']).date() }}</b></p></h4>
-                            </div>
-                            <div class="form-group">
-                                <h5><p>Επικοινωνήστε στο: 216 500 5060 για ανανέωση</p></h5>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <div class="container">
-                            <div class="d-flex justify-content-center">
-                                <button class="btn btn-primary" data-dismiss="modal" aria-label="Close">Το κατάλαβα</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <script>
-            const dateObj = new Date('{{ session['blckdate'] }}');
-            const month = String(dateObj.getMonth() + 1).padStart(2, '0') ;
-            const day = String(dateObj.getDate()).padStart(2, '0');
-            const year = dateObj.getFullYear();
-            const output = day  + '/'+ month  + '/' + year;
-        
-            document.querySelector('#expdate').textContent = output;
-        
-            $('#expiremodal').modal('show');
+            $("#experror1").append('Καλέστε στο: <a href="tel:2165005060">216 500 5060</a> \n για ανανέωση συμβολαίου.');
         </script>
     {%endif%}
     <!--USERMODAL-->
@@ -410,13 +368,13 @@
         </div>
     </div>
     <script>
-        const dateObj = new Date('{{ session['blckdate'] }}');
+        const dateObj = new Date('{{ session['blckdate'].date() }}');
         const month = String(dateObj.getMonth() + 1).padStart(2, '0') ;
         const day = String(dateObj.getDate()).padStart(2, '0');
         const year = dateObj.getFullYear();
         const output = day  + '/'+ month  + '/' + year;
     
-        document.querySelector('#expdate').textContent = output;
+        $("#expdate").text(output);
     </script>
     <!--SuccessModal-->
     <div class="modal fade" id="successmodal" role="dialog">
