@@ -2,7 +2,7 @@ import json
 import requests
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_mobility import Mobility
-from datetime import timedelta, date, datetime
+from datetime import date, datetime
 from bs4 import BeautifulSoup
 
 app = Flask(__name__)
@@ -60,22 +60,26 @@ def login():
 			session['users'] = users
 
 			if diff >= 0:
-				vcheck = check_if_logged_in(getcred['data'][0]['sn'], username)  	# Κανω κλήση για να δω εαν είναι συνδεδεμενος
-				print(vcheck)
-				if vcheck['success']:  												# Εάν είναι συνδεδεμένος
-					logout_from_log(vcheck['data'][0]['CCCLOGINLOG'])  				# Τον αφαιρώ
+				vcheck = check_if_logged_in(getcred['data'][0]['sn'], username)  # Κανω κλήση για να δω εαν είναι συνδεδεμενος
+				if vcheck['success']:  # Εάν είναι συνδεδεμένος
+					logout_from_log(vcheck['data'][0]['CCCLOGINLOG'])  # Τον αφαιρώ
 				vActives = get_actives(getcred['data'][0]['sn'])['data'][0]['ACTIVES']
-				print('USERS:'+users+' ACTIVES:'+vActives)
-				if users > vActives:												# Αν οι users είναι περισότεροι απο τους active
-					login_to_log()  												# Τον προσθέτω
-				else:																# Αλλιώς
+				if users > vActives:  # Αν οι users είναι περισότεροι απο τους active
+					login_to_log()  # Τον προσθέτω
+				else:  # Αλλιώς
 					session.clear()
-					error = 'Υπέρβαση χρηστών'										# Επιστρέφω σφάλμα
-					return render_template('login.html', error=error)				# Υπέρβασης χρηστών
-				return redirect(url_for('index'))
+					error = 'Υπέρβαση χρηστών'  # Επιστρέφω σφάλμα
+					return {'success': False, 'error': error}
+				return {'success': True}
 			else:
 				session['expired'] = True
-				return redirect(url_for('renew'))
+				return {
+					'success': False,
+					'error':
+						'Η άδεια χρήσης του λογισμικού σας έληξε.\n'
+						'Παρακαλώ καλέστε στο: 216 5005060 για ανανέωση.\n'
+						'Λήξη: ' + str(blckdate.date())
+				}
 		else:
 			error = 'Try again '
 
@@ -108,7 +112,8 @@ def companies():
 @app.route('/logout')
 def logout():
 	if 'id' in session:
-		logout_from_log(session['loginid'])
+		if 'loginid' in session:
+			logout_from_log(session.get('loginid'))
 		session.clear()
 	return redirect(url_for('login'))
 
@@ -143,6 +148,20 @@ def renew():
 		return redirect(url_for('logout'))
 
 
+@app.route('/clearcache', methods=['GET', 'POST'])
+def clearcache():
+	if 'id' in session:
+		if request.method == "POST":
+			clear = requests.request('GET', session['url'] + '?refresh')
+			if clear.status_code == 200:
+				session.clear()
+				return {'success': True}
+			else:
+				return {'success': False}
+	else:
+		return redirect(url_for('logout'))
+
+
 @app.route('/changepassword', methods=['GET', 'POST'])
 def changepassword():
 	if 'id' in session and 'expired' not in session:
@@ -162,8 +181,10 @@ def changepassword():
 @app.route('/meetings')
 def meetings():
 	if 'id' in session and 'expired' not in session:
-		return render_template("desktop/meetings.html")
-
+		if request.MOBILE:
+			return render_template("mobile/m_meetings.html", datedif={'datedif': diff})
+		else:
+			return render_template("desktop/meetings.html", datedif={'datedif': diff})
 	else:
 		return redirect(url_for('logout'))
 
@@ -731,8 +752,133 @@ def d1services():
 				key = data.get('key')
 				response = s1_get_call_out(url, clientID, company, obj)
 				return response
-			elif service.lower == "set":
-				return 1
+			elif service.lower() == "set_order":
+				clientID = data.get('clientid')
+				dataset = dict((k.lower(), v) for k, v in data.get('data').items())
+				saldoc = dict((k.lower(), v) for k, v in dataset.get('saldoc').items())
+				trdr = dict((k.lower(), v) for k, v in saldoc.get('trdr').items())
+				itelines = dataset.get('itelines')
+				headers = {'Content-Type': 'application/json'}
+				# Αν δεν έχει συμπληρωμένο trdr
+				if trdr.get('trdr') == '':
+					# Χτίζω την κλήση για να δω αν υπαρχει ο trdr συμφωνα με το τηλεφωνο
+					payload = json.dumps(
+						{
+							"clientID": clientID,
+							"company": company,
+							"phone": trdr.get('phone01')
+						})
+					trdrexist = requests.request('POST', url + '/js/connector.ws_Mparouti/getTrdr', headers=headers, data=payload)
+					if trdrexist.json().get('success'):
+						trdr['trdr'] = trdrexist.json().get('data')[0].get('TRDR')
+				payload = json.dumps(
+					{
+						"service": "setData",
+						"clientID": clientID,
+						"appId": "2001",
+						"OBJECT": "CUSTOMER",
+						"KEY": trdr['trdr'],
+						"data": {
+							"CUSTOMER": [
+								{
+									"CODE": trdr.get('code'),
+									"NAME": trdr.get('name'),
+									"EMAIL": trdr.get('email'),
+									"PHONE01": trdr.get('phone01'),
+								}
+							]
+						}
+					})
+				setTrdr = requests.request('POST', url, headers=headers, data=payload)
+				if setTrdr.json().get('success'):
+					saldoc['trdr'] = setTrdr.json().get('id')
+				else:
+					errorTrdr = setTrdr.json()
+					errorTrdr['object'] = 'customer'
+					return errorTrdr
+				y = 0
+				mt = [dict() for number in itelines]
+				# Λουπα για κάθε iteline
+				for i in itelines:
+					item = dict((k.lower(), v) for k, v in i.items())
+					# Τα στοιχεία του mtrl της γραμμης
+					mtrl = dict((k.lower(), v) for k, v in item.get('mtrl').items())
+					# Αν δεν έχει συμπληρωμένο mtrl τότε κάνω κλήση για να δω αν υπάρχει
+					if mtrl.get('mtrl') == '':
+						# Χτίζω την κλήση
+						payload = json.dumps(
+							{
+								"clientID": clientID,
+								"company": company,
+								"name": mtrl.get('name')
+							})
+						# Κάνω κλήση για να δω αν υπάρχει το συγκεκριμένο mtrl με αυτό το όνομα
+						mtrlexist = requests.request('POST', url + '/js/connector.ws_Mparouti/getMtrl', headers=headers, data=payload)
+						# Αν υπάρχει τοτε ενημερώνω το mtrl
+						if mtrlexist.json().get('success'):
+							mtrl['mtrl'] = mtrlexist.json().get('data')[0].get('MTRL')
+					# Χτίζω την κλήση για UPDATE ή INSERT
+					payload = json.dumps(
+						{
+							"service": "setData",
+							"clientID": clientID,
+							"appId": "2001",
+							"OBJECT": "ITEM",
+							"KEY": mtrl.get('mtrl'),
+							"data": {
+								"ITEM": [
+									{
+										"CODE": mtrl.get('code'),
+										"NAME": mtrl.get('name'),
+										"VAT": mtrl.get('vat'),
+										"PRICER": mtrl.get('pricer'),
+										"PRICEW": mtrl.get('pricew'),
+										"MTRUNIT1": mtrl.get('mtrunit'),
+										"MTRUNIT2": mtrl.get('mtrunit'),
+										"MTRUNIT3": mtrl.get('mtrunit'),
+										"MTRUNIT4": mtrl.get('mtrunit'),
+										"MU21": 1,
+										"MU31": 1,
+										"MU41": 1
+									}
+								]
+							}
+						})
+					setMtrl = requests.request('POST', url, headers=headers, data=payload)
+					if setMtrl.json().get('success'):
+						i['MTRL'] = setMtrl.json().get('id')
+						mt[y]['itemID'] = setMtrl.json().get('id')
+						mt[y]['isbn'] = mtrl.get('code')
+					else:
+						errorMtrl = setMtrl.json()
+						errorMtrl['object'] = 'item'
+						errorMtrl['isbn'] = mtrl.get('code')
+						return errorMtrl
+					y = y + 1
+				payload = json.dumps(
+					{
+						"service": "setData",
+						"clientID": clientID,
+						"appId": "2001",
+						"OBJECT": "SALDOC",
+						"KEY": "",
+						"data": {
+							"SALDOC": [saldoc],
+							"ITELINES": dataset.get('itelines'),
+							"MTRDOC": dataset.get('mtrdoc')
+						}
+					})
+				setOrder = requests.request('POST', url, headers=headers, data=payload)
+				if setOrder.json().get('success'):
+					setOrderMsg = setOrder.json()
+
+					setOrderMsg['data'] = {
+						'customerID': saldoc.get('trdr'),
+						'items': mt
+					}
+					return setOrderMsg
+				else:
+					return setOrder.json()
 		else:
 			return {'success': False, 'error': 'false erp'}
 
@@ -867,8 +1013,8 @@ def s1get_Credentials1(url, password, username):
 	try:
 		response = requests.request('POST', url + '/js/connector.connector/getCredentials1', data=payload)
 		return response
-	except:
-		return {'success': False, 'error': 'something went wrong'}
+	except requests.exceptions.RequestException as e:
+		return {'success': False, 'error': e}
 
 
 def s1get_Credentials(url, password, username, company):
