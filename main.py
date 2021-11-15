@@ -4,6 +4,8 @@ from flask import Flask, render_template, request, redirect, url_for, session
 from flask_mobility import Mobility
 from datetime import date, datetime
 from bs4 import BeautifulSoup
+import cryptocode
+
 
 app = Flask(__name__)
 Mobility(app)
@@ -104,7 +106,6 @@ def companies():
 				return getCompanies(url, data['cccwebaccounts']).json()
 			else:
 				return s1get_Credentials1(url, password, username).json()
-
 		else:
 			return {'success': False, 'error': 'domain'}
 
@@ -121,7 +122,10 @@ def logout():
 @app.route("/")
 def reindex():
 	if 'id' in session and 'expired' not in session:
-		return redirect(url_for('index'))
+		if request.MOBILE:
+			return render_template("mobile/m_home.html")
+		else:
+			return render_template("desktop/home.html")
 	else:
 		return redirect(url_for('logout'))
 
@@ -130,9 +134,9 @@ def reindex():
 def index():
 	if 'id' in session and 'expired' not in session:
 		if request.MOBILE:
-			return render_template("mobile/m_home.html", datedif={'datedif': diff})
+			return render_template("mobile/m_home.html")
 		else:
-			return render_template("desktop/home.html", datedif={'datedif': diff})
+			return render_template("desktop/home.html")
 	else:
 		return redirect(url_for('logout'))
 
@@ -141,9 +145,9 @@ def index():
 def renew():
 	if 'id' in session and 'expired' in session:
 		if request.MOBILE:
-			return render_template("mobile/m_renew.html", datedif={'datedif': diff})
+			return render_template("mobile/m_renew.html")
 		else:
-			return render_template("desktop/home.html", datedif={'datedif': diff})
+			return render_template("desktop/home.html")
 	else:
 		return redirect(url_for('logout'))
 
@@ -182,9 +186,9 @@ def changepassword():
 def meetings():
 	if 'id' in session and 'expired' not in session:
 		if request.MOBILE:
-			return render_template("mobile/m_meetings.html", datedif={'datedif': diff})
+			return render_template("mobile/m_meetings.html")
 		else:
-			return render_template("desktop/meetings.html", datedif={'datedif': diff})
+			return render_template("desktop/meetings.html")
 	else:
 		return redirect(url_for('logout'))
 
@@ -241,10 +245,10 @@ def updtMeet():
 def customers():
 	if 'id' in session and 'expired' not in session:
 		if request.MOBILE:
-			return render_template("mobile/m_customerstest.html", datedif={'datedif': diff})
+			return render_template("mobile/m_customerstest.html")
 
 		else:
-			return render_template("desktop/customerstest.html", datedif={'datedif': diff})
+			return render_template("desktop/customerstest.html")
 
 	else:
 
@@ -391,11 +395,12 @@ def getKartela():
 @app.route('/parousiologio')
 def parousiologio():
 	if 'id' in session and 'expired' not in session:
-		d1 = {'qrcode': session['url']}
+		token = cryptocode.encrypt(session['url'].lower(), "wow")
+		d1 = {'qrcode': token}
 		if request.MOBILE:
-			return render_template("mobile/m_parousiologio.html", data=d1, datedif={'datedif': diff})
+			return render_template("mobile/m_parousiologio.html", data=d1)
 		else:
-			return render_template("desktop/parousiologio.html", data=d1, datedif={'datedif': diff})
+			return render_template("desktop/parousiologio.html", data=d1)
 
 	else:
 		return redirect(url_for('logout'))
@@ -406,14 +411,18 @@ def insertParousiologio():
 	if 'id' in session and 'expired' not in session:
 		if request.method == "POST":
 			message = request.form['qrcode']
-			if message.lower() == session['url'].lower():
+			latitude = request.form['latitude']
+			longitude = request.form['longitude']
+			mm = cryptocode.decrypt(message, "wow")
+			if mm == session['url'].lower():
 				datee = request.form['date']
-				thecheck = s1_CheckForChekIn(
-					session['url'], session['prsn'], datee, session['companycode'])
+				thecheck = s1_CheckForChekIn(session['url'], session['prsn'], datee, session['companycode'])
 				if thecheck.json()['success']:
 					soaction = thecheck.json()['data'][0]['SOACTION']
 					data = {"SOPRSN": [{
-						"finaldate": datee
+						"finaldate": datee,
+						'ccclatitudecheckout': latitude,
+						'ccclongitudecheckout': longitude,
 					}]
 					}
 					setData(session['url'], 'SOPRSN', session['id'], soaction, data)
@@ -425,10 +434,13 @@ def insertParousiologio():
 								"trndate": datee,
 								"fromdate": datee,
 								'series': 9889,
-								'actprsn': session['prsn']
+								'ccclatitudecheckin': latitude,
+								'ccclongitudecheckin': longitude,
+								'actprsn': session['prsn'],
 							}
 						]
 					}
+					print(data)
 					setData(session['url'], 'SOPRSN', session['id'], "", data)
 					return {'success': True, 'status': 'insert'}
 			else:
@@ -441,9 +453,9 @@ def insertParousiologio():
 def calls():
 	if 'id' in session and 'expired' not in session:
 		if request.MOBILE:
-			return render_template("mobile/m_calls.html", datedif={'datedif': diff})
+			return render_template("mobile/m_calls.html")
 		else:
-			return render_template("desktop/m_calls.html", datedif={'datedif': diff})
+			return render_template("desktop/m_calls.html")
 	else:
 		return redirect(url_for('logout'))
 
@@ -541,9 +553,9 @@ def calendar():
 		data = json.dumps({'clientID': session['id'], 'username': session['username']})
 		call = requests.request('POST', session['url'] + '/js/connector.connector/getCalendarInfo', headers=headers, data=data)
 		if request.MOBILE:
-			return render_template("mobile/m_calendar.html", cdata=call.json(), datedif={'datedif': diff})
+			return render_template("mobile/m_calendar.html", cdata=call.json())
 		else:
-			return render_template("desktop/calendar.html", cdata=call.json(), datedif={'datedif': diff})
+			return render_template("desktop/calendar.html", cdata=call.json())
 	else:
 		return redirect(url_for('logout'))
 
@@ -688,13 +700,11 @@ def D1ServicesIN():
 			'trdr': request.form['trdr'],
 			'company': session['companycode']
 		}
-	elif obj == 'soaction':
+	elif obj == 'soaction' or obj == 'soactionfirst':
 		questions = {'soaction': request.form['id']}
 	elif obj == 'soactionseries':
 		questions = {'company': session['companycode']}
-	elif obj == 'calendar':
-		questions = ''
-	elif obj == 'calls':
+	elif obj == 'calendar' or obj == 'calls' or obj == 'meetings':
 		questions = ''
 	elif obj == 'callinfo':
 		questions = {'soaction': request.form['soaction']}
@@ -742,8 +752,7 @@ def d1services():
 				password = data.get('password')
 				clientID = s1login_Out(url, user, password)
 				if clientID['success']:
-					auth = s1authenticate_Out(url, clientID['clientID'], company)
-					return auth
+					return s1authenticate_Out(url, clientID['clientID'], company)
 				else:
 					return clientID
 			elif service.lower() == "get":
@@ -785,6 +794,7 @@ def d1services():
 									"NAME": trdr.get('name'),
 									"EMAIL": trdr.get('email'),
 									"PHONE01": trdr.get('phone01'),
+									"COMPANY": company
 								}
 							]
 						}
@@ -810,7 +820,7 @@ def d1services():
 							{
 								"clientID": clientID,
 								"company": company,
-								"name": mtrl.get('name')
+								"code": mtrl.get('code')
 							})
 						# Κάνω κλήση για να δω αν υπάρχει το συγκεκριμένο mtrl με αυτό το όνομα
 						mtrlexist = requests.request('POST', url + '/js/connector.ws_Mparouti/getMtrl', headers=headers, data=payload)
@@ -839,7 +849,12 @@ def d1services():
 										"MTRUNIT4": mtrl.get('mtrunit'),
 										"MU21": 1,
 										"MU31": 1,
-										"MU41": 1
+										"MU41": 1,
+										"COMPANY": company
+									}
+								], "ITEEXTRA": [
+									{
+										"VARCHAR01": mtrl.get('publisher')
 									}
 								]
 							}
@@ -1076,28 +1091,6 @@ LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ'
 LETTERS = LETTERS.lower()
 
 
-def encrypt(message, key):
-	encrypted = ''
-	for chars in message:
-		if chars in LETTERS:
-			num = LETTERS.find(chars)
-			num += key
-			encrypted += LETTERS[num]
-
-	return encrypted
-
-
-def decrypt(message, key):
-	decrypted = ''
-	for chars in message:
-		if chars in LETTERS:
-			num = LETTERS.find(chars)
-			num -= key
-			decrypted += LETTERS[num]
-
-	return decrypted
-
-
 # -------------functions for LISTS------------- #
 
 
@@ -1265,6 +1258,14 @@ def s1call(url, service, obj, company, id, data):
 					'company': session['companycode']
 				})
 			call = requests.request('POST', url + '/js/connector.connector/getSoaction', headers=headers, data=data)
+		elif obj == 'soactionfirst':
+			data = json.dumps(
+				{
+					'clientID': id,
+					'soaction': data['soaction'],
+					'company': session['companycode']
+				})
+			call = requests.request('POST', url + '/js/connector.connector/getSoactionFirst', headers=headers, data=data)
 		elif obj == 'soactionseries':
 			data = json.dumps(
 				{
@@ -1297,6 +1298,14 @@ def s1call(url, service, obj, company, id, data):
 					'prsn': session['prsn']
 				})
 			call = requests.request('POST', url + '/js/connector.connector/getCalendar', headers=headers, data=data)
+		elif obj == 'meetings':
+			data = json.dumps(
+				{
+					'clientID': id,
+					'company': session['companycode'],
+					'prsn': session['prsn']
+				})
+			call = requests.request('POST', url + '/js/connector.connector/getMeetings', headers=headers, data=data)
 		elif obj == 'calls':
 			data = json.dumps(
 				{

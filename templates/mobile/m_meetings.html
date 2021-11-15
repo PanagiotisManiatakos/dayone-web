@@ -248,7 +248,8 @@
                                         <label for="fsoactionseries" class="col-sm-2 col-form-label disable-select">Σειρά</label>
                                         <div class="col-sm-10">
                                             <div class="input-group">
-                                                <input class="form-control disable-select locked required" id="fsoactionseries" data-id="">
+                                                <select class="form-select disable-select required" id="fsoactionseries" data-id="">
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="dropdown" style="position:absolute">
@@ -291,7 +292,7 @@
                                         <label for="ftrdrname" class="col-sm-2 col-form-label disable-select">Πελάτης:</label>
                                         <div class="col-sm-10">
                                             <div class="input-group">
-                                                <input class="form-control required" type="text" autocomplete="off" id="ftrdrname" onkeyup="trdrSelectorByName()">
+                                                <input class="form-control required" type="text" autocomplete="off" id="ftrdrname" data-trdr=" " onkeyup="trdrSelectorByName()">
                                                 <span class="input-group-append">
                                                         <button class="btn btn-outline-secondary bg-white ms-n3 locked" type="button">
                                                             <i class="fa fa-search"></i>
@@ -321,14 +322,14 @@
                                     <div class="form-group row">
                                         <label for="fphone01" class="col-sm-2 col-form-label disable-select">Τηλ.1:</label>
                                         <div class="col-sm-10">
-                                            <input type="text" class="form-control locked" id="fphone01" onfocusout="updAll.call(this,event);">
+                                            <input type="text" class="form-control locked" id="fphone01">
                                         </div>
                                     </div>
     
                                     <div class="form-group row">
                                         <label for="fremarks" class="col-sm-2 col-form-label disable-select">Σχόλια:</label>
                                         <div class="col-sm-10">
-                                                <textarea class="form-control" id="fremarks" rows="3" onfocusout="updAll.call(this,event);" ></textarea>
+                                                <textarea class="form-control" id="fremarks" rows="3" ></textarea>
                                         </div>
                                     </div>
     
@@ -345,22 +346,6 @@
     
                                     <div class="form-group row" style="display:none;">
                                         <input type="text" class="form-control" id="fsoaction" placeholder="soaction">
-                                    </div>
-    
-                                    <div class="form-group row">
-                                        <label for="fname" class="col-sm-2 col-form-label">Επωνυμία:</label>
-                                        <div class="col-sm-10">
-                                            <div class="input-group">
-                                                <input class="form-control" type="text" autocomplete="off" id="fname"
-                                                       placeholder="Επωνυμία Πελάτη">
-                                                <span class="input-group-append">
-                                                        <button class="btn btn-outline-secondary bg-white ms-n3"
-                                                                type="button">
-                                                            <i class="fa fa-search"></i>
-                                                        </button>
-                                                    </span>
-                                            </div>
-                                        </div>
                                     </div>
     
                                     <div class="form-group row">
