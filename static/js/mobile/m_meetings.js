@@ -6,7 +6,7 @@ $(document).ready(function () {
         method: "POST",
         data: {
             service: "get",
-            object: "calls",
+            object: "meetings",
         },
         success: function (data) {
             window.meets = $("#meets").DataTable({
@@ -20,14 +20,15 @@ $(document).ready(function () {
                 nowrap :true,
                 data: data["data"],
                 columns: [
-                    { title: "Κλήση", data: "SOACTIONCODE", defaultContent: "" },
-                    { title: "Ημερομηνία", data: "FROMDATE", defaultContent: "" },
+                    { title: "Συνάντηση", data: "SOACTIONCODE", defaultContent: "" },
+                    { title: "Απο", data: "FROMDATE", defaultContent: "" },
+                    { title: "Έως", data: "FINALDATE", defaultContent: "" },
                     { title: "Πελάτης", data: "TRDRNAME", defaultContent: "" },
                     { title: "Θέμα", data: "COMMENTS", defaultContent: "" },
                     { title: "SOACTION", data: "SOACTION", defaultContent: "" },
                 ],
                 columnDefs: [
-                    { className: "hide_column", targets: [4] }],
+                    { className: "hide_column", targets: [5] }],
             });
             stopload();
             $("#meetsdiv").css("display", "block");
@@ -35,50 +36,95 @@ $(document).ready(function () {
         },
     });
     
-    /*When Single click a calls row*/
+    /*When Single click a meets row*/
     $("#meets").on("click", "tr", function () {
         startload();
         meets.rows().deselect();
         meets.rows($(this)).select();
         var d = meets.rows({ selected: true }).data().toArray();
-        $.ajax({
-            url: "/D1ServicesIN",
-            method: "POST",
-            data: {
-                service: "get",
-                object: "soaction",
-                id: d[0]["SOACTION"],
-            },
-            success: function (d) {
-                data = jQuery.parseJSON(JSON.stringify(d.data[0]));
-                var ddnn = new Date((data.FROMDATE).replace(/-/g, "/"));
-                var tzoffset = new Date().getTimezoneOffset() * 60000; //offset in milliseconds
-                var localISOTimeFROM = new Date(ddnn - tzoffset)
-                    .toISOString()
-                    .slice(0, 16);
-                var prsname = data.PRSNAME != undefined ? data.PRSNAME : '' ;
-                var prsname2 = data.PRSNAME2 != undefined ? data.PRSNAME2 : '' ;
-                var finalname = (prsname=='')&&(prsname2=='') ? '' : ((prsname!='')&&(prsname2=='') ? prsname :((prsname=='')&&(prsname2!='')) ? prsname2 : prsname+ ' ' +prsname2);
-                $("[id='fsoaction']").val(data.SOACTION);
-                $("[id='fsoactioncode']").val(data.SOACTIONCODE);
-                $("[id='ffromdate']").val(localISOTimeFROM);
-                $("[id='fcomments']").val(data.COMMENTS);
-                $("[id='ftrdrname']").val(data.NAME != undefined ? data.NAME : '');
-                $("[id='ftrdrname']").prop("data-trdr",data.TRDR != undefined ? data.TRDR : '');
-                $("[id='fprsname']").val(finalname);
-                $("[id='fprsname']").prop("data-trdr",data.PRSN != undefined ? data.PRSN : '');
-                $("[id='fphone01']").val(data.PHONE01);
-                $("[id='fremarks']").val(data.REMARKS);
-                $("[id='fdone']").prop('checked',false);
-                $("#screenform .modal-content .modal-body .tab-content")
-                    .find("*")
-                    .attr("disabled", true);
-                $("#editm1").css("display", "block");
-                $("#savem1").prop("disabled", true);
-                stopload();
-                $("#screenform").modal("toggle");
-            }
-        });
+        if ($('#fsoactionseries option').length>0){
+            $.ajax({
+                url: "/D1ServicesIN",
+                method: "POST",
+                data: {
+                    service: "get",
+                    object: "soaction",
+                    id: d[0]["SOACTION"],
+                },
+                success: function (d) {
+                    data = jQuery.parseJSON(JSON.stringify(d.data[0]));
+                    var ddnn = new Date((data.FROMDATE).replace(/-/g, "/"));
+                    var tzoffset = new Date().getTimezoneOffset() * 60000; //offset in milliseconds
+                    var localISOTimeFROM = new Date(ddnn - tzoffset)
+                        .toISOString()
+                        .slice(0, 16);
+                    var prsname = data.PRSNAME != undefined ? data.PRSNAME : '' ;
+                    var prsname2 = data.PRSNAME2 != undefined ? data.PRSNAME2 : '' ;
+                    var finalname = (prsname=='')&&(prsname2=='') ? '' : ((prsname!='')&&(prsname2=='') ? prsname :((prsname=='')&&(prsname2!='')) ? prsname2 : prsname+ ' ' +prsname2);
+                    $("[id='fsoaction']").val(data.SOACTION);
+                    $("[id='fsoactioncode']").val(data.SOACTIONCODE);
+                    $("[id='ffromdate']").val(localISOTimeFROM);
+                    $("[id='fcomments']").val(data.COMMENTS);
+                    $("[id='ftrdrname']").val(data.NAME != undefined ? data.NAME : '');
+                    $("[id='ftrdrname']").attr("data-trdr",data.TRDR != undefined ? data.TRDR : '');
+                    $("[id='fprsname']").val(finalname);
+                    $("[id='fprsname']").attr("data-prsn",data.PRSN != undefined ? data.PRSN : '');
+                    $("[id='fphone01']").val(data.PHONE01);
+                    $("[id='fremarks']").val(data.REMARKS);
+                    $("#screenform .modal-content .modal-body .tab-content")
+                        .find("*")
+                        .attr("disabled", true);
+                    $("#editm1").css("display", "block");
+                    $("#savem1").prop("disabled", true);
+                    stopload();
+                    $("#screenform").modal("toggle");
+                }
+            });
+        }else{
+            $.ajax({
+                url: "/D1ServicesIN",
+                method: "POST",
+                data: {
+                    service: "get",
+                    object: "soactionfirst",
+                    id: d[0]["SOACTION"],
+                },
+                success: function (d) {
+                    soaction = jQuery.parseJSON(JSON.stringify(d.data.soaction[0]));
+                    series = jQuery.parseJSON(JSON.stringify(d.data.series));
+                    var ddnn = new Date((soaction.FROMDATE).replace(/-/g, "/"));
+                    var tzoffset = new Date().getTimezoneOffset() * 60000; //offset in milliseconds
+                    var localISOTimeFROM = new Date(ddnn - tzoffset)
+                        .toISOString()
+                        .slice(0, 16);
+                    var prsname = soaction.PRSNAME != undefined ? soaction.PRSNAME : '' ;
+                    var prsname2 = soaction.PRSNAME2 != undefined ? soaction.PRSNAME2 : '' ;
+                    var finalname = (prsname=='')&&(prsname2=='') ? '' : ((prsname!='')&&(prsname2=='') ? prsname :((prsname=='')&&(prsname2!='')) ? prsname2 : prsname+ ' ' +prsname2);
+                    $("[id='fsoaction']").val(soaction.SOACTION);
+                    $("[id='fsoactioncode']").val(soaction.SOACTIONCODE);
+                    $("[id='ffromdate']").val(localISOTimeFROM);
+                    $("[id='fcomments']").val(soaction.COMMENTS);
+                    $("[id='ftrdrname']").val(soaction.NAME != undefined ? soaction.NAME : '');
+                    $("[id='ftrdrname']").attr("data-trdr",soaction.TRDR != undefined ? soaction.TRDR : '');
+                    $("[id='fprsname']").val(finalname);
+                    $("[id='fprsname']").attr("data-prsn",soaction.PRSN != undefined ? soaction.PRSN : '');
+                    $("[id='fphone01']").val(soaction.PHONE01);
+                    $("[id='fremarks']").val(soaction.REMARKS);
+                    $.each(series, function (index, value) {
+                        data = jQuery.parseJSON(JSON.stringify(series[index]));
+                        $("#fsoactionseries").append('<option data-series="'+data.SERIES+'">'+data.NAME+'</option>');
+                    });
+                    $("#fsoactionseries").val(soaction.SERIESNAME);
+                    $("#screenform .modal-content .modal-body .tab-content")
+                        .find("*")
+                        .attr("disabled", true);
+                    $("#editm1").css("display", "block");
+                    $("#savem1").prop("disabled", true);
+                    stopload();
+                    $("#screenform").modal("toggle");
+                }
+            });
+        }
     });
     
     /*When Screen Save Button is pressed*/
@@ -172,7 +218,7 @@ $(document).ready(function () {
     
     /*When Screen Edit Button is pressed*/
     $("#editm1").on("click", function () {
-        $("#screenform .modal-content .modal-body .toolbody")
+        $("#screenform .modal-content .modal-body .tab-content")
             .find("*")
             .not(".locked")
             .attr("disabled", false);
@@ -184,6 +230,7 @@ $(document).ready(function () {
     
     /*When New Button is pressed*/
     $("#btnew").on("click", function () {
+        startload();
         var ddnn = new Date(Date.now());
         var tzoffset = new Date().getTimezoneOffset() * 60000; //offset in milliseconds
         var localISOTimeFROM = new Date(ddnn - tzoffset)
@@ -195,19 +242,18 @@ $(document).ready(function () {
         $("[id='ffromdate']").val(localISOTimeFROM);
         $("[id='fcomments']").val("");
         $("[id='ftrdrname']").val("");
-        $("[id='ftrdrname']").prop("data-trdr","");
+        $("[id='ftrdrname']").attr("data-trdr","");
         $("[id='fprsname']").val("");
-        $("[id='fprsname']").prop("data-prsn","");
+        $("[id='fprsname']").attr("data-prsn","");
         $("[id='fprsname']").val();
         $("[id='fphone01']").val("");
         $("[id='fremarks']").val("");
-        $("[id='fdone']").prop('checked',false);
         
-        $("#screenform .modal-content .modal-body .toolbody")
+        $("#screenform .modal-content .modal-body .tab-content")
             .find('.locked')
             .attr("disabled", true);
 
-        $("#screenform .modal-content .modal-body .toolbody")
+        $("#screenform .modal-content .modal-body .tab-content")
             .find("*")
             .not('.locked')
             .attr("disabled", false);
@@ -215,7 +261,28 @@ $(document).ready(function () {
         $("[id='ffromdate']").attr("disabled", false);
         $("#savem1").attr("disabled", false);
         $("#editm1").css('display',"none");
-        $("#screenform").modal("toggle");
+        
+        if ($('#fsoactionseries option').length<1){
+            $.ajax({
+                url: "/D1ServicesIN",
+                method: "POST",
+                data: {
+                  service: "get",
+                  object: "soactionseries",
+                },
+                success: function (d) {
+                    $.each(d.data, function (index, value) {
+                        data = jQuery.parseJSON(JSON.stringify(d.data[index]));
+                        $("#fsoactionseries").append('<option data-series="'+data.SERIES+'">'+data.NAME+'</option>');
+                        stopload();
+                        $("#screenform").modal("toggle");                        
+                    });
+                }
+            });
+        }else{
+            stopload();
+            $("#screenform").modal("toggle");
+        }
     });
     
     /*When Screen Χ Button is pressed*/
@@ -520,6 +587,20 @@ $(document).ready(function () {
         $("#fprsname").prop("data-prsn",id);
     });
     
+    /*When Dcreen closes*/
+    $('#screenform').on('hidden.bs.modal', function () {
+        $("[id='fsoaction']").val('');
+        $("[id='fsoactioncode']").val('');
+        $("[id='ffromdate']").val('');
+        $("[id='fcomments']").val('');
+        $("[id='ftrdrname']").val('');
+        $("[id='ftrdrname']").attr("data-trdr",'');
+        $("[id='fprsname']").val('');
+        $("[id='fprsname']").attr("data-prsn",'');
+        $("[id='fphone01']").val('');
+        $("[id='fremarks']").val('');
+    });
+    
     document.addEventListener("click", function (e) {
         if ($("#Selectortrdrname").css("display") == "block") {
             let insidedropdown = e.target.closest("#Selectortrdrname");
@@ -564,13 +645,14 @@ function refreshthecalls() {
                 data: data["data"],
                 columns: [
                     { title: "Κλήση", data: "SOACTIONCODE", defaultContent: "" },
-                    { title: "Ημερομηνία", data: "FROMDATE", defaultContent: "" },
+                    { title: "Απο", data: "FROMDATE", defaultContent: "" },
+                    { title: "Έως", data: "FINALDATE", defaultContent: "" },
                     { title: "Πελάτης", data: "TRDRNAME", defaultContent: "" },
                     { title: "Θέμα", data: "COMMENTS", defaultContent: "" },
                     { title: "SOACTION", data: "SOACTION", defaultContent: "" },
                 ],
                 columnDefs: [
-                    { className: "hide_column", targets: [4] }],
+                    { className: "hide_column", targets: [5] }],
             });
             calls.columns.adjust().draw();
             $("#loader").css("display", "none");

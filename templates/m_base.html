@@ -233,7 +233,7 @@
            $('#sidebarToggle').click();
         });
     </script>
-    {% if datedif['datedif']<=15 and datedif['datedif']>=0 %}
+
         <!--ExpireMOdal-->
         <div class="modal fade show" id="expiremodal" role="dialog">
             <div class="modal-dialog modal-md modal-dialog-centered" role="document">
@@ -265,17 +265,25 @@
             </div>
         </div>
         <script>
-            const dateObj1 = new Date('{{ session['blckdate'].date() }}');
-            const month1 = String(dateObj1.getMonth() + 1).padStart(2, '0') ;
-            const day1 = String(dateObj1.getDate()).padStart(2, '0');
-            const year1 = dateObj1.getFullYear();
-            const output1 = day1  + '/'+ month1  + '/' + year1;
+            const blckdate = new Date('{{ session['blckdate'].date() }}');
+            const blckmonth = String(blckdate.getMonth() + 1).padStart(2, '0') ;
+            const blckday = String(blckdate.getDate()).padStart(2, '0');
+            const blckyear = blckdate.getFullYear();
+            const blckoutput = blckday  + '/'+ blckmonth  + '/' + blckyear;
+            
+            const toddate = new Date();
+            
+            function datediff(first, second) {
+                return Math.round((second-first)/(1000*60*60*24));
+            }
+            
+            if (datediff(toddate,blckdate)<=15){
         
-            $("#expdate1").text(output1);
-            $('#expiremodal').modal('show');
-            $("#experror1").append('Καλέστε στο: <a href="tel:2165005060">216 500 5060</a> \n για ανανέωση συμβολαίου.');
+                $("#expdate1").text(blckoutput);
+                $('#expiremodal').modal('show');
+                $("#experror1").append('Καλέστε στο: <a href="tel:2165005060">216 500 5060</a> \n για ανανέωση συμβολαίου.');
+            }
         </script>
-    {%endif%}
     <!--USERMODAL-->
     <div class="modal fade" id="usermodal" role="dialog">
         <div class="modal-dialog modal-md modal-dialog-centered" role="document">
